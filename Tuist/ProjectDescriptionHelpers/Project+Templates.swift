@@ -29,6 +29,10 @@ public extension Project {
         // MARK: - Static Or Dynamic Framework
         
         if targets.contains(where: { $0.hasFramework }) {
+            let deps: [TargetDependency] = targets.contains(.interface)
+            ? [.target(name: "\(name)Interface")]
+            : []
+
             let settings: SettingsDictionary = hasDynamicFramework
             ? ["OTHER_LDFLAGS" : "$(inherited) -all_load"]
             : ["OTHER_LDFLAGS" : "$(inherited)"]
@@ -42,7 +46,7 @@ public extension Project {
                 infoPlist: .default,
                 sources: ["Sources/**/*.swift"],
                 resources:  hasDynamicFramework ? [.glob(pattern: "Resources/**", excluding: [])] : [],
-                dependencies: internalDependencies + externalDependencies,
+                dependencies: deps + internalDependencies + externalDependencies,
                 settings: .settings(base: settings, configurations: XCConfig.framework)
             )
             
