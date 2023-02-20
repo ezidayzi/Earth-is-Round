@@ -15,6 +15,7 @@ let spm = SwiftPackageManagerDependencies([
     .SPM.External.Alamofire,
     .SPM.External.TCA,
     .SPM.External.Lottie,
+    .SPM.External.FLEX,
     .SPM.External.Nimble,
     .SPM.External.Quick,
 ], baseSettings: Settings.settings(

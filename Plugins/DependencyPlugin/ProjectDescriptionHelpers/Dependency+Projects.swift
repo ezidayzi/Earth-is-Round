@@ -22,6 +22,7 @@ public extension TargetDependency {
 
 public extension Dep.Features {
     static let BaseFeatureDependency = Dep.project(target: "BaseFeatureDependency", path: .relativeToFeature("BaseFeatureDependency"))
+    static let RootFeature = Dep.project(target: "RootFeature", path: .relativeToFeature("RootFeature"))
 }
 
 public extension Dep.Features.Splash {
