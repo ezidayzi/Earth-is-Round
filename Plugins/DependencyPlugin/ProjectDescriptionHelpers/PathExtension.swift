@@ -7,14 +7,11 @@ public extension ProjectDescription.Path {
     static func relativeToCore(_ path: String) -> Self {
         return .relativeToRoot("Projects/Core/\(path)")
     }
-    static func relativeToShared(_ path: String) -> Self {
-        return .relativeToRoot("Projects/Shared/\(path)")
-    }
     static func relativeToDesignSystem(_ path: String) -> Self {
         return .relativeToRoot("Projects/DesignSystem/\(path)")
     }
     static func relativeToWatchApp(_ path: String) -> Self {
-        return .relativeToRoot("Projects/WatchApp/Application/\(path)")
+        return .relativeToRoot("Projects/WatchApp/\(path)")
     }
     static var app: Self {
         return .relativeToRoot("Projects/iOSApp/Application")
@@ -22,19 +19,19 @@ public extension ProjectDescription.Path {
     static var watchApp: Self {
         return .relativeToRoot("Projects/WatchApp/Application")
     }
-}
-
-public extension TargetDependency {
-    static func feature(name: String) -> Self {
-        return .project(target: name, path: .relativeToFeature(name))
+    static var domain: Self {
+        return .relativeToRoot("Projects/Domain")
     }
-    static func designSystem(name: String) -> Self {
-        return .project(target: name, path: .relativeToDesignSystem(name))
+    static var core: Self {
+        return .relativeToRoot("Projects/Core")
     }
-    static func core(name: String) -> Self {
-        return .project(target: name, path: .relativeToCore(name))
+    static var shared: Self {
+        return .relativeToRoot("Projects/Shared")
     }
-    static func shared(name: String) -> Self {
-        return .project(target: name, path: .relativeToShared(name))
+    static var designSystem: Self {
+        return .relativeToRoot("Projects/DesignSystem")
+    }
+    static var thirdPartyLibs: Self {
+        return .relativeToRoot("Projects/ThirdPartyLibs")
     }
 }

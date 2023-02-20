@@ -6,10 +6,10 @@ let project = Project.watchApp(
     name: "EarthIsRoundWatchApp",
     targets: [.unitTest, .testing],
     internalDependencies: [
-        
+        .Watch.Features.WatchMain.Feature
     ],
     externalDependencies: [
-        .SPM.External.Alamofire
+        
     ],
     testingDependencies: []
 )
