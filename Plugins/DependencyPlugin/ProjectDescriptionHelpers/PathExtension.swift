@@ -28,6 +28,9 @@ public extension ProjectDescription.Path {
     static var shared: Self {
         return .relativeToRoot("Projects/Shared")
     }
+    static var designSystem: Self {
+        return .relativeToRoot("Projects/DesignSystem")
+    }
     static var thirdPartyLibs: Self {
         return .relativeToRoot("Projects/ThirdPartyLibs")
     }

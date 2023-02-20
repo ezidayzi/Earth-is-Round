@@ -15,7 +15,8 @@ let project = Project.framework(
     ],
     interfaceDependencies: [
         .Core.watchOS,
-        .Domain.watchOS
+        .Domain.watchOS,
+        .DesignSystem.watchOS
     ],
     testingDependencies: [],
     demoDependencies: []

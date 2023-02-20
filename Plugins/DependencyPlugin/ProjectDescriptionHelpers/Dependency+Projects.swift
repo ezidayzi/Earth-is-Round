@@ -72,6 +72,13 @@ public extension Dep.Core {
     static let watchOS = Dep.project(target: "Core_watchos", path: .core)
 }
 
+// MARK: - DesignSystemp
+
+public extension Dep.DesignSystem {
+    static let iOS = Dep.project(target: "DesignSystem_ios", path: .designSystem)
+    static let watchOS = Dep.project(target: "DesignSystem_watchos", path: .designSystem)
+}
+
 // MARK: - Shared
 
 public extension Dep.Shared {

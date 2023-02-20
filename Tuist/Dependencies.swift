@@ -14,8 +14,9 @@ import ConfigPlugin
 let spm = SwiftPackageManagerDependencies([
     .SPM.External.Alamofire,
     .SPM.External.TCA,
+    .SPM.External.Lottie,
     .SPM.External.Nimble,
-    .SPM.External.Quick
+    .SPM.External.Quick,
 ], baseSettings: Settings.settings(
     configurations: XCConfig.framework
 ))
