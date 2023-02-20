@@ -14,13 +14,16 @@ public extension ProjectDescription.Path {
         return .relativeToRoot("Projects/DesignSystem/\(path)")
     }
     static func relativeToWatchApp(_ path: String) -> Self {
-        return .relativeToRoot("Projects/WatchApp/Application/\(path)")
+        return .relativeToRoot("Projects/WatchApp/\(path)")
     }
     static var app: Self {
         return .relativeToRoot("Projects/iOSApp/Application")
     }
     static var watchApp: Self {
         return .relativeToRoot("Projects/WatchApp/Application")
+    }
+    static var domain: Self {
+        return .relativeToRoot("Projects/Domain")
     }
 }
 
