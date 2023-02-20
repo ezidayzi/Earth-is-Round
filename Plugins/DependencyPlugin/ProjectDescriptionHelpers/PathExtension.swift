@@ -13,6 +13,9 @@ public extension ProjectDescription.Path {
     static func relativeToDesignSystem(_ path: String) -> Self {
         return .relativeToRoot("Projects/DesignSystem/\(path)")
     }
+    static func relativeToWatchApp(_ path: String) -> Self {
+        return .relativeToRoot("Projects/WatchApp/Application/\(path)")
+    }
     static var app: Self {
         return .relativeToRoot("Projects/iOSApp/Application")
     }

@@ -34,13 +34,13 @@ public extension Project {
             : []
 
             let settings: SettingsDictionary = hasDynamicFramework
-            ? ["OTHER_LDFLAGS" : "$(inherited) -all_load"]
-            : ["OTHER_LDFLAGS" : "$(inherited)"]
+            ? ["OTHER_LDFLAGS" : "$(inherited) -all_load"].merging(SettingsDictionary().setCodeSignManual())
+            : ["OTHER_LDFLAGS" : "$(inherited)"].merging(SettingsDictionary().setCodeSignManual())
             
             let target = Target(
                 name: name,
                 platform: .iOS,
-                product: hasDynamicFramework ? .framework : .staticLibrary,
+                product: hasDynamicFramework ? .framework : .staticFramework,
                 bundleId: "com.earthIsRound.\(name)",
                 deploymentTarget: deploymentTarget,
                 infoPlist: .default,
@@ -56,6 +56,8 @@ public extension Project {
         // MARK: - Interface of Feature
         
         if targets.contains(.interface) {
+            let settings: SettingsDictionary = ["OTHER_LDFLAGS" : "$(inherited) -all_load"].merging(SettingsDictionary().setCodeSignManual())
+
             let target =  Target(
                     name: "\(name)Interface",
                     platform: .iOS,
@@ -65,7 +67,7 @@ public extension Project {
                     infoPlist: .default,
                     sources: ["Interface/Sources/**/*.swift"],
                     dependencies: interfaceDependencies,
-                    settings: .settings(base: [:], configurations: XCConfig.framework)
+                    settings: .settings(base: settings, configurations: XCConfig.framework)
                 )
             
             projectTargets.append(target)
@@ -89,7 +91,7 @@ public extension Project {
                         .target(name: "\(name)"),
                     ]
                 ].flatMap { $0 },
-                settings: .settings(base: [:], configurations: XCConfig.framework)
+                settings: .settings(base: SettingsDictionary().setCodeSignManual(), configurations: XCConfig.framework)
             )
             
             projectTargets.append(target)
@@ -121,7 +123,7 @@ public extension Project {
                         // MARK: DEV Tool 추가
                     ],
                 ].flatMap { $0 },
-                settings: .settings(base: [:], configurations: XCConfig.demo)
+                settings: .settings(base: SettingsDictionary().setCodeSignManual(), configurations: XCConfig.demo)
             )
             
             projectTargets.append(target)
@@ -164,7 +166,7 @@ public extension Project {
                         .SPM.External.Quick
                     ]
                 ].flatMap { $0 },
-                settings: .settings(base: [:], configurations: XCConfig.tests)
+                settings: .settings(base: SettingsDictionary().setCodeSignManual(), configurations: XCConfig.tests)
             )
             
             projectTargets.append(target)

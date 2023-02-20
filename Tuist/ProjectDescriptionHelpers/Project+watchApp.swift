@@ -6,38 +6,31 @@ import ConfigPlugin
 import EnvPlugin
 
 public extension Project {
-    static func iOSApp(name: String,
-                       organizationName: String = Environment.organizationName,
-                       targets: Set<FeatureTarget> = Set([.staticFramework, .unitTest, .demo, .testing]),
-                       packages: [Package] = [],
-                       internalDependencies: [TargetDependency] = [],
-                       externalDependencies: [TargetDependency] = [],
-                       testingDependencies: [TargetDependency] = [] // dependency of extra target for testing
+    static func watchApp(name: String,
+                         organizationName: String = Environment.organizationName,
+                         targets: Set<FeatureTarget> = Set([.staticFramework, .unitTest, .demo, .testing]),
+                         packages: [Package] = [],
+                         internalDependencies: [TargetDependency] = [],
+                         externalDependencies: [TargetDependency] = [],
+                         testingDependencies: [TargetDependency] = [] // dependency of extra target for testing
     ) -> Project {
         
         let configurationName: ConfigurationName = "Development"
-        let deploymentTarget = DeploymentTarget.iOS(targetVersion: "15.0", devices: .iphone)
+        let deploymentTarget = DeploymentTarget.watchOS(targetVersion: "8.0")
         var projectTargets: [Target] = []
         
-        let settings: SettingsDictionary = ["OTHER_LDFLAGS" : "$(inherited)"]
-            .merging(SettingsDictionary().setCodeSignManual())
+        let settings = Project.watchAppSettings
         
         let target = Target(
             name: name,
-            platform: .iOS,
+            platform: .watchOS,
             product: .app,
-            bundleId: "com.earthIsRound.release",
+            bundleId: "com.earthIsRound.release.watchApp",
             deploymentTarget: deploymentTarget,
-            infoPlist: .extendingDefault(with: Project.iosAppInfoPlist),
+            infoPlist: nil,
             sources: ["Sources/**/*.swift"],
             resources:  [.glob(pattern: "Resources/**", excluding: [])],
-            dependencies: [
-                internalDependencies,
-                externalDependencies,
-                [
-                    Dep.project(target: "EarthIsRoundWatchApp", path: .watchApp)
-                ]
-            ].flatMap { $0 },
+            dependencies: internalDependencies + externalDependencies,
             settings: .settings(base: settings, configurations: XCConfig.project)
         )
         
@@ -48,7 +41,7 @@ public extension Project {
         if targets.contains(.testing) {
             let target = Target(
                 name: "\(name)Testing",
-                platform: .iOS,
+                platform: .watchOS,
                 product: .framework,
                 bundleId: "com.earthIsRound.\(name)Testing",
                 deploymentTarget: deploymentTarget,
@@ -56,9 +49,9 @@ public extension Project {
                 sources: ["Testing/Sources/**/*.swift"],
                 resources: [.glob(pattern: "Testing/Resources/**", excluding: [])],
                 dependencies: [
-                    testingDependencies,
+                    testingDependencies
                 ].flatMap { $0 },
-                settings: .settings(base: settings, configurations: XCConfig.framework)
+                settings: .settings(base: [:], configurations: XCConfig.framework)
             )
             
             projectTargets.append(target)
@@ -81,7 +74,7 @@ public extension Project {
             
             let target = Target(
                 name: "\(name)Tests",
-                platform: .iOS,
+                platform: .watchOS,
                 product: .unitTests,
                 bundleId: "com.erathIsRound.Tests",
                 deploymentTarget: deploymentTarget,
@@ -95,7 +88,7 @@ public extension Project {
                         .SPM.External.Quick
                     ]
                 ].flatMap { $0 },
-                settings: .settings(base: settings, configurations: XCConfig.tests)
+                settings: .settings(base: [:], configurations: XCConfig.tests)
             )
             
             projectTargets.append(target)
@@ -107,44 +100,44 @@ public extension Project {
             packages: packages,
             settings: .settings(configurations: XCConfig.project),
             targets: projectTargets,
-            schemes: appSchemes,
+            schemes: watchAppSchemes,
             additionalFiles: [])
     }
 }
 
 extension Project {
-    static let appSchemes: [Scheme] = [
+    static let watchAppSchemes: [Scheme] = [
         .init(
-            name: "EarthIsRound-DEV",
+            name: "EarthIsRoundWatchApp-DEV",
             shared: true,
-            buildAction: .buildAction(targets: ["EarthIsRound"]),
+            buildAction: .buildAction(targets: ["EarthIsRoundWatchApp"]),
             runAction: .runAction(configuration: "Development"),
             archiveAction: .archiveAction(configuration: "Development"),
             profileAction: .profileAction(configuration: "Development"),
             analyzeAction: .analyzeAction(configuration: "Development")
         ),
         .init(
-            name: "EarthIsRound-Test",
+            name: "EarthIsRoundWatchApp-Test",
             shared: true,
-            buildAction: .buildAction(targets: ["EarthIsRound"]),
+            buildAction: .buildAction(targets: ["EarthIsRoundWatchApp"]),
             runAction: .runAction(configuration: "Test"),
             archiveAction: .archiveAction(configuration: "Test"),
             profileAction: .profileAction(configuration: "Test"),
             analyzeAction: .analyzeAction(configuration: "Test")
         ),
         .init(
-            name: "EarthIsRound-QA",
+            name: "EarthIsRoundWatchApp-QA",
             shared: true,
-            buildAction: .buildAction(targets: ["EarthIsRound"]),
+            buildAction: .buildAction(targets: ["EarthIsRoundWatchApp"]),
             runAction: .runAction(configuration: "QA"),
             archiveAction: .archiveAction(configuration: "QA"),
             profileAction: .profileAction(configuration: "QA"),
             analyzeAction: .analyzeAction(configuration: "QA")
         ),
         .init(
-            name: "EarthIsRound-Release",
+            name: "EarthIsRoundWatchApp-Release",
             shared: true,
-            buildAction: .buildAction(targets: ["EarthIsRound"]),
+            buildAction: .buildAction(targets: ["EarthIsRoundWatchApp"]),
             runAction: .runAction(configuration: "Release"),
             archiveAction: .archiveAction(configuration: "Release"),
             profileAction: .profileAction(configuration: "Release"),

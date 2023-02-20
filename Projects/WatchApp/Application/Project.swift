@@ -2,16 +2,14 @@ import ProjectDescriptionHelpers
 import ProjectDescription
 import DependencyPlugin
 
-let project = Project.iOSApp(
-    name: "EarthIsRound",
+let project = Project.watchApp(
+    name: "EarthIsRoundWatchApp",
     targets: [.unitTest, .testing],
     internalDependencies: [
-        .Features.Main.Feature,
-        .Features.Splash.Feature,
-        .Features.Setting.Feature,
+        
     ],
     externalDependencies: [
-        
+        .SPM.External.Alamofire
     ],
     testingDependencies: []
 )

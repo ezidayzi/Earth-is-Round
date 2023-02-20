@@ -5,5 +5,6 @@ let config = Config(
         .local(path: .relativeToRoot("Plugins/DependencyPlugin")),
         .local(path: .relativeToRoot("Plugins/ConfigPlugin")),
         .local(path: .relativeToRoot("Plugins/EnvPlugin"))
-    ]
+    ],
+    generationOptions: .options()
 )
