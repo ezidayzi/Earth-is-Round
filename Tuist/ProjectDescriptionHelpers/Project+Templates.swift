@@ -150,7 +150,7 @@ public extension Project {
                     dependencies: [
                         deps,
                         [
-                            // MARK: DEV Tool 추가
+                            Dep.SPM.External.FLEX
                         ],
                     ].flatMap { $0 },
                     settings: .settings(base: SettingsDictionary().setCodeSignManual(), configurations: XCConfig.demo)
