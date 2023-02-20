@@ -35,7 +35,8 @@ public extension Project {
                 internalDependencies,
                 externalDependencies,
                 [
-                    Dep.project(target: "EarthIsRoundWatchApp", path: .watchApp)
+                    Dep.project(target: "EarthIsRoundWatchApp", path: .watchApp),
+                    Dep.target(name: "WidgetExtension")
                 ]
             ].flatMap { $0 },
             settings: .settings(base: settings, configurations: XCConfig.project)
@@ -63,6 +64,28 @@ public extension Project {
             
             projectTargets.append(target)
         }
+        
+        // MARK: - Widget Extension
+        
+        let widgetTarget = Target(
+            name: "WidgetExtension",
+            platform: .iOS,
+            product: .appExtension,
+            bundleId: "com.earthIsRound.release.widget",
+            infoPlist: .extendingDefault(with: [
+                "CFBundleDisplayName": "$(PRODUCT_NAME)",
+                "NSExtension": [
+                    "NSExtensionPointIdentifier": "com.apple.widgetkit-extension",
+                ],
+            ]),
+            sources: "../Extensions/WidgetExtension/Sources/**/*.swift",
+            resources: "../Extensions/WidgetExtension/Resources/**",
+            dependencies: [
+                .Core.iOS
+            ]
+        )
+        
+        projectTargets.append(widgetTarget)
         
         // MARK: - Tests: Unit Tests
         
