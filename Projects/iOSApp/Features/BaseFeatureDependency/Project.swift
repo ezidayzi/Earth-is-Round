@@ -4,18 +4,17 @@ import DependencyPlugin
 import EnvPlugin
 
 let project = Project.framework(
-    name: "WatchMainFeature",
-    platforms: [.watchOS],
-    targets: [.testing, .interface, .unitTest, .staticFramework, .demo],
+    name: "BaseFeatureDependency",
+    targets: [.dynamicFramework],
     internalDependencies: [
-        
+        .Core.iOS,
+        .Domain.iOS
     ],
     externalDependencies: [
         
     ],
     interfaceDependencies: [
-        .Core.watchOS,
-        .Domain.watchOS
+
     ],
     testingDependencies: [],
     demoDependencies: []

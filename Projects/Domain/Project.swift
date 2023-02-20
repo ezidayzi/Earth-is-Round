@@ -6,9 +6,10 @@ import EnvPlugin
 let project = Project.framework(
     name: "Domain",
     platforms: [.iOS, .watchOS],
-    targets: [.testing, .unitTest, .staticFramework],
+    targets: [.testing, .unitTest, .dynamicFramework],
     internalDependencies: [
-
+        .Shared.iOS,
+        .Shared.watchOS,
     ],
     externalDependencies: [
         

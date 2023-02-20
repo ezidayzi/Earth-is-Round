@@ -14,8 +14,7 @@ let project = Project.framework(
         
     ],
     interfaceDependencies: [
-        .SPM.External.Alamofire,
-        .Domain.iOS
+        .Features.BaseFeatureDependency
     ],
     testingDependencies: [],
     demoDependencies: []

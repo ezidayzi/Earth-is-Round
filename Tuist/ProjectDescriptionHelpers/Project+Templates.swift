@@ -61,13 +61,20 @@ public extension Project {
             ? name + "_ios"
             : name + "_watchos"
             
-            if platforms.count == 1 { nameWithPlatform = name }
-            
             var bundleNameWithPlatform = platform == .iOS
             ? name + "-ios"
             : name + "-watchos"
             
-            if platforms.count == 1 { bundleNameWithPlatform = name }
+            let originInternalDependnecies = internalDependencies
+            var internalDependencies = platform == .iOS
+            ? internalDependencies.filter { !$0.isWatchOSDependency }
+            : internalDependencies.filter { $0.isWatchOSDependency }
+            
+            if platforms.count == 1 {
+                nameWithPlatform = name
+                bundleNameWithPlatform = name
+                internalDependencies = originInternalDependnecies
+            }
             
             // MARK: - Static Or Dynamic Framework
             

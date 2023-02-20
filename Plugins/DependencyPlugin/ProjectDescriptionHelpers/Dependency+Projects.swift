@@ -14,10 +14,15 @@ public extension TargetDependency {
     public struct Domain {}
     public struct Core {}
     public struct Shared {}
+    public struct ThirdPartyLibs {}
     public struct DesignSystem {}
 }
 
 // MARK: - Features
+
+public extension Dep.Features {
+    static let BaseFeatureDependency = Dep.project(target: "BaseFeatureDependency", path: .relativeToFeature("BaseFeatureDependency"))
+}
 
 public extension Dep.Features.Splash {
     static let group = "Splash"
@@ -61,4 +66,22 @@ public extension Dep.Domain {
 }
 
 // MARK: - Core
+
+public extension Dep.Core {
+    static let iOS = Dep.project(target: "Core_ios", path: .core)
+    static let watchOS = Dep.project(target: "Core_watchos", path: .core)
+}
+
 // MARK: - Shared
+
+public extension Dep.Shared {
+    static let iOS = Dep.project(target: "Shared_ios", path: .shared)
+    static let watchOS = Dep.project(target: "Shared_watchos", path: .shared)
+}
+
+// MARK: - ThirdPartyLibs
+
+public extension Dep.ThirdPartyLibs {
+    static let iOS = Dep.project(target: "ThirdPartyLibs_ios", path: .thirdPartyLibs)
+    static let watchOS = Dep.project(target: "ThirdPartyLibs_watchos", path: .thirdPartyLibs)
+}
