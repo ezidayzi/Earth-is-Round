@@ -20,7 +20,10 @@ public extension Project {
         var projectTargets: [Target] = []
         
         let settings: SettingsDictionary = ["OTHER_LDFLAGS" : "$(inherited)"]
-            .merging(SettingsDictionary().setCodeSignManual())
+            .merging(
+                SettingsDictionary()
+                    .setCodeSignManual()
+            )
         
         let target = Target(
             name: name,
@@ -39,7 +42,7 @@ public extension Project {
                     Dep.target(name: "WidgetExtension")
                 ]
             ].flatMap { $0 },
-            settings: .settings(base: settings, configurations: XCConfig.project)
+            settings: .settings(base: settings.setProvisioning(), configurations: XCConfig.project)
         )
         
         projectTargets.append(target)
@@ -82,7 +85,8 @@ public extension Project {
             resources: "../Extensions/WidgetExtension/Resources/**",
             dependencies: [
                 .Core.iOS
-            ]
+            ],
+            settings: .settings(base: settings.setProvisioningWidget(), configurations: XCConfig.project)
         )
         
         projectTargets.append(widgetTarget)

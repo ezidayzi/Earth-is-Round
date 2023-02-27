@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="fastlane.lanes">
+    
+    
+    
+      
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000212">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="1: match" time="33.65263">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="2: match" time="29.740393">
+        
+      </testcase>
+    
+  </testsuite>
+</testsuites>

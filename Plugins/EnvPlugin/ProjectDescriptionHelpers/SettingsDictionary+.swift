@@ -24,18 +24,17 @@ public extension SettingsDictionary {
     func setCodeSignManual() -> SettingsDictionary {
         merging(["CODE_SIGN_STYLE": SettingValue(stringLiteral: "Manual")])
             .merging(["DEVELOPMENT_TEAM": SettingValue(stringLiteral: "FY8N9XTH66")])
-            .merging(["CODE_SIGN_IDENTITY": SettingValue(stringLiteral: "iPhone Developer")])
+            .merging(["CODE_SIGN_IDENTITY": SettingValue(stringLiteral: "$(CODE_SIGN_IDENTITY)")])
     }
     
-    func setProvisioningDevelopment() -> SettingsDictionary {
-        merging(["PROVISIONING_PROFILE_SPECIFIER": SettingValue(stringLiteral: "")])
-            .merging(["PROVISIONING_PROFILE": SettingValue(stringLiteral: "")])
+    func setProvisioning() -> SettingsDictionary {
+        merging(["PROVISIONING_PROFILE_SPECIFIER": SettingValue(stringLiteral: "$(APP_PROVISIONING_PROFILE)")])
+            .merging(["PROVISIONING_PROFILE": SettingValue(stringLiteral: "$(APP_PROVISIONING_PROFILE)")])
     }
     
-    func setProvisioningAppstore() -> SettingsDictionary {
-        merging(["PROVISIONING_PROFILE_SPECIFIER": SettingValue(stringLiteral: "")])
-            .merging(["CODE_SIGN_IDENTITY[sdk=iphoneos*]": SettingValue(stringLiteral: "")])
-            .merging(["PROVISIONING_PROFILE": SettingValue(stringLiteral: "")])
+    func setProvisioningWidget() -> SettingsDictionary {
+        merging(["PROVISIONING_PROFILE_SPECIFIER": SettingValue(stringLiteral: "$(WIDGET_PROVISIONING_PROFILE)")])
+            .merging(["PROVISIONING_PROFILE": SettingValue(stringLiteral: "$(WIDGET_PROVISIONING_PROFILE)")])
     }
 }
 

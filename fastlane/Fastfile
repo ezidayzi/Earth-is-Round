@@ -1,0 +1,27 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Push a new beta build to TestFlight"
+  lane :beta do
+    build_app(scheme: "EarthIsRound-QA")
+    upload_to_testflight
+  end
+end
+
+# match 인증서 파일 생성 -> 관리자용
+
+platform :ios do
+  lane :matchByTeam do
+      match(git_branch: "master", type: "appstore")
+      match(git_branch: "master", type: "development")
+  end
+end
+
+# match 인증서 받아오기 -> 팀원용
+
+platform :ios do
+  lane :matchReadOnly do
+      match(git_branch: "master", type: "appstore", readonly: true)
+      match(git_branch: "master", type: "development", readonly: true)
+  end
+end
