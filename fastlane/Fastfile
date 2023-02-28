@@ -1,5 +1,27 @@
 default_platform(:ios)
 
+################## Managing xcconfigs
+
+desc 'Set Marketing Version in Xcconfig'
+lane :set_version_xcconfigs do |options|
+    version_bump(options[:version])
+end
+
+def version_bump(target)
+    file_path = 'xcconfigs/Base/Projects/Shared.xcconfig'
+    version_key = 'MARKETING_VERSION'
+
+    puts "New Version: #{target}"
+
+    update_xcconfig_value(
+      path: file_path,
+      name: version_key,
+      value: target
+    )
+end
+
+################## Versioning
+
 platform :ios do
   desc 'Set Marketing and Build version'
   lane :set_version do |version|
@@ -40,26 +62,6 @@ lane :QA_CD do |options|
     build_app(scheme: "EarthIsRound-QA")
 
     upload_to_testflight
-end
-
-################## Managing xcconfigs
-
-desc 'Set Marketing Version in Xcconfig'
-lane :set_version_xcconfigs do |options|
-    version_bump(options[:version])
-end
-
-def version_bump(target)
-    file_path = 'xcconfigs/Base/Projects/Shared.xcconfig'
-    version_key = 'MARKETING_VERSION'
-
-    puts "New Version: #{target}"
-
-    update_xcconfig_value(
-      path: file_path,
-      name: version_key,
-      value: target
-    )
 end
 
 ################## Match
