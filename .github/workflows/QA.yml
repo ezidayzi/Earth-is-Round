@@ -23,8 +23,6 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
       - run: brew install fastlane
-      - run: bundle update fastlane
-      - run: bundle exec fastlane set_version version:1.0.0
       - name: Install Tuist
         run: |
           curl -L -o ./tuist.zip https://github.com/tuist/tuist/releases/download/${{ matrix.tuist }}/tuist.zip
@@ -33,6 +31,7 @@ jobs:
         run: |
           .tuist-bin/tuist fetch
           .tuist-bin/tuist generate
+      - run: bundle exec fastlane set_version version:1.0.0
       - run: bundle exec fastlane QA_CD
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSPHRASE }}
