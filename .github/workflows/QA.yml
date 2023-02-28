@@ -1,11 +1,14 @@
 name: QA
 
 on:
-  pull_request_target:
-    types: [opened, reopened]
+  push:
+    branches:
+      - 'develop'
+    tags:
+      - 'v*.*.*'
 
 jobs:
-  appstore:
+  QA:
     runs-on: macos-latest
     strategy:
       matrix:
