@@ -1,0 +1,45 @@
+name: QA
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  appstore:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        tuist: [ '3.16.0' ]
+        node: [ '12', '14' ]
+        ruby: [ '2.7' ]
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_KEY }}
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+      - run: brew install fastlane
+      - name: Install Tuist
+        run: |
+          curl -L -o ./tuist.zip https://github.com/tuist/tuist/releases/download/${{ matrix.tuist }}/tuist.zip
+          unzip ./tuist.zip -d .tuist-bin
+      - name: Increment Version
+        run: fastlane set_version version:1.0.0
+      - name: tuist generate
+        run: |
+          .tuist-bin/tuist fetch
+          .tuist-bin/tuist generate
+      - run: fastlane QA_CD
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSPHRASE }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
