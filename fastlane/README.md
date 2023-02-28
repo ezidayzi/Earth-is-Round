@@ -29,6 +29,14 @@ Set Marketing and Build version
 
 Upload QA App
 
+### QA_CD
+
+```sh
+[bundle exec] fastlane QA_CD
+```
+
+Upload QA App
+
 ### set_version_xcconfigs
 
 ```sh

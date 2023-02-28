@@ -26,8 +26,23 @@ lane :QA do |options|
     message: "Update version - #{version_number}",
     xcodeproj: "./Projects/iOSApp/Application/EarthIsRound.xcodeproj"
   )
-  add_git_tag(tag: "v#{version_number}")
+  add_git_tag(tag: "v#{options[:version]}")
   push_to_git_remote
+end
+
+desc 'Upload QA App'
+lane :QA_CD do |options|
+    match(git_branch: "master", type: "appstore", readonly: true)
+
+    app_store_connect_api_key(
+      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
+      key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"]
+    )
+
+    build_app(scheme: "EarthIsRound-QA")
+
+    upload_to_testflight
 end
 
 ################## Managing xcconfigs
