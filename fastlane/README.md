@@ -13,15 +13,34 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
-## iOS
-
-### ios beta
+### set_version
 
 ```sh
-[bundle exec] fastlane ios beta
+[bundle exec] fastlane set_version
 ```
 
-Push a new beta build to TestFlight
+Set Marketing and Build version
+
+### QA
+
+```sh
+[bundle exec] fastlane QA
+```
+
+Upload QA App
+
+### set_version_xcconfigs
+
+```sh
+[bundle exec] fastlane set_version_xcconfigs
+```
+
+Set Marketing Version in Xcconfig
+
+----
+
+
+## iOS
 
 ### ios matchByTeam
 

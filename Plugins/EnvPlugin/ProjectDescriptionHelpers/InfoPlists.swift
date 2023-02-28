@@ -2,9 +2,7 @@ import ProjectDescription
 
 public extension Project {
     public static let iosAppInfoPlist: [String: InfoPlist.Value] = [
-        "CFBundleShortVersionString": "1.0.0",
         "CFBundleDevelopmentRegion": "ko",
-        "CFBundleVersion": "1",
         "CFBundleIdentifier": "com.earthIsRound.release",
         "CFBundleDisplayName": "지구는 둥그니까",
         "UIMainStoryboardFile": "",
