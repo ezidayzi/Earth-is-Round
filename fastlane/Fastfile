@@ -1,25 +1,78 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "Push a new beta build to TestFlight"
-  lane :beta do
-    build_app(scheme: "EarthIsRound-QA")
-    upload_to_testflight
+  desc 'Set Marketing and Build version'
+  lane :set_version do |version|
+    increment_version_number(
+      version_number: version[:version],
+      xcodeproj: "./Projects/iOSApp/Application/EarthIsRound.xcodeproj"
+    )
+  
+    increment_build_number(
+      build_number: Time.new.strftime("%Y.%m%d.%H%M"), # 2023.0228.1138
+      xcodeproj: "./Projects/iOSApp/Application/EarthIsRound.xcodeproj"
+    )
   end
+
+
+################## QA
+
+desc 'Upload QA App'
+lane :QA do |options|
+  set_version(version: options[:version])
+  version_number = "#{lane_context[SharedValues::VERSION_NUMBER]}(#{lane_context[SharedValues::BUILD_NUMBER]})"
+
+  git_commit(path: "./", message: "QA staging")
+  add_git_tag(tag: "v#{options[:version]}")
+  push_to_git_remote
 end
+
+desc 'Upload QA App'
+lane :QA_CD do |options|
+    match(git_branch: "master", type: "appstore", readonly: true)
+
+    app_store_connect_api_key(
+      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
+      key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"]
+    )
+
+    build_app(scheme: "EarthIsRound-QA")
+
+    upload_to_testflight
+end
+
+################## Managing xcconfigs
+
+desc 'Set Marketing Version in Xcconfig'
+lane :set_version_xcconfigs do |options|
+    version_bump(options[:version])
+end
+
+def version_bump(target)
+    file_path = 'xcconfigs/Base/Projects/Shared.xcconfig'
+    version_key = 'MARKETING_VERSION'
+
+    puts "New Version: #{target}"
+
+    update_xcconfig_value(
+      path: file_path,
+      name: version_key,
+      value: target
+    )
+end
+
+################## Match
 
 # match 인증서 파일 생성 -> 관리자용
 
-platform :ios do
   lane :matchByTeam do
       match(git_branch: "master", type: "appstore")
       match(git_branch: "master", type: "development")
   end
-end
 
 # match 인증서 받아오기 -> 팀원용
 
-platform :ios do
   lane :matchReadOnly do
       match(git_branch: "master", type: "appstore", readonly: true)
       match(git_branch: "master", type: "development", readonly: true)
