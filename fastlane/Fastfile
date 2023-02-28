@@ -59,7 +59,12 @@ lane :QA_CD do |options|
       key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"]
     )
 
-    build_app(scheme: "EarthIsRound-QA")
+    build_app(
+      scheme: "EarthIsRound-QA",
+      include_symbols: true,
+      xcargs: "-allowProvisioningUpdates",
+      export_method: "app-store"
+    )
 
     upload_to_testflight
 end
