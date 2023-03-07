@@ -4,7 +4,11 @@ public extension TargetDependency {
     public struct Features {
         public struct Splash {}
         public struct Main {}
+        public struct Auth {}
+        public struct Archive {}
         public struct Setting {}
+        public struct SnowmanAlert {}
+        public struct ItemAlert {}
     }
     public struct Watch {
         public struct Features {
@@ -41,8 +45,40 @@ public extension Dep.Features.Main {
     static let Interface = Dep.project(target: "\(group)FeatureInterface", path: .relativeToFeature("\(group)Feature"))
 }
 
+public extension Dep.Features.Auth {
+    static let group = "Auth"
+    static func project(name: String) -> Dep { .project(target: "\(group)\(name)", path: .relativeToFeature("\(group)\(name)")) }
+
+    static let Feature        = project(name: "Feature")
+    static let Interface = Dep.project(target: "\(group)FeatureInterface", path: .relativeToFeature("\(group)Feature"))
+}
+
+public extension Dep.Features.Archive {
+    static let group = "Archive"
+    static func project(name: String) -> Dep { .project(target: "\(group)\(name)", path: .relativeToFeature("\(group)\(name)")) }
+
+    static let Feature        = project(name: "Feature")
+    static let Interface = Dep.project(target: "\(group)FeatureInterface", path: .relativeToFeature("\(group)Feature"))
+}
+
 public extension Dep.Features.Setting {
     static let group = "Setting"
+    static func project(name: String) -> Dep { .project(target: "\(group)\(name)", path: .relativeToFeature("\(group)\(name)")) }
+
+    static let Feature        = project(name: "Feature")
+    static let Interface = Dep.project(target: "\(group)FeatureInterface", path: .relativeToFeature("\(group)Feature"))
+}
+
+public extension Dep.Features.SnowmanAlert {
+    static let group = "SnowmanAlert"
+    static func project(name: String) -> Dep { .project(target: "\(group)\(name)", path: .relativeToFeature("\(group)\(name)")) }
+
+    static let Feature        = project(name: "Feature")
+    static let Interface = Dep.project(target: "\(group)FeatureInterface", path: .relativeToFeature("\(group)Feature"))
+}
+
+public extension Dep.Features.ItemAlert {
+    static let group = "ItemAlert"
     static func project(name: String) -> Dep { .project(target: "\(group)\(name)", path: .relativeToFeature("\(group)\(name)")) }
 
     static let Feature        = project(name: "Feature")
