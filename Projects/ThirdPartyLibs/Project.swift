@@ -9,6 +9,7 @@ let project = Project.framework(
     targets: [.dynamicFramework],
     externalDependencies: [
         .SPM.External.Alamofire,
-        .SPM.External.TCA
+        .SPM.External.TCA,
+        .SPM.External.TCACoordinator
     ]
 )
