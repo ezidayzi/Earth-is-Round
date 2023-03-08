@@ -2,6 +2,10 @@ import SwiftUI
 
 import ComposableArchitecture
 
+import SplashFeature
+import MainFeature
+import AuthFeature
+
 public struct RootView: View {
     
     let store: StoreOf<RootFeature>
@@ -13,6 +17,29 @@ public struct RootView: View {
     }
 
     public var body: some View {
-        EmptyView()
+        IfLetStore(
+            store.scope(
+                state: \.splash,
+                action: RootFeature.Action.splash
+            )
+        ) { store in
+            SplashView(store: store)
+        }
+        IfLetStore(
+            store.scope(
+                state: \.auth,
+                action: RootFeature.Action.auth
+            )
+        ) { store in
+            SignInView(store: store)
+        }
+        IfLetStore(
+            store.scope(
+                state: \.main,
+                action: RootFeature.Action.main
+            )
+        ) { store in
+            MainView(store: store)
+        }
     }
 }

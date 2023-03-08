@@ -21,6 +21,25 @@ public struct SplashView: View {
     }
 
     public var body: some View {
-        EmptyView()
+        VStack {
+            Text("Splash View")
+        }
+        .frame(
+            maxWidth: .infinity,
+            maxHeight: .infinity
+        )
+        .background(
+            Color(.yellow)
+        )
+        .onAppear {
+            Task {
+                do {
+                    try await Task.sleep(nanoseconds: 1_000_000_000)
+                    viewStore.send(.splashAnimationFinished, animation: .default)
+                } catch {
+                    
+                }
+            }
+        }
     }
 }

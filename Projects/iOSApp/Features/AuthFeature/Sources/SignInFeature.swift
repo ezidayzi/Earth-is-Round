@@ -9,7 +9,7 @@ public struct SignInFeature: ReducerProtocol {
     }
 
     public enum Action: Equatable {
-        
+        case signInButtonTapped
     }
 
     public var body: some ReducerProtocol<State, Action> {

@@ -13,6 +13,15 @@ public struct MainView: View {
     }
 
     public var body: some View {
-        EmptyView()
+        VStack {
+            Text("Main View")
+        }
+        .frame(
+            maxWidth: .infinity,
+            maxHeight: .infinity
+        )
+        .background(
+            Color(.brown)
+        )
     }
 }

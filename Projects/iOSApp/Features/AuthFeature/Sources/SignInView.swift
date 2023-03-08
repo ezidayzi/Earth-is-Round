@@ -13,6 +13,13 @@ public struct SignInView: View {
     }
 
     public var body: some View {
-        EmptyView()
+        VStack {
+            Text("SignIn View")
+            Button {
+                viewStore.send(.signInButtonTapped, animation: .default)
+            } label: {
+                Text("로그인 하기")
+            }
+        }
     }
 }
