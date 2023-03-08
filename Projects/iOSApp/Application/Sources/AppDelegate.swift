@@ -9,10 +9,18 @@
 import UIKit
 import WatchConnectivity
 
+import ComposableArchitecture
+
 final class AppDelegate: UIResponder, UIApplicationDelegate {
+    let store = Store<AppFeature.State, AppFeature.Action>(
+        initialState: AppFeature.State(),
+        reducer: AppFeature()
+    )
+    
+    lazy var viewStore = ViewStore<AppFeature.State, AppFeature.Action>(store)
     
     var session: WCSession!
-
+    
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
@@ -23,7 +31,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             session.delegate = self
             session.activate()
         }
-
+        
         return true
     }
 }
@@ -42,7 +50,7 @@ extension AppDelegate: WCSessionDelegate {
     ) {
         
     }
-
+    
     func session(
         _ session: WCSession,
         didReceiveMessage message: [String: Any],

@@ -7,12 +7,10 @@ import SplashFeature
 public struct RootFeature: ReducerProtocol {
     public init() {}
     
-    public struct State: Equatable {
-        var splash: SplashFeature.State?
-        var main: MainFeature.State?
-        var auth: SignInFeature.State?
-        
-        public init() { self.splash = SplashFeature.State() }
+    public enum State: Equatable {
+        case splash(SplashFeature.State)
+        case main(MainFeature.State)
+        case auth(SignInFeature.State)
     }
 
     public enum Action: Equatable {
@@ -22,31 +20,14 @@ public struct RootFeature: ReducerProtocol {
     }
 
     public var body: some ReducerProtocol<State, Action> {
-        Reduce { state, action in
-            switch action {
-            case let .splash(splashAction) :
-                switch splashAction {
-                case .splashAnimationFinished:
-                    state.splash = nil
-                    state.auth = SignInFeature.State()
-                }
-            case let .auth(authAction):
-                switch authAction {
-                case .signInButtonTapped:
-                    state.auth = nil
-                    state.main = MainFeature.State()
-                }
-            }
-            return .none
-        }
-        .ifLet(\.splash, action: /Action.splash) {
+        Scope(state: /State.splash, action: /Action.splash) {
             SplashFeature()
         }
-        .ifLet(\.main, action: /Action.main) {
-            MainFeature()
-        }
-        .ifLet(\.auth, action: /Action.auth) {
+        Scope(state: /State.auth, action: /Action.auth) {
             SignInFeature()
+        }
+        Scope(state: /State.main, action: /Action.main) {
+            MainFeature()
         }
     }
 }

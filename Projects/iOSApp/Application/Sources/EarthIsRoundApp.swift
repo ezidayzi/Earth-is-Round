@@ -11,9 +11,9 @@ struct EarthIsRoundApp: App {
     var body: some Scene {
         WindowGroup {
             RootView(
-                store: .init(
-                    initialState: .init(),
-                    reducer: RootFeature()
+                store: appDelegate.store.scope(
+                    state: \.rootCoordinator,
+                    action: AppFeature.Action.rootCoordinator
                 )
             )
         }
