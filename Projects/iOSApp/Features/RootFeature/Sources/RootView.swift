@@ -4,9 +4,12 @@ import ComposableArchitecture
 import TCACoordinators
 
 import SplashFeature
-import MainFeature
 import AuthFeature
+import MainFeature
+import SettingFeature
+import ArchiveFeature
 import SnowmanAlertFeature
+import ItemAlertFeature
 
 public struct RootView: View {
     
@@ -27,19 +30,34 @@ public struct RootView: View {
                     then: SplashView.init
                 )
                 CaseLet(
-                    state: /RootFeature.State.auth,
-                    action: RootFeature.Action.auth,
-                    then: SignInView.init
-                )
-                CaseLet(
                     state: /RootFeature.State.main,
                     action: RootFeature.Action.main,
                     then: MainView.init
                 )
                 CaseLet(
+                    state: /RootFeature.State.auth,
+                    action: RootFeature.Action.auth,
+                    then: SignInView.init
+                )
+                CaseLet(
+                    state: /RootFeature.State.setting,
+                    action: RootFeature.Action.setting,
+                    then: SettingView.init
+                )
+                CaseLet(
+                    state: /RootFeature.State.archive,
+                    action: RootFeature.Action.archive,
+                    then: ArchiveView.init
+                )
+                CaseLet(
                     state: /RootFeature.State.snowmanAlert,
                     action: RootFeature.Action.snowmanAlert,
                     then: SnowmanAlertView.init
+                )
+                CaseLet(
+                    state: /RootFeature.State.itemAlert,
+                    action: RootFeature.Action.itemAlert,
+                    then: ItemAlertView.init
                 )
             }
         }
