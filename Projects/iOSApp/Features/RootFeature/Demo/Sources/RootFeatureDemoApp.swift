@@ -1,29 +1,29 @@
 import SwiftUI
 
-import ItemAlertFeature
+import RootFeature
 
 import ComposableArchitecture
 
 @main
-struct ItemAlertFeatureDemoApp: App {
+struct RootFeatureDemoApp: App {
     var body: some Scene {
         WindowGroup {
-            ItemAlertView(
+            RootView(
                 store: Store(
                     initialState: .init(),
-                    reducer: ItemAlertFeature()
+                    reducer: RootCoordinator()
                 )
             )
         }
     }
 }
 
-struct ItemAlertView_Previews: PreviewProvider {
+struct RootView_Previews: PreviewProvider {
     static var previews: some View {
-        ItemAlertView(
+        RootView(
             store: Store(
                 initialState: .init(),
-                reducer: ItemAlertFeature()
+                reducer: RootCoordinator()
             )
         )
     }

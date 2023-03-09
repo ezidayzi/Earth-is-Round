@@ -1,29 +1,29 @@
 import SwiftUI
 
-import ItemAlertFeature
+import SplashFeature
 
 import ComposableArchitecture
 
 @main
-struct ItemAlertFeatureDemoApp: App {
+struct SplashFeatureDemoApp: App {
     var body: some Scene {
         WindowGroup {
-            ItemAlertView(
+            SplashView(
                 store: Store(
                     initialState: .init(),
-                    reducer: ItemAlertFeature()
+                    reducer: SplashFeature()
                 )
             )
         }
     }
 }
 
-struct ItemAlertView_Previews: PreviewProvider {
+struct SplashView_Previews: PreviewProvider {
     static var previews: some View {
-        ItemAlertView(
+        SplashView(
             store: Store(
                 initialState: .init(),
-                reducer: ItemAlertFeature()
+                reducer: SplashFeature()
             )
         )
     }

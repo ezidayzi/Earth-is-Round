@@ -1,29 +1,29 @@
 import SwiftUI
 
-import ItemAlertFeature
+import SnowmanAlertFeature
 
 import ComposableArchitecture
 
 @main
-struct ItemAlertFeatureDemoApp: App {
+struct SnowmanAlertFeatureDemoApp: App {
     var body: some Scene {
         WindowGroup {
-            ItemAlertView(
+            SnowmanAlertView(
                 store: Store(
                     initialState: .init(),
-                    reducer: ItemAlertFeature()
+                    reducer: SnowmanAlertFeature()
                 )
             )
         }
     }
 }
 
-struct ItemAlertView_Previews: PreviewProvider {
+struct SnowmanAlertView_Previews: PreviewProvider {
     static var previews: some View {
-        ItemAlertView(
+        SnowmanAlertView(
             store: Store(
                 initialState: .init(),
-                reducer: ItemAlertFeature()
+                reducer: SnowmanAlertFeature()
             )
         )
     }
