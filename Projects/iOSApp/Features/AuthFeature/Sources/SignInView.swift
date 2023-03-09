@@ -21,5 +21,12 @@ public struct SignInView: View {
                 Text("로그인 하기")
             }
         }
+        .frame(
+            maxWidth: .infinity,
+            maxHeight: .infinity
+        )
+        .background(
+            Color(.white)
+        )
     }
 }

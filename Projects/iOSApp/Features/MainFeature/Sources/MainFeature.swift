@@ -7,14 +7,25 @@ public struct MainFeature: ReducerProtocol {
     public struct State: Equatable {
         public init() {}
     }
-
+    
     public enum Action: Equatable {
+        case onAppear
+        case delegate(Delegate)
         
+        public enum Delegate: Equatable {
+            case checkTodayPopup
+        }
     }
-
+    
     public var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
-            return .none
+            switch action {
+            case .onAppear:
+                return .send(.delegate(.checkTodayPopup))
+                
+            case .delegate:
+                return .none
+            }
         }
     }
 }

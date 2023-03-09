@@ -6,6 +6,7 @@ import TCACoordinators
 import SplashFeature
 import MainFeature
 import AuthFeature
+import SnowmanAlertFeature
 
 public struct RootView: View {
     
@@ -34,6 +35,11 @@ public struct RootView: View {
                     state: /RootFeature.State.main,
                     action: RootFeature.Action.main,
                     then: MainView.init
+                )
+                CaseLet(
+                    state: /RootFeature.State.snowmanAlert,
+                    action: RootFeature.Action.snowmanAlert,
+                    then: SnowmanAlertView.init
                 )
             }
         }

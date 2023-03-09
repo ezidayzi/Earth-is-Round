@@ -13,6 +13,15 @@ public struct SnowmanAlertView: View {
     }
 
     public var body: some View {
-        EmptyView()
+        VStack {
+            Text("SnowmanAlert View")
+        }
+        .frame(
+            maxWidth: .infinity,
+            maxHeight: .infinity
+        )
+        .background(
+            Color(.gray)
+        )
     }
 }

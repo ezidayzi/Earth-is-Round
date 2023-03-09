@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import SwiftUI
 import TCACoordinators
 
 public struct RootCoordinator: ReducerProtocol {
@@ -23,15 +24,22 @@ public struct RootCoordinator: ReducerProtocol {
             case let .routeAction(_, .splash(splashAction)):
                 switch splashAction {
                 case .splashAnimationFinished:
-                    state.routes.push(.auth(.init()))
-                default:
-                    return .none
+                    return .routeWithDelaysIfUnsupported(state.routes) { route in
+                        route.append(.root(.auth(.init())))
+                        
+                    }
                 }
                 
             case let .routeAction(_, .auth(authAction)):
                 switch authAction {
                 case .signInButtonTapped:
                     state.routes.push(.main(.init()))
+                }
+                
+            case let .routeAction(_, .main(mainAction)):
+                switch mainAction {
+                case .delegate(.checkTodayPopup):
+                    state.routes.presentSheet(.snowmanAlert(.init()))
                 default:
                     return .none
                 }

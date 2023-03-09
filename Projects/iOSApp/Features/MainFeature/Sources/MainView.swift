@@ -23,5 +23,8 @@ public struct MainView: View {
         .background(
             Color(.brown)
         )
+        .onAppear {
+            viewStore.send(.onAppear)
+        }
     }
 }
