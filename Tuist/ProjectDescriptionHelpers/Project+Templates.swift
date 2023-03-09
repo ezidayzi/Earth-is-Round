@@ -241,7 +241,7 @@ extension Scheme {
     }
     static func makeDemoScheme(configs: ConfigurationName, name: String) -> Scheme {
         return Scheme(
-            name: name,
+            name: "\(name)Demo",
             shared: true,
             buildAction: .buildAction(targets: ["\(name)Demo"]),
             testAction: .targets(

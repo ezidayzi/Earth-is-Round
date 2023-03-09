@@ -1,29 +1,29 @@
 import SwiftUI
 
-import ItemAlertFeature
+import ArchiveFeature
 
 import ComposableArchitecture
 
 @main
-struct ItemAlertFeatureDemoApp: App {
+struct ArchiveFeatureDemoApp: App {
     var body: some Scene {
         WindowGroup {
-            ItemAlertView(
+            ArchiveView(
                 store: Store(
                     initialState: .init(),
-                    reducer: ItemAlertFeature()
+                    reducer: ArchiveFeature()
                 )
             )
         }
     }
 }
 
-struct ItemAlertView_Previews: PreviewProvider {
+struct ArchiveView_Previews: PreviewProvider {
     static var previews: some View {
-        ItemAlertView(
+        ArchiveView(
             store: Store(
                 initialState: .init(),
-                reducer: ItemAlertFeature()
+                reducer: ArchiveFeature()
             )
         )
     }
