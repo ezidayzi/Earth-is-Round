@@ -5,16 +5,15 @@ import EnvPlugin
 
 let project = Project.framework(
     name: "SettingFeature",
-    targets: [.testing, .interface, .unitTest, .staticFramework, .demo],
+    targets: [.testing, .unitTest, .staticFramework, .demo],
     internalDependencies: [
-        .Features.Main.Interface,
-        .Features.Splash.Interface
+        .Features.BaseFeatureDependency
     ],
     externalDependencies: [
         
     ],
     interfaceDependencies: [
-        .Features.BaseFeatureDependency
+        
     ],
     testingDependencies: [],
     demoDependencies: []
