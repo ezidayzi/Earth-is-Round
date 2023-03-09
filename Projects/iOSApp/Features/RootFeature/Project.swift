@@ -10,6 +10,10 @@ let project = Project.framework(
         .Features.Splash.Feature,
         .Features.Auth.Feature,
         .Features.Main.Feature,
+        .Features.Setting.Feature,
+        .Features.Archive.Feature,
+        .Features.SnowmanAlert.Feature,
+        .Features.ItemAlert.Feature
     ],
     externalDependencies: [
         

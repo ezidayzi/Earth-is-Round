@@ -7,7 +7,7 @@ let project = Project.framework(
     name: "ArchiveFeature",
     targets: [.testing, .unitTest, .staticFramework, .demo],
     internalDependencies: [
-        .Features.SnowmanAlert.Feature
+        .Features.BaseFeatureDependency
     ],
     externalDependencies: [
         

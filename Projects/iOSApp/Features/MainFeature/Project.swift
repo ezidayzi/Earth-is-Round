@@ -7,10 +7,7 @@ let project = Project.framework(
     name: "MainFeature",
     targets: [.testing, .unitTest, .staticFramework, .demo],
     internalDependencies: [
-        .Features.Setting.Feature,
-        .Features.Archive.Feature,
-        .Features.SnowmanAlert.Feature,
-        .Features.ItemAlert.Feature
+        .Features.BaseFeatureDependency
     ],
     externalDependencies: [
         
