@@ -23,7 +23,7 @@ public extension ProjectDescription.Path {
         return .relativeToRoot("Projects/Domain")
     }
     static var core: Self {
-        return .relativeToRoot("Projects/Core")
+        return .relativeToRoot("Projects/Core/Core")
     }
     static var shared: Self {
         return .relativeToRoot("Projects/Shared")

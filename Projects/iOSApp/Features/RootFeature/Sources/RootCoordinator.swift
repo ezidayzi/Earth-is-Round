@@ -24,16 +24,13 @@ public struct RootCoordinator: ReducerProtocol {
             case let .routeAction(_, .splash(splashAction)):
                 switch splashAction {
                 case .splashAnimationFinished:
-                    return .routeWithDelaysIfUnsupported(state.routes) { route in
-                        route.append(.root(.auth(.init())))
-                        
-                    }
+                    state.routes = [.root(.auth(.init()))]
                 }
                 
             case let .routeAction(_, .auth(authAction)):
                 switch authAction {
                 case .signInButtonTapped:
-                    state.routes.push(.main(.init()))
+                    state.routes = [.root(.main(.init()))]
                 }
                 
             case let .routeAction(_, .main(mainAction)):

@@ -4,9 +4,9 @@ import DependencyPlugin
 import EnvPlugin
 
 let project = Project.framework(
-    name: "Core",
+    name: "PedometerClient",
     platforms: [.iOS, .watchOS],
-    targets: [.unitTest, .dynamicFramework, .demo, .testing],
+    targets: [.unitTest, .dynamicFramework],
     internalDependencies: [
         .Shared.iOS,
         .Shared.watchOS

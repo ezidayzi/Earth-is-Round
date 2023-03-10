@@ -10,10 +10,10 @@ public extension Project {
             "UIInterfaceOrientationPortrait",
         ],
         "UILaunchStoryboardName": "LaunchScreen",
-        "App Transport Security Settings": ["Allow Arbitrary Loads": true],
         "NSAppTransportSecurity": ["NSAllowsArbitraryLoads": true],
         "ITSAppUsesNonExemptEncryption": false,
         "UIUserInterfaceStyle": "Light",
+        "NSMotionUsageDescription": "걸음수 데이터 측정을 위해 데이터 접근 권한이 필요합니다."
     ]
     
     public static let watchAppSettings: SettingsDictionary = [
