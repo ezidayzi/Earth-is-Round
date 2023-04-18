@@ -18,6 +18,7 @@ public extension TargetDependency {
     public struct Domain {}
     public struct Core {
         public struct PedometerClient {}
+        public struct APIClient {}
     }
     public struct Shared {}
     public struct ThirdPartyLibs {}
@@ -114,6 +115,11 @@ public extension Dep.Core {
 public extension Dep.Core.PedometerClient {
     static let iOS = Dep.project(target: "PedometerClient_ios", path: .relativeToCore("PedometerClient"))
     static let watchOS = Dep.project(target: "PedometerClient_watchos", path: .relativeToCore("PedometerClient"))
+}
+
+public extension Dep.Core.APIClient {
+    static let iOS = Dep.project(target: "APIClient_ios", path: .relativeToCore("APIClient"))
+    static let watchOS = Dep.project(target: "APIClient_watchos", path: .relativeToCore("APIClient"))
 }
 
 // MARK: - DesignSystemp
