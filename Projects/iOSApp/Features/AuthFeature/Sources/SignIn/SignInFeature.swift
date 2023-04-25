@@ -20,8 +20,11 @@ public struct SignInFeature: ReducerProtocol {
     }
 
     public enum Action: BindableAction, Equatable {
+        // View Actions
         case binding(BindingAction<State>)
         case signInButtonTapped
+        
+        // Internal Actions
         case _enableSignIn
     }
 
@@ -47,7 +50,7 @@ public struct SignInFeature: ReducerProtocol {
                 let isEnabled = state.isValidPassword && state.isValidNickname
                 state.signinIsEnabled = isEnabled
                 return .none
-                                
+                
             case .signInButtonTapped:
                 return .none
             }

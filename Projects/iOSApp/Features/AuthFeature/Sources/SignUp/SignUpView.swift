@@ -62,7 +62,7 @@ public struct SignUpView: View {
                     .frame(height: Metric.buttonTopSpacing)
                 
                 Button("회원가입") {
-                    viewStore.send(.signUpButtonTapped)
+                    viewStore.send(.signUpButtonTapped, animation: Animation.easeIn(duration: 0.2))
                 }
                 .erButton(
                     labelColor: viewStore.signupIsEnabled
@@ -70,7 +70,7 @@ public struct SignUpView: View {
                     backgroundColor: viewStore.signupIsEnabled
                     ? ERColor.Main : ERColor.Black90
                 )
-                .disabled(viewStore.signupIsEnabled)
+                .disabled(!viewStore.signupIsEnabled)
                 
                 Spacer()
                     .frame(height: Metric.buttonBottomPadding)

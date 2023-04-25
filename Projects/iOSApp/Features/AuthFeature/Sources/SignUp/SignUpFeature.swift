@@ -28,8 +28,11 @@ public struct SignUpFeature: ReducerProtocol {
     }
 
     public enum Action: BindableAction, Equatable {
+        // View Actions
         case binding(BindingAction<State>)
         case signUpButtonTapped
+        
+        // Internal Actions
         case _enableSignUp
     }
 
@@ -62,4 +65,3 @@ public struct SignUpFeature: ReducerProtocol {
         }
     }
 }
-

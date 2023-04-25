@@ -54,7 +54,7 @@ public struct SignInView: View {
                     .frame(height: Metric.buttonTopSpacing)
                 
                 Button("로그인") {
-                    viewStore.send(.signInButtonTapped)
+                    viewStore.send(.signInButtonTapped, animation: Animation.easeIn(duration: 0.2))
                 }
                 .erButton(
                     labelColor: viewStore.signinIsEnabled
@@ -62,7 +62,7 @@ public struct SignInView: View {
                     backgroundColor: viewStore.signinIsEnabled
                     ? ERColor.Main : ERColor.Black90
                 )
-                .disabled(viewStore.signinIsEnabled)
+                .disabled(!viewStore.signinIsEnabled)
                 
                 Spacer()
                     .frame(height: Metric.buttonBottomPadding)

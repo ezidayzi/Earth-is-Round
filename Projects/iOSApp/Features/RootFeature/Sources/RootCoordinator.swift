@@ -32,6 +32,10 @@ public struct RootCoordinator: ReducerProtocol {
                 switch authAction {
                 case let .routeAction(_, authScreenAction):
                     switch authScreenAction {
+                    case .signIn(.signInButtonTapped),
+                        .signUp(.signUpButtonTapped):
+                        state.routes = [.root(.main(.init()))]
+                        
                     default:
                         return .none
                     }
