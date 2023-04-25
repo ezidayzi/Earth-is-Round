@@ -7,7 +7,7 @@ import EnvPlugin
 
 public extension Project {
     static func watchApp(name: String,
-                         organizationName: String = Environment.organizationName,
+                         organizationName: String = Environment.workspaceName,
                          targets: Set<FeatureTarget> = Set([.staticFramework, .unitTest, .demo, .testing]),
                          packages: [Package] = [],
                          internalDependencies: [TargetDependency] = [],
@@ -16,7 +16,7 @@ public extension Project {
     ) -> Project {
         
         let configurationName: ConfigurationName = "Development"
-        let deploymentTarget = DeploymentTarget.watchOS(targetVersion: "8.0")
+        let deploymentTarget = Environment.watchDeploymentTarget
         var projectTargets: [Target] = []
         
         let settings = Project.watchAppSettings
@@ -25,7 +25,7 @@ public extension Project {
             name: name,
             platform: .watchOS,
             product: .app,
-            bundleId: "com.earthIsRound.release.watchApp",
+            bundleId: "\(Environment.bundlePrefix).release.watchApp",
             deploymentTarget: deploymentTarget,
             infoPlist: nil,
             sources: ["Sources/**/*.swift"],
@@ -43,7 +43,7 @@ public extension Project {
                 name: "\(name)Testing",
                 platform: .watchOS,
                 product: .framework,
-                bundleId: "com.earthIsRound.\(name)Testing",
+                bundleId: "\(Environment.bundlePrefix).\(name)Testing",
                 deploymentTarget: deploymentTarget,
                 infoPlist: .default,
                 sources: ["Testing/Sources/**/*.swift"],
@@ -76,7 +76,7 @@ public extension Project {
                 name: "\(name)Tests",
                 platform: .watchOS,
                 product: .unitTests,
-                bundleId: "com.erathIsRound.Tests",
+                bundleId: "\(Environment.bundlePrefix).Tests",
                 deploymentTarget: deploymentTarget,
                 infoPlist: .default,
                 sources: ["Tests/Sources/**/*.swift"],

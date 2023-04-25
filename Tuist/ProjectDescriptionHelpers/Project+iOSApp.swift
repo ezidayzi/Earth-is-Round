@@ -7,7 +7,7 @@ import EnvPlugin
 
 public extension Project {
     static func iOSApp(name: String,
-                       organizationName: String = Environment.organizationName,
+                       organizationName: String = Environment.workspaceName,
                        targets: Set<FeatureTarget> = Set([.staticFramework, .unitTest, .demo, .testing]),
                        packages: [Package] = [],
                        internalDependencies: [TargetDependency] = [],
@@ -16,7 +16,7 @@ public extension Project {
     ) -> Project {
         
         let configurationName: ConfigurationName = "Development"
-        let deploymentTarget = DeploymentTarget.iOS(targetVersion: "15.0", devices: .iphone)
+        let deploymentTarget = Environment.iphoneDeploymentTarget
         var projectTargets: [Target] = []
         
         let settings: SettingsDictionary = ["OTHER_LDFLAGS" : "$(inherited)"]
@@ -29,7 +29,7 @@ public extension Project {
             name: name,
             platform: .iOS,
             product: .app,
-            bundleId: "com.earthIsRound.release",
+            bundleId: "\(Environment.bundlePrefix).release",
             deploymentTarget: deploymentTarget,
             infoPlist: .extendingDefault(with: Project.iosAppInfoPlist),
             sources: ["Sources/**/*.swift"],
@@ -54,7 +54,7 @@ public extension Project {
                 name: "\(name)Testing",
                 platform: .iOS,
                 product: .framework,
-                bundleId: "com.earthIsRound.\(name)Testing",
+                bundleId: "\(Environment.bundlePrefix).\(name)Testing",
                 deploymentTarget: deploymentTarget,
                 infoPlist: .default,
                 sources: ["Testing/Sources/**/*.swift"],
@@ -74,7 +74,7 @@ public extension Project {
             name: "WidgetExtension",
             platform: .iOS,
             product: .appExtension,
-            bundleId: "com.earthIsRound.release.widget",
+            bundleId: "\(Environment.bundlePrefix).release.widget",
             infoPlist: .extendingDefault(with: [
                 "CFBundleDisplayName": "$(PRODUCT_NAME)",
                 "NSExtension": [
@@ -110,7 +110,7 @@ public extension Project {
                 name: "\(name)Tests",
                 platform: .iOS,
                 product: .unitTests,
-                bundleId: "com.erathIsRound.Tests",
+                bundleId: "\(Environment.bundlePrefix).Tests",
                 deploymentTarget: deploymentTarget,
                 infoPlist: .default,
                 sources: ["Tests/Sources/**/*.swift"],
