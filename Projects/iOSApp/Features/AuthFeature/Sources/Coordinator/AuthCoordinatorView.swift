@@ -6,4 +6,40 @@
 //  Copyright © 2023 com.earthIsRound. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
+
+import ComposableArchitecture
+import TCACoordinators
+
+public struct AuthCoordinatorView: View {
+    
+    let store: StoreOf<AuthCoordinator>
+    @ObservedObject var viewStore: ViewStoreOf<AuthCoordinator>
+    
+    public init(store: StoreOf<AuthCoordinator>) {
+        self.store = store
+        self.viewStore = ViewStore(store, observe: { $0 })
+    }
+    
+    public var body: some View {
+        TCARouter(store) { store in
+            SwitchStore(store) {
+                CaseLet(
+                    state: /AuthScreen.State.auth,
+                    action: AuthScreen.Action.auth,
+                    then: AuthView.init
+                )
+                CaseLet(
+                    state: /AuthScreen.State.signIn,
+                    action: AuthScreen.Action.signIn,
+                    then: SignInView.init
+                )
+                CaseLet(
+                    state: /AuthScreen.State.signUp,
+                    action: AuthScreen.Action.signUp,
+                    then: SignUpView.init
+                )
+            }
+        }
+    }
+}

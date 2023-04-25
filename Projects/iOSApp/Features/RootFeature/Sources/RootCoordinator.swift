@@ -1,5 +1,6 @@
-import ComposableArchitecture
 import SwiftUI
+
+import ComposableArchitecture
 import TCACoordinators
 
 public struct RootCoordinator: ReducerProtocol {
@@ -10,12 +11,12 @@ public struct RootCoordinator: ReducerProtocol {
             self.routes = [.root(.splash(.init()), embedInNavigationView: true)]
         }
         
-        public var routes: [Route<RootFeature.State>]
+        public var routes: [Route<RootScreen.State>]
     }
     
     public enum Action: Equatable, IndexedRouterAction {
-        case routeAction(Int, action: RootFeature.Action)
-        case updateRoutes([Route<RootFeature.State>])
+        case routeAction(Int, action: RootScreen.Action)
+        case updateRoutes([Route<RootScreen.State>])
     }
     
     public var body: some ReducerProtocol<State, Action> {
@@ -29,8 +30,14 @@ public struct RootCoordinator: ReducerProtocol {
                 
             case let .routeAction(_, .auth(authAction)):
                 switch authAction {
-                case .signInButtonTapped:
-                    state.routes = [.root(.main(.init()))]
+                case let .routeAction(_, authScreenAction):
+                    switch authScreenAction {
+                    default:
+                        return .none
+                    }
+                    
+                default:
+                    return .none
                 }
                 
             case let .routeAction(_, .main(mainAction)):
@@ -47,7 +54,7 @@ public struct RootCoordinator: ReducerProtocol {
             
             return .none
         }.forEachRoute {
-            RootFeature()
+            RootScreen()
         }
     }
 }

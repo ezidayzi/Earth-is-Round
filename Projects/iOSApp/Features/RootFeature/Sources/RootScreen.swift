@@ -20,8 +20,6 @@ public struct RootScreen: ReducerProtocol {
         case snowmanAlert(SnowmanAlertFeature.State)
         case itemAlert(ItemAlertFeature.State)
     }
-    
-    // 예를 RootFeature가 아니라 RootScreen으로 생각하고, State는 다른 곳에서 관리
 
     public enum Action: Equatable {
         case splash(SplashFeature.Action)
