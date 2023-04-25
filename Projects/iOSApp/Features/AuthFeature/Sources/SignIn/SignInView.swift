@@ -2,9 +2,17 @@ import SwiftUI
 
 import ComposableArchitecture
 
+import Shared_ios
 import DesignSystem_ios
 
 public struct SignInView: View {
+    
+    private enum Metric {
+        static let topPadding = (132 - 74).adjustedH
+        static let textFieldSpacing = 49.adjustedH
+        static let buttonTopSpacing = 355.adjustedH
+        static let buttonBottomPadding = (62 - 34).adjustedH
+    }
     
     let store: StoreOf<SignInFeature>
     @ObservedObject var viewStore: ViewStoreOf<SignInFeature>
@@ -15,45 +23,54 @@ public struct SignInView: View {
     }
 
     public var body: some View {
-        VStack {
-            Spacer(minLength: 301 - 44)
-            
-            DesignSystemIosAsset.Assets.splashTitle.swiftUIImage
-            
-            Spacer()
-            
-            Button("회원가입") {
+        // Note(230426)
+        // Fixed Frame에서 keyboard avoidance를 회피하기 위해 ScrollView 사용
+        ScrollView {
+            VStack {
                 
-            }
-            .buttonStyle(ERButton(labelColor: DesignSystemIosAsset.Assets.white.swiftUIColor))
-            .background(Color.white)
-            .dynamicCornerRadius(ERColor.Black50)
-            .frame(maxWidth: .infinity) // Fill the screen width
-            
-            Spacer(minLength: 20)
-            
-            Button {
+                Spacer()
+                    .frame(height: Metric.topPadding)
                 
-            } label: {
-                Text("로그인")
-                    .frame(maxWidth: .infinity)
-                    .font(DesignSystemIosFontFamily.AritaDotumOTF.semiBold.font(size: 18).toSwiftUI)
-                    .foregroundColor(DesignSystemIosAsset.Assets.black10.swiftUIColor)
-                    .padding(.vertical, 17)a
-                    .background(Color.white)
+                titleTextField(
+                    title: "닉네임",
+                    placeHolder: "영문 4 ~ 12자로 입력해 주세요.",
+                    text: viewStore.binding(\.$nickname),
+                    isValid: viewStore.isValidNickname,
+                    maxLength: 12
+                )
+                
+                Spacer()
+                    .frame(height: Metric.textFieldSpacing)
+                
+                titleSecureField(
+                    title: "비밀번호",
+                    placeHolder: "영문, 숫자 8 ~ 15자로 입력해 주세요.",
+                    text: viewStore.binding(\.$password),
+                    isValid: viewStore.isValidPassword,
+                    maxLength: 15
+                )
+                
+                Spacer()
+                    .frame(height: Metric.buttonTopSpacing)
+                
+                Button("회원가입") {
+                    viewStore.send(.signUpButtonTapped)
+                }
+                .erButton(
+                    labelColor: viewStore.signinIsEnabled
+                    ? ERColor.White : ERColor.Black50,
+                    backgroundColor: viewStore.signinIsEnabled
+                    ? ERColor.Main : ERColor.Black90
+                )
+                .disabled(viewStore.signinIsEnabled)
+                
+                Spacer()
+                    .frame(height: Metric.buttonBottomPadding)
             }
-            
-            .dynamicCornerRadius(ERColor.Black50)
-
-            Spacer(minLength: 62)
+            .horizontalPadding()
         }
-        .frame(
-            maxWidth: .infinity,
-            maxHeight: .infinity
-        )
-        .background(
-            Color(.white)
-        )
-        .padding(.horizontal) // Add left and right margin
+        .scrollDisabled(true)
+        .onTapHideKeyboard()
+        .ignoresSafeArea(.keyboard)
     }
 }
