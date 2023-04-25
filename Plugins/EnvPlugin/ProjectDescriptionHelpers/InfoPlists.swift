@@ -3,7 +3,7 @@ import ProjectDescription
 public extension Project {
     public static let iosAppInfoPlist: [String: InfoPlist.Value] = [
         "CFBundleDevelopmentRegion": "ko",
-        "CFBundleIdentifier": "com.earthIsRound.release",
+        "CFBundleIdentifier": "\(Environment.bundlePrefix).release",
         "CFBundleDisplayName": "지구는 둥그니까",
         "UIMainStoryboardFile": "",
         "UISupportedInterfaceOrientations": [
@@ -24,7 +24,7 @@ public extension Project {
             "UIInterfaceOrientationPortrait",
             "UIInterfaceOrientationPortraitUpsideDown",
         ],
-        "INFOPLIST_KEY_WKCompanionAppBundleIdentifier": "com.earthIsRound.release",
+        "INFOPLIST_KEY_WKCompanionAppBundleIdentifier": "\(Environment.bundlePrefix).release",
         "INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp": true,
         "INFOPLIST_KEY_CFBundleDisplayName": "지구는 둥그니까",
     ]

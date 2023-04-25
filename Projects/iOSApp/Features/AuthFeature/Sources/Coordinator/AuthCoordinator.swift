@@ -1,0 +1,63 @@
+//
+//  AuthCoordinator.swift
+//  AuthFeature
+//
+//  Created by Junho Lee on 2023/04/25.
+//  Copyright © 2023 com.earthIsRound. All rights reserved.
+//
+
+import SwiftUI
+
+import ComposableArchitecture
+import TCACoordinators
+
+public struct AuthCoordinator: ReducerProtocol {
+    public init() { }
+    
+    public struct State: Equatable, IndexedRouterState {
+        public init() {
+            self.routes = [.root(.auth(.init()), embedInNavigationView: true)]
+        }
+        
+        public var routes: [Route<AuthScreen.State>]
+    }
+    
+    public enum Action: Equatable, IndexedRouterAction {
+        case routeAction(Int, action: AuthScreen.Action)
+        case updateRoutes([Route<AuthScreen.State>])
+    }
+    
+    public var body: some ReducerProtocol<State, Action> {
+        return Reduce<State, Action> { state, action in
+            switch action {
+            case let .routeAction(_, .auth(authAction)):
+                switch authAction {
+                case .signInButtonTapped:
+                    state.routes.push(.signIn(.init()))
+                case .signUpButtonTapped:
+                    state.routes.push(.signUp(.init()))
+                }
+                
+            case let .routeAction(_, .signIn(signInAction)):
+                switch signInAction {
+                default:
+                    return .none
+                }
+                
+            case let .routeAction(_, .signUp(signUpAction)):
+                switch signUpAction {
+                default:
+                    return .none
+                }
+                
+            default:
+                break
+            }
+            
+            return .none
+        }.forEachRoute {
+            AuthScreen()
+        }
+    }
+}
+

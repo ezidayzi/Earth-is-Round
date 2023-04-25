@@ -10,6 +10,9 @@ import SwiftUI
 
 import ComposableArchitecture
 
+import Shared_ios
+import DesignSystem_ios
+
 public struct SplashView: View {
     
     let store: StoreOf<SplashFeature>
@@ -22,15 +25,16 @@ public struct SplashView: View {
 
     public var body: some View {
         VStack {
-            Text("Splash View")
+            Spacer(minLength: 336 - 44)
+            DesignSystemIosAsset.Assets.splashTitle.swiftUIImage
+            Spacer()
+            Text("@2023.earthisround All rights reserved.")
+                .font(DesignSystemIosFontFamily.AritaDotumOTF.medium.font(size: 15).toSwiftUI)
+                .foregroundColor(ERColor.Black10)
+                .frame(width: 250, height: 15)
+                .background(Color.white)
+            Spacer(minLength: 65)
         }
-        .frame(
-            maxWidth: .infinity,
-            maxHeight: .infinity
-        )
-        .background(
-            Color(.yellow)
-        )
         .onAppear {
             Task {
                 do {

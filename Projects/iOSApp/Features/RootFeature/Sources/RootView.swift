@@ -11,7 +11,7 @@ import ArchiveFeature
 import SnowmanAlertFeature
 import ItemAlertFeature
 
-public struct RootView: View {
+public struct RootCoordinatorView: View {
     
     let store: StoreOf<RootCoordinator>
     @ObservedObject var viewStore: ViewStoreOf<RootCoordinator>
@@ -25,38 +25,38 @@ public struct RootView: View {
         TCARouter(store) { store in
             SwitchStore(store) {
                 CaseLet(
-                    state: /RootFeature.State.splash,
-                    action: RootFeature.Action.splash,
+                    state: /RootScreen.State.splash,
+                    action: RootScreen.Action.splash,
                     then: SplashView.init
                 )
                 CaseLet(
-                    state: /RootFeature.State.main,
-                    action: RootFeature.Action.main,
+                    state: /RootScreen.State.main,
+                    action: RootScreen.Action.main,
                     then: MainView.init
                 )
                 CaseLet(
-                    state: /RootFeature.State.auth,
-                    action: RootFeature.Action.auth,
-                    then: SignInView.init
+                    state: /RootScreen.State.auth,
+                    action: RootScreen.Action.auth,
+                    then: AuthCoordinatorView.init
                 )
                 CaseLet(
-                    state: /RootFeature.State.setting,
-                    action: RootFeature.Action.setting,
+                    state: /RootScreen.State.setting,
+                    action: RootScreen.Action.setting,
                     then: SettingView.init
                 )
                 CaseLet(
-                    state: /RootFeature.State.archive,
-                    action: RootFeature.Action.archive,
+                    state: /RootScreen.State.archive,
+                    action: RootScreen.Action.archive,
                     then: ArchiveView.init
                 )
                 CaseLet(
-                    state: /RootFeature.State.snowmanAlert,
-                    action: RootFeature.Action.snowmanAlert,
+                    state: /RootScreen.State.snowmanAlert,
+                    action: RootScreen.Action.snowmanAlert,
                     then: SnowmanAlertView.init
                 )
                 CaseLet(
-                    state: /RootFeature.State.itemAlert,
-                    action: RootFeature.Action.itemAlert,
+                    state: /RootScreen.State.itemAlert,
+                    action: RootScreen.Action.itemAlert,
                     then: ItemAlertView.init
                 )
             }

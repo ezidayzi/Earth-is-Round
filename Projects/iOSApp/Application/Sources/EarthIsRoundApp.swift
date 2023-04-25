@@ -10,7 +10,7 @@ struct EarthIsRoundApp: App {
     
     var body: some Scene {
         WindowGroup {
-            RootView(
+            RootCoordinatorView(
                 store: appDelegate.store.scope(
                     state: \.rootCoordinator,
                     action: AppFeature.Action.rootCoordinator

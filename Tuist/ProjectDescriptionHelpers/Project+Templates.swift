@@ -10,7 +10,7 @@ let isCI = (ProcessInfo.processInfo.environment["TUIST_CI"] ?? "0") == "1" ? tru
 
 public extension Project {
     static func framework(name: String,
-                          organizationName: String = Environment.organizationName,
+                          organizationName: String = Environment.workspaceName,
                           platforms: [Platform] = [Platform.iOS],
                           targets: Set<FeatureTarget> = Set([.staticFramework, .unitTest, .demo, .testing]),
                           packages: [Package] = [],
@@ -25,8 +25,8 @@ public extension Project {
         let configurationName: ConfigurationName = "Development"
         var singlePlatform = platforms.first!
         var singleDeplymentTarget = singlePlatform == .iOS
-        ? DeploymentTarget.iOS(targetVersion: "15.0", devices: [.iphone])
-        : DeploymentTarget.watchOS(targetVersion: "8.0")
+        ? Environment.iphoneDeploymentTarget
+        : Environment.watchDeploymentTarget
         
         var projectTargets: [Target] = []
         var schemes: [Scheme] = []
@@ -41,7 +41,7 @@ public extension Project {
                     name: "\(name)Interface",
                     platform: singlePlatform,
                     product: .framework,
-                    bundleId: "com.earthIsRound.\(name)Interface",
+                    bundleId: "\(Environment.bundlePrefix).\(name)Interface",
                     deploymentTarget: singleDeplymentTarget,
                     infoPlist: .default,
                     sources: ["Interface/Sources/**/*.swift"],
@@ -54,8 +54,8 @@ public extension Project {
         
         for platform in platforms {
             let deploymentTarget = platform == .iOS
-            ? DeploymentTarget.iOS(targetVersion: "15.0", devices: [.iphone])
-            : DeploymentTarget.watchOS(targetVersion: "8.0")
+            ? Environment.iphoneDeploymentTarget
+            : Environment.watchDeploymentTarget
             
             var nameWithPlatform = platform == .iOS
             ? name + "_ios"
@@ -91,7 +91,7 @@ public extension Project {
                     name: nameWithPlatform,
                     platform: platform,
                     product: hasDynamicFramework ? .framework : .staticFramework,
-                    bundleId: "com.earthIsRound.\(bundleNameWithPlatform)",
+                    bundleId: "\(Environment.bundlePrefix).\(bundleNameWithPlatform)",
                     deploymentTarget: deploymentTarget,
                     infoPlist: .default,
                     sources: ["Sources/**/*.swift"],
@@ -110,7 +110,7 @@ public extension Project {
                     name: "\(nameWithPlatform)Testing",
                     platform: platform,
                     product: .framework,
-                    bundleId: "com.earthIsRound.\(bundleNameWithPlatform)Testing",
+                    bundleId: "\(Environment.bundlePrefix).\(bundleNameWithPlatform)Testing",
                     deploymentTarget: deploymentTarget,
                     infoPlist: .default,
                     sources: ["Testing/Sources/**/*.swift"],
@@ -137,7 +137,7 @@ public extension Project {
                 case (_, false): deps = [.target(name: nameWithPlatform)]
                 }
                 
-                let bundleId = demoTargetOption?.bundleId ?? "com.earthIsRound.demo.\(bundleNameWithPlatform)Demo"
+                let bundleId = demoTargetOption?.bundleId ?? "\(Environment.bundlePrefix).\(bundleNameWithPlatform)Demo"
                 let target = Target(
                     name: "\(nameWithPlatform)Demo",
                     platform: platform,
@@ -184,7 +184,7 @@ public extension Project {
                     name: "\(nameWithPlatform)Tests",
                     platform: platform,
                     product: .unitTests,
-                    bundleId: "com.erathIsRound.\(bundleNameWithPlatform)Tests",
+                    bundleId: "\(Environment.bundlePrefix).\(bundleNameWithPlatform)Tests",
                     deploymentTarget: deploymentTarget,
                     infoPlist: .default,
                     sources: ["Tests/Sources/**/*.swift"],
