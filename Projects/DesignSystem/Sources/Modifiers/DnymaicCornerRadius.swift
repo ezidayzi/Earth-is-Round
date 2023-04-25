@@ -20,6 +20,14 @@ public extension View {
             )
         )
     }
+    
+    func dynamicCornerRadius(_ borderColor: Color) -> some View {
+        self.modifier(
+            DynamicCornerRadiusWithColor(
+                isValid: true, validColor: borderColor, invalidColor: borderColor
+            )
+        )
+    }
 }
 
 struct DynamicCornerRadius: ViewModifier {

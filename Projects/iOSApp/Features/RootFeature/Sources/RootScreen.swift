@@ -8,12 +8,12 @@ import ArchiveFeature
 import SnowmanAlertFeature
 import ItemAlertFeature
 
-public struct RootFeature: ReducerProtocol {
+public struct RootScreen: ReducerProtocol {
     public init() {}
     
     public enum State: Equatable {
         case splash(SplashFeature.State)
-        case auth(SignInFeature.State)
+        case auth(AuthCoordinator.State)
         case main(MainFeature.State)
         case setting(SettingFeature.State)
         case archive(ArchiveFeature.State)
@@ -25,7 +25,7 @@ public struct RootFeature: ReducerProtocol {
 
     public enum Action: Equatable {
         case splash(SplashFeature.Action)
-        case auth(SignInFeature.Action)
+        case auth(AuthCoordinator.Action)
         case main(MainFeature.Action)
         case setting(SettingFeature.Action)
         case archive(ArchiveFeature.Action)
@@ -38,7 +38,7 @@ public struct RootFeature: ReducerProtocol {
             SplashFeature()
         }
         Scope(state: /State.auth, action: /Action.auth) {
-            SignInFeature()
+            AuthCoordinator()
         }
         Scope(state: /State.main, action: /Action.main) {
             MainFeature()
