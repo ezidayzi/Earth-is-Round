@@ -53,8 +53,8 @@ public struct SignInView: View {
                 Spacer()
                     .frame(height: Metric.buttonTopSpacing)
                 
-                Button("회원가입") {
-                    viewStore.send(.signUpButtonTapped)
+                Button("로그인") {
+                    viewStore.send(.signInButtonTapped)
                 }
                 .erButton(
                     labelColor: viewStore.signinIsEnabled

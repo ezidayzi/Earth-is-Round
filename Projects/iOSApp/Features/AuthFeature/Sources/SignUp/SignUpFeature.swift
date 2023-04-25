@@ -9,6 +9,8 @@
 import ComposableArchitecture
 import Dependencies
 
+import Shared_ios
+
 public struct SignUpFeature: ReducerProtocol {
     public init() {}
     
@@ -33,15 +35,16 @@ public struct SignUpFeature: ReducerProtocol {
 
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
+        
         Reduce { state, action in
             switch action {
             case .binding(\.$nickname):
-                let isValid = (5...12) ~= state.nickname.count
+                let isValid = state.nickname.isEnglish(range: (4...12))
                 state.isValidNickname = isValid
                 return .send(._enableSignUp)
                 
             case .binding(\.$password):
-                let isValid = (5...12) ~= state.password.count
+                let isValid = state.password.isEnglishAndNumber(range: (8...15))
                 state.isValidPassword = isValid
                 return .send(._enableSignUp)
                 
