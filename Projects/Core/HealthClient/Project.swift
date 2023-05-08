@@ -4,16 +4,13 @@ import DependencyPlugin
 import EnvPlugin
 
 let project = Project.framework(
-    name: "Core",
+    name: "HealthClient",
     platforms: [.iOS, .watchOS],
-    targets: [.unitTest, .dynamicFramework, .demo, .testing],
+    targets: [.unitTest, .dynamicFramework],
     internalDependencies: [
-        .Core.PedometerClient.iOS,
-        .Core.PedometerClient.watchOS,
-        .Core.APIClient.iOS,
-        .Core.APIClient.watchOS,
-        .Core.HealthClient.iOS,
-        .Core.HealthClient.watchOS
+        .Shared.iOS,
+        .Shared.watchOS,
+        .sdk(name: "HealthKit", type: .framework, status: .required)
     ],
     externalDependencies: [
         
