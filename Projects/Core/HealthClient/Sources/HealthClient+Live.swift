@@ -13,9 +13,9 @@ public extension HealthClient {
         let stepCountType = HKObjectType.quantityType(forIdentifier: .stepCount)!
         
         return .init {
-            let typesToShare: Set = [stepCountType]
-            let typesToRead: Set = [stepCountType]
-            
+            let typesToShare: Set<HKSampleType> = [stepCountType]
+            let typesToRead: Set<HKObjectType> = [stepCountType]
+
             return try await healthStore.requestAuthorization(toShare: typesToShare, read: typesToRead)
         } getStepsFromMonday: {
             let calendar = Calendar.current

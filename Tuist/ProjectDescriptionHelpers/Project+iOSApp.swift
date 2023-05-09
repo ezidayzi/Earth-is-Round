@@ -9,6 +9,7 @@ public extension Project {
     static func iOSApp(name: String,
                        organizationName: String = Environment.workspaceName,
                        targets: Set<FeatureTarget> = Set([.staticFramework, .unitTest, .demo, .testing]),
+                       entitlements: Path? = nil,
                        packages: [Package] = [],
                        internalDependencies: [TargetDependency] = [],
                        externalDependencies: [TargetDependency] = [],
@@ -34,6 +35,7 @@ public extension Project {
             infoPlist: .extendingDefault(with: Project.iosAppInfoPlist),
             sources: ["Sources/**/*.swift"],
             resources:  [.glob(pattern: "Resources/**", excluding: [])],
+            entitlements: entitlements,
             dependencies: [
                 internalDependencies,
                 externalDependencies,
