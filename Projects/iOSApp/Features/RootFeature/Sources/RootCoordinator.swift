@@ -34,7 +34,7 @@ public struct RootCoordinator: ReducerProtocol {
                     switch authScreenAction {
                     case .signIn(.signInButtonTapped),
                         .signUp(.signUpButtonTapped):
-                        state.routes = [.root(.main(.init()))]
+                        state.routes = [.root(.main(.init(currentWeekDay: 0, pastSteps: [])))]
                         
                     default:
                         return .none

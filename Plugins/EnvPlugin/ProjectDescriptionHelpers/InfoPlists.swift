@@ -13,7 +13,9 @@ public extension Project {
         "NSAppTransportSecurity": ["NSAllowsArbitraryLoads": true],
         "ITSAppUsesNonExemptEncryption": false,
         "UIUserInterfaceStyle": "Light",
-        "NSMotionUsageDescription": "걸음수 데이터 측정을 위해 데이터 접근 권한이 필요합니다."
+        "NSMotionUsageDescription": "걸음수 데이터 측정을 위해 데이터 접근 권한이 필요합니다.",
+        "NSHealthShareUsageDescription": "걸음수 데이터 측정을 위해 건강 정보 접근 권한이 필요합니다.",
+        "NSHealthUpdateUsageDescription": "걸음수 데이터 측정을 위해 건강 정보 접근 권한이 필요합니다.",
     ]
     
     public static let watchAppSettings: SettingsDictionary = [
