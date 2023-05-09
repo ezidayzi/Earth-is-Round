@@ -27,17 +27,22 @@ public struct MainView: View {
     }
     
     private var mainContent: some View {
-        VStack(alignment: .leading) {
+        VStack() {
             customNavigationBar
             
-            stepsContent
-                .padding(.top, 44)
-                .padding(.leading, 22)
-            
-            snowmanButton
-                .padding(.leading, 22)
+            VStack(alignment: .leading) {
+                stepsContent
+                    .padding(.top, 44)
+                    .padding(.leading, 22)
+                
+                snowmanButton
+                    .padding(.leading, 22)
+            }
             
             Spacer()
+            
+            achievementRateView
+                .padding(.bottom, 33)
         }
         .ignoresSafeArea(edges: .top)
         .frame(
@@ -52,7 +57,9 @@ public struct MainView: View {
     private var customNavigationBar: some View {
         HStack {
             weekDayButton
+            
             Spacer()
+            
             DesignSystemIosAsset.Assets.icnSetting.swiftUIImage
         }
         .padding(.horizontal, 22)
@@ -67,6 +74,7 @@ public struct MainView: View {
                 DesignSystemIosAsset.Assets.icnLeftArrow.swiftUIImage
                     .renderingMode(.template)
                     .foregroundColor(viewStore.prevButtonEnabled ? .blue : .gray)
+                    .frame(width: 35, height: 35)
             }
             .disabled(!viewStore.prevButtonEnabled)
             
@@ -125,6 +133,18 @@ public struct MainView: View {
         .padding(.leading)
         .onTapGesture {
             // TODO: Present Snowman
+        }
+    }
+    
+    private var achievementRateView: some View {
+        HStack(spacing: 8) {
+            DesignSystemIosAsset.Assets.icnSnow.swiftUIImage
+                .resizable()
+                .frame(width: 18, height: 19)
+            
+            Text("달성률 \(viewStore.achievementRate)%")
+                .font(DesignSystemIosFontFamily.AritaDotumOTF.medium.font(size: 16).toSwiftUI)
+                .foregroundColor(DesignSystemIosAsset.Assets.black20.swiftUIColor)
         }
     }
     

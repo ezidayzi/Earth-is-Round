@@ -16,6 +16,7 @@ public struct MainFeature: ReducerProtocol {
         var displayedSteps: Int?
         var nextButtonEnabled: Bool = false
         var prevButtonEnabled: Bool = false
+        var achievementRate: Int = 0
         var isLoading: Bool = false
         
         public init(
@@ -60,6 +61,8 @@ public struct MainFeature: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
+                state.isLoading = true
+                
                 state.currentWeekDay = Date().weekdayFromMonday
                 
                 return .merge (
@@ -115,6 +118,10 @@ public struct MainFeature: ReducerProtocol {
                 : state.pastSteps[state.currentWeekDay]
                 
                 state.isLoading = false
+                
+                // TODO: UserDefaults Client에서 가져오기
+                let standard = 5000
+                state.achievementRate = (state.displayedSteps ?? 0) * 100 / standard
                 
                 return .none
                 
