@@ -10,12 +10,22 @@
 
 #### 만보기 기능
 - 애플 워치 및 아이폰에서 걸음 수를 즉시 확인 가능합니다.
-- 굴러가는 눈동이를 통해 시각적으로 확인할 수 있습니다.
+- 굴러가는 눈동이를 통해 시각적으로 확인할 수 있습니다. <br>
+
+![image](https://github.com/Earth-Is-Round/Client-iOS/assets/77208067/9f00a0f6-c2cf-45d1-9fc7-abdc69e86e01)
+
+#### 눈사람 보기
+
+- 일주일 간의 걸음수에 따라 서로 다른 모습의 눈사람이 등장합니다.
+- 걸음 수에 따라 다양한 아이템을 얻을 수 있습니다.
+
+![image](https://github.com/Earth-Is-Round/Client-iOS/assets/77208067/2f1bc02f-319d-4867-bb6d-52c3042fe292)
+
 
 ---
 
 ### 🛠 개발 환경 및 라이브러리
-[![swift](https://img.shields.io/badge/swift-5.8-orange)]() [![swiftUI](https://img.shields.io/badge/swift-5.8-orange)]() [![xcode](https://img.shields.io/badge/Xcode-14.2-blue)]() [![tuist](https://img.shields.io/badge/Tuist-3.16.0-purple)]() [![TCA](https://img.shields.io/badge/TCA-1.0.0-yellow)]() [![Lottie](https://img.shields.io/badge/Lottie-4.1.3-orange)]()
+[![swift](https://img.shields.io/badge/swift-5.8-orange)]() [![swiftUI](https://img.shields.io/badge/swift-5.8-orange)]() [![xcode](https://img.shields.io/badge/Xcode-14.2-blue)]() [![tuist](https://img.shields.io/badge/Tuist-3.16.0-purple)]() [![TCA](https://img.shields.io/badge/TCA-0.5.0-yellow)]() [![Lottie](https://img.shields.io/badge/Lottie-4.1.3-orange)]()
 
 <br>
 
@@ -32,6 +42,10 @@
 
 #### Composable Architecture
 - TCA를 이용하여 요소를 Composable하게 작성합니다.
+
+#### HealthKit & CoreMotion
+- HealthKit을 통해 장기간의 걸음 정보를 가져옵니다.
+- CoreMotion을 통해 실시간 걸음 수 및 속도를 가져옵니다.
 
 #### Swift Concurrency
 - Swift Concurrency를 이용하여 최적화된 비동기 처리를 구현합니다.
