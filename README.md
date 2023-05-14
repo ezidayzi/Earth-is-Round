@@ -29,6 +29,10 @@
 
 <br>
 
+### 📦 Modules
+
+![graph](https://github.com/Earth-Is-Round/Client-iOS/assets/77208067/b868711e-9789-411d-8def-a5e661e5d332)
+
 ### 🏡 Skills
 
 #### Tuist
