@@ -33,6 +33,12 @@ struct ContentView: View {
             }, color: .blue)
             .padding(.horizontal, 60)
             .frame(maxHeight: 108)
+            
+            Spacer()
+                .frame(height: 200)
+            
+            WeeklyWalkView(steps: [2030, 15420, 31200, 4030, 304, 132], standard: 5000)
+                .background(Color.yellow)
         }
     }
 }
