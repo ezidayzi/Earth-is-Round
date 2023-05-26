@@ -21,12 +21,24 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            ERTextField(text: $text, isValid: $isValid, maxLength: 10, placeholder: "Enter text")
+            ERTextField(text: $text, isValid: isValid, maxLength: 10, placeholder: "Enter text")
                 .padding()
             Text("Text: \(text)")
             Toggle(isOn: $isValid) {
                 Text("토글")
             }
+            
+            ERSpeechBalloon(text: {
+                Text("머리 조금만 더 크게 만들어주지..")
+            }, color: .blue)
+            .padding(.horizontal, 60)
+            .frame(maxHeight: 108)
+            
+            Spacer()
+                .frame(height: 200)
+            
+            WeeklyWalkView(steps: [2030, 15420, 31200, 4030, 304, 132], standard: 5000)
+                .background(Color.yellow)
         }
     }
 }
