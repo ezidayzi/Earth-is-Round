@@ -34,7 +34,13 @@ public struct RootCoordinator: ReducerProtocol {
                     switch authScreenAction {
                     case .signIn(.signInButtonTapped),
                         .signUp(.signUpButtonTapped):
-                        state.routes = [.root(.main(.init(currentWeekDay: 0, pastSteps: [])))]
+                        state.routes = [.root(
+                            .main(.init(
+                                currentWeekDay: 0,
+                                pastSteps: []
+                            )),
+                            embedInNavigationView: true
+                        )]
                         
                     default:
                         return .none
@@ -48,6 +54,10 @@ public struct RootCoordinator: ReducerProtocol {
                 switch mainAction {
                 case .delegate(.checkTodayPopup):
                     state.routes.presentSheet(.snowmanAlert(.init()))
+                    
+                case .delegate(.pushSettingView):
+                    state.routes.push(.setting(.init()))
+                    
                 default:
                     return .none
                 }

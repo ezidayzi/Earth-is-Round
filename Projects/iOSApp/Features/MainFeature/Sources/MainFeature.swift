@@ -35,6 +35,7 @@ public struct MainFeature: ReducerProtocol {
         case onAppear
         case prevButtonTapped
         case nextButtonTapped
+        case settingButtonTapped
         
         // Internal Actions
         case _fetchTodaySteps(Int)
@@ -48,6 +49,7 @@ public struct MainFeature: ReducerProtocol {
         
         public enum Delegate: Equatable {
             case checkTodayPopup
+            case pushSettingView
         }
     }
     
@@ -61,7 +63,7 @@ public struct MainFeature: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                state.isLoading = true
+//                state.isLoading = true
                 
                 state.currentWeekDay = Date().weekdayFromMonday
                 
@@ -86,6 +88,9 @@ public struct MainFeature: ReducerProtocol {
                     .send(._updateButtonStatus),
                     .send(._updateDisplayedStatus)
                 )
+                
+            case .settingButtonTapped:
+                return .send(.delegate(.pushSettingView))
                 
             case ._fetchTodaySteps(let steps):
                 state.todaySteps = steps
