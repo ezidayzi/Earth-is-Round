@@ -75,7 +75,7 @@ public struct WeeklyWalkView: View {
         let maxCircleSize = calculateMaxCircleSize(viewWidth: viewWidth)
         let calculatedSize = calculateCircleSize(maxCircleSize: maxCircleSize, index: index)
         Circle()
-            .foregroundColor(selectedIndex == index ? .blue : .gray)
+            .foregroundColor(selectedIndex == index ? ERColor.Main : ERColor.Black70)
             .frame(
                 width: min(maxCircleSize, calculatedSize),
                 height: min(maxCircleSize, calculatedSize)
