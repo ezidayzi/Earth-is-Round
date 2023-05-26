@@ -15,39 +15,47 @@ public struct SettingView: View {
     }
 
     public var body: some View {
-        VStack(spacing: 1.adjustedH) {
-            settingItem(text: "닉네임 변경")
+        VStack(spacing: 0) {
+            ERNavigationBar(title: "설정")
+                .padding(.bottom, 44.5.adjustedH)
             
-            settingItem(text: "비밀번호 변경")
-                .padding(.bottom, 20.adjustedH)
-            
-            settingItem(text: "개인정보 처리방침")
-            
-            settingItem(text: "서비스 이용약관")
-            
-            settingItem(text: "서비스 문의 및 의견")
-                .padding(.bottom, 20.adjustedH)
-            
-            settingItem(text: "눈사람 굴리는 사람들")
-                .padding(.bottom, 20.adjustedH)
-            
-            settingItem(text: "로그아웃")
-            
-            HStack {
-                Spacer()
+            VStack(spacing: 1.adjustedH) {
                 
-                Button(action: {
+                settingItem(text: "닉네임 변경")
+                
+                settingItem(text: "비밀번호 변경")
+                    .padding(.bottom, 20.adjustedH)
+                
+                settingItem(text: "개인정보 처리방침")
+                
+                settingItem(text: "서비스 이용약관")
+                
+                settingItem(text: "서비스 문의 및 의견")
+                    .padding(.bottom, 20.adjustedH)
+                
+                settingItem(text: "눈사람 굴리는 사람들")
+                    .padding(.bottom, 20.adjustedH)
+                
+                settingItem(text: "로그아웃")
+                
+                HStack {
+                    Spacer()
                     
-                }) {
-                    Text("탈퇴하기")
-                        .font(DesignSystemIosFontFamily.AritaDotumOTF.medium.font(size: 15).toSwiftUI)
-                        .foregroundColor(ERColor.Black50)
-                        .padding(10)
-                        .frame(alignment: .trailing)
+                    Button(action: {
+                        
+                    }) {
+                        Text("탈퇴하기")
+                            .font(DesignSystemIosFontFamily.AritaDotumOTF.medium.font(size: 15).toSwiftUI)
+                            .foregroundColor(ERColor.Black50)
+                            .padding(10)
+                            .frame(alignment: .trailing)
+                    }
                 }
+                
+                Spacer()
             }
+            .padding(.horizontal, 24.adjusted)
         }
-        .padding(.horizontal, 24.adjusted)
         .frame(
             maxWidth: .infinity,
             maxHeight: .infinity

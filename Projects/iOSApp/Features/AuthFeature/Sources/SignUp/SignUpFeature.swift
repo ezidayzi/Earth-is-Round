@@ -31,6 +31,7 @@ public struct SignUpFeature: ReducerProtocol {
         // View Actions
         case binding(BindingAction<State>)
         case signUpButtonTapped
+        case naviBackButtonTapped
         
         // Internal Actions
         case _enableSignUp
@@ -54,12 +55,15 @@ public struct SignUpFeature: ReducerProtocol {
             case .binding:
                 return .none
                 
+            case .signUpButtonTapped:
+                return .none
+                
+            case .naviBackButtonTapped:
+                return .none
+                
             case ._enableSignUp:
                 let isEnabled = state.isValidPassword && state.isValidNickname
                 state.signupIsEnabled = isEnabled
-                return .none
-                                
-            case .signUpButtonTapped:
                 return .none
             }
         }

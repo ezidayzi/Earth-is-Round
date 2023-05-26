@@ -40,12 +40,18 @@ public struct AuthCoordinator: ReducerProtocol {
                 
             case let .routeAction(_, .signIn(signInAction)):
                 switch signInAction {
+                case .naviBackButtonTapped:
+                    state.routes.pop()
+                    
                 default:
                     return .none
                 }
                 
             case let .routeAction(_, .signUp(signUpAction)):
                 switch signUpAction {
+                case .naviBackButtonTapped:
+                    state.routes.pop()
+                    
                 default:
                     return .none
                 }

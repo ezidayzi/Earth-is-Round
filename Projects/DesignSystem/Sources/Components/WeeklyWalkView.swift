@@ -11,7 +11,7 @@ import SwiftUI
 #if os(iOS)
 import Shared_ios
 #elseif os(watchOS)
-import shared_watchOS
+import shared_watchos
 #endif
 
 /// WeeklyWalkVIew : 주간 걸음 수 확인 뷰

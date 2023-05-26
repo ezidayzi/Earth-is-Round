@@ -18,16 +18,19 @@ public struct SignInFeature: ReducerProtocol {
         
         public init() {}
     }
-
+    
+    // TODO: Delegate를 사용하여 Navigating하기
+    // embed 에러 발생함
     public enum Action: BindableAction, Equatable {
         // View Actions
         case binding(BindingAction<State>)
         case signInButtonTapped
+        case naviBackButtonTapped
         
         // Internal Actions
         case _enableSignIn
     }
-
+    
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
         
@@ -46,12 +49,15 @@ public struct SignInFeature: ReducerProtocol {
             case .binding:
                 return .none
                 
+            case .signInButtonTapped:
+                return .none
+                
+            case .naviBackButtonTapped:
+                return .none
+                
             case ._enableSignIn:
                 let isEnabled = state.isValidPassword && state.isValidNickname
                 state.signinIsEnabled = isEnabled
-                return .none
-                
-            case .signInButtonTapped:
                 return .none
             }
         }
