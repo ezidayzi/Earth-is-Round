@@ -30,9 +30,30 @@ public struct SettingCoordinator: ReducerProtocol {
     public var body: some ReducerProtocol<State, Action> {
         return Reduce<State, Action> { state, action in
             switch action {
+            case let .routeAction(_, .setting(settingAction)):
+                switch settingAction {
+                case .passwordEditTapped:
+                    state.routes.push(.passwordEdit(.init()))
+                    
+                case .nicknameEditTapped:
+                    state.routes.push(.nicknameEdit(.init()))
+                    
+                default: return .none
+                }
                 
-            default:
-                break
+            case let .routeAction(_, .nicknameEdit(nicknameAction)):
+                switch nicknameAction {
+                case .naviBackButtonTapped:
+                    state.routes.pop()
+                }
+            
+            case let .routeAction(_, .passwordEdit(passwordAction)):
+                switch passwordAction {
+                case .naviBackButtonTapped:
+                    state.routes.pop()
+                }
+                
+            default: break
             }
             
             return .none

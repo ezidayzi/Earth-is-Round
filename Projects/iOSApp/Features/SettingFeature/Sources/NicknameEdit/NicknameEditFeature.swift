@@ -17,12 +17,18 @@ public struct NicknameEditFeature: ReducerProtocol {
     }
 
     public enum Action: Equatable {
+        // View Actions
+        case naviBackButtonTapped
         
+        // Internal Actions
     }
 
     public var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
-            return .none
+            switch action {
+            case .naviBackButtonTapped:
+                return .none
+            }
         }
     }
 }

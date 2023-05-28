@@ -9,12 +9,22 @@ public struct SettingFeature: ReducerProtocol {
     }
 
     public enum Action: Equatable {
+        // View Actions
+        case nicknameEditTapped
+        case passwordEditTapped
         
+        // Internal Actions
     }
 
     public var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
-            return .none
+            switch action {
+            case .nicknameEditTapped:
+                return .none
+                
+            case .passwordEditTapped:
+                return .none
+            }
         }
     }
 }
