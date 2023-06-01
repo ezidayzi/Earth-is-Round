@@ -42,7 +42,7 @@ public struct RootCoordinatorView: View {
                 CaseLet(
                     state: /RootScreen.State.setting,
                     action: RootScreen.Action.setting,
-                    then: SettingView.init
+                    then: SettingCoordinatorView.init
                 )
                 CaseLet(
                     state: /RootScreen.State.archive,

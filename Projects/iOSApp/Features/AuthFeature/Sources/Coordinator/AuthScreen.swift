@@ -17,7 +17,7 @@ public struct AuthScreen: ReducerProtocol {
         case signIn(SignInFeature.State)
     }
 
-    public enum Action: Equatable {
+    public enum Action {
         case auth(AuthFeature.Action)
         case signUp(SignUpFeature.Action)
         case signIn(SignInFeature.Action)

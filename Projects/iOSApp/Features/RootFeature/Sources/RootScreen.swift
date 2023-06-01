@@ -15,17 +15,17 @@ public struct RootScreen: ReducerProtocol {
         case splash(SplashFeature.State)
         case auth(AuthCoordinator.State)
         case main(MainFeature.State)
-        case setting(SettingFeature.State)
+        case setting(SettingCoordinator.State)
         case archive(ArchiveFeature.State)
         case snowmanAlert(SnowmanAlertFeature.State)
         case itemAlert(ItemAlertFeature.State)
     }
 
-    public enum Action: Equatable {
+    public enum Action {
         case splash(SplashFeature.Action)
         case auth(AuthCoordinator.Action)
         case main(MainFeature.Action)
-        case setting(SettingFeature.Action)
+        case setting(SettingCoordinator.Action)
         case archive(ArchiveFeature.Action)
         case snowmanAlert(SnowmanAlertFeature.Action)
         case itemAlert(ItemAlertFeature.Action)
@@ -42,7 +42,7 @@ public struct RootScreen: ReducerProtocol {
             MainFeature()
         }
         Scope(state: /State.setting, action: /Action.setting) {
-            SettingFeature()
+            SettingCoordinator()
         }
         Scope(state: /State.archive, action: /Action.archive) {
             ArchiveFeature()

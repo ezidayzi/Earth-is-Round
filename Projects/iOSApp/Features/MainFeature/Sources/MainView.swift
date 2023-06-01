@@ -60,7 +60,11 @@ public struct MainView: View {
             
             Spacer()
             
-            DesignSystemIosAsset.Assets.icnSetting.swiftUIImage
+            Button(action: {
+                viewStore.send(.settingButtonTapped)
+            }) {
+                DesignSystemIosAsset.Assets.icnSetting.swiftUIImage
+            }
         }
         .padding(.horizontal, 22)
         .padding(.top, UIApplication.shared.windows.first?.safeAreaInsets.top)

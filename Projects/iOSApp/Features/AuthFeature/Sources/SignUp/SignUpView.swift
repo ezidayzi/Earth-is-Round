@@ -33,52 +33,60 @@ public struct SignUpView: View {
     public var body: some View {
         // Note(230426)
         // Fixed Frame에서 keyboard avoidance를 회피하기 위해 ScrollView 사용
-        ScrollView {
-            VStack {
-                
-                Spacer()
-                    .frame(height: Metric.topPadding)
-                
-                titleTextField(
-                    title: "닉네임",
-                    placeHolder: "영문 4 ~ 12자로 입력해 주세요.",
-                    text: viewStore.binding(\.$nickname),
-                    isValid: viewStore.isValidNickname,
-                    maxLength: 12
-                )
-                
-                Spacer()
-                    .frame(height: Metric.textFieldSpacing)
-                
-                titleSecureField(
-                    title: "비밀번호",
-                    placeHolder: "영문, 숫자 8 ~ 15자로 입력해 주세요.",
-                    text: viewStore.binding(\.$password),
-                    isValid: viewStore.isValidPassword,
-                    maxLength: 15
-                )
-                
-                Spacer()
-                    .frame(height: Metric.buttonTopSpacing)
-                
-                Button("회원가입") {
-                    viewStore.send(.signUpButtonTapped, animation: Animation.easeIn(duration: 0.2))
+        VStack {
+            ERNavigationBar(
+                title: "회원가입",
+                action: { viewStore.send(.naviBackButtonTapped) }
+            )
+            
+            ScrollView {
+                VStack {
+                    
+                    Spacer()
+                        .frame(height: Metric.topPadding)
+                    
+                    titleTextField(
+                        title: "닉네임",
+                        placeHolder: "영문 4 ~ 12자로 입력해 주세요.",
+                        text: viewStore.binding(\.$nickname),
+                        isValid: viewStore.isValidNickname,
+                        maxLength: 12
+                    )
+                    
+                    Spacer()
+                        .frame(height: Metric.textFieldSpacing)
+                    
+                    titleSecureField(
+                        title: "비밀번호",
+                        placeHolder: "영문, 숫자 8 ~ 15자로 입력해 주세요.",
+                        text: viewStore.binding(\.$password),
+                        isValid: viewStore.isValidPassword,
+                        maxLength: 15
+                    )
+                    
+                    Spacer()
+                        .frame(height: Metric.buttonTopSpacing)
+                    
+                    Button("회원가입") {
+                        viewStore.send(.signUpButtonTapped, animation: Animation.easeIn(duration: 0.2))
+                    }
+                    .erButton(
+                        labelColor: viewStore.signupIsEnabled
+                        ? ERColor.White : ERColor.Black50,
+                        backgroundColor: viewStore.signupIsEnabled
+                        ? ERColor.Main : ERColor.Black90
+                    )
+                    .disabled(!viewStore.signupIsEnabled)
+                    
+                    Spacer()
+                        .frame(height: Metric.buttonBottomPadding)
                 }
-                .erButton(
-                    labelColor: viewStore.signupIsEnabled
-                    ? ERColor.White : ERColor.Black50,
-                    backgroundColor: viewStore.signupIsEnabled
-                    ? ERColor.Main : ERColor.Black90
-                )
-                .disabled(!viewStore.signupIsEnabled)
-                
-                Spacer()
-                    .frame(height: Metric.buttonBottomPadding)
+                .horizontalPadding()
             }
-            .horizontalPadding()
+            .scrollDisabled(true)
+            .onTapHideKeyboard()
+            .ignoresSafeArea(.keyboard)
         }
-        .scrollDisabled(true)
-        .onTapHideKeyboard()
-        .ignoresSafeArea(.keyboard)
+        .toolbar(.hidden, for: .navigationBar)
     }
 }

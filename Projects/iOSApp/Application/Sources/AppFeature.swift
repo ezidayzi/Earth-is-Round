@@ -14,7 +14,7 @@ struct AppFeature: ReducerProtocol {
         public init() {}
     }
 
-    public enum Action: Equatable {
+    public enum Action {
         case rootCoordinator(RootCoordinator.Action)
     }
 

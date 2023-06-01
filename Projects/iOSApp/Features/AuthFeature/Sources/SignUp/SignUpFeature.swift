@@ -27,18 +27,25 @@ public struct SignUpFeature: ReducerProtocol {
         public init() {}
     }
 
-    public enum Action: BindableAction, Equatable {
+    public enum Action: BindableAction {
         // View Actions
         case binding(BindingAction<State>)
         case signUpButtonTapped
+        case naviBackButtonTapped
         
         // Internal Actions
         case _enableSignUp
+        
+        // Coordinator
+        case coordinator(CoordinatorAction)
+        
+        public enum CoordinatorAction {
+            case pop
+            case tmpSignUp
+        }
     }
 
     public var body: some ReducerProtocol<State, Action> {
-        BindingReducer()
-        
         Reduce { state, action in
             switch action {
             case .binding(\.$nickname):
@@ -54,14 +61,22 @@ public struct SignUpFeature: ReducerProtocol {
             case .binding:
                 return .none
                 
+            case .signUpButtonTapped:
+                return .send(.coordinator(.tmpSignUp))
+                
+            case .naviBackButtonTapped:
+                return .send(.coordinator(.pop))
+                
             case ._enableSignUp:
                 let isEnabled = state.isValidPassword && state.isValidNickname
                 state.signupIsEnabled = isEnabled
                 return .none
-                                
-            case .signUpButtonTapped:
+                
+            case .coordinator:
                 return .none
             }
         }
+        
+        BindingReducer()
     }
 }
