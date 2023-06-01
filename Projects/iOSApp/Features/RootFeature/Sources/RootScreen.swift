@@ -21,7 +21,7 @@ public struct RootScreen: ReducerProtocol {
         case itemAlert(ItemAlertFeature.State)
     }
 
-    public enum Action: Equatable {
+    public enum Action {
         case splash(SplashFeature.Action)
         case auth(AuthCoordinator.Action)
         case main(MainFeature.Action)

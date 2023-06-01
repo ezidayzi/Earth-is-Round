@@ -32,8 +32,6 @@ public struct SignInFeature: ReducerProtocol {
     }
     
     public var body: some ReducerProtocol<State, Action> {
-        BindingReducer()
-        
         Reduce { state, action in
             switch action {
             case .binding(\.$nickname):
@@ -61,5 +59,7 @@ public struct SignInFeature: ReducerProtocol {
                 return .none
             }
         }
+        
+        BindingReducer()
     }
 }

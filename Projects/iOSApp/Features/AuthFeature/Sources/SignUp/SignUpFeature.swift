@@ -27,7 +27,7 @@ public struct SignUpFeature: ReducerProtocol {
         public init() {}
     }
 
-    public enum Action: BindableAction, Equatable {
+    public enum Action: BindableAction {
         // View Actions
         case binding(BindingAction<State>)
         case signUpButtonTapped
@@ -38,8 +38,6 @@ public struct SignUpFeature: ReducerProtocol {
     }
 
     public var body: some ReducerProtocol<State, Action> {
-        BindingReducer()
-        
         Reduce { state, action in
             switch action {
             case .binding(\.$nickname):
@@ -67,5 +65,7 @@ public struct SignUpFeature: ReducerProtocol {
                 return .none
             }
         }
+        
+        BindingReducer()
     }
 }

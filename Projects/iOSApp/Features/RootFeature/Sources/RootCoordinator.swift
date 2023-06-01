@@ -14,7 +14,7 @@ public struct RootCoordinator: ReducerProtocol {
         public var routes: [Route<RootScreen.State>]
     }
     
-    public enum Action: Equatable, IndexedRouterAction {
+    public enum Action: IndexedRouterAction {
         case routeAction(Int, action: RootScreen.Action)
         case updateRoutes([Route<RootScreen.State>])
     }

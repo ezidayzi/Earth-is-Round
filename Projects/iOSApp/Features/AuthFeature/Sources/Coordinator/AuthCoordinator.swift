@@ -22,7 +22,7 @@ public struct AuthCoordinator: ReducerProtocol {
         public var routes: [Route<AuthScreen.State>]
     }
     
-    public enum Action: Equatable, IndexedRouterAction {
+    public enum Action: IndexedRouterAction {
         case routeAction(Int, action: AuthScreen.Action)
         case updateRoutes([Route<AuthScreen.State>])
     }
