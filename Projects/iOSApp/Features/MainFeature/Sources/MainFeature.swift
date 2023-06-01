@@ -30,7 +30,7 @@ public struct MainFeature: ReducerProtocol {
         }
     }
     
-    public enum Action: Equatable {
+    public enum Action {
         // View Actions
         case onAppear
         case prevButtonTapped
@@ -44,10 +44,10 @@ public struct MainFeature: ReducerProtocol {
         case _updateDisplayedStatus
         case _showFetchingStepError
         
-        // Delegate
-        case delegate(Delegate)
+        // Coordinator
+        case coordinator(CoordinatorAction)
         
-        public enum Delegate: Equatable {
+        public enum CoordinatorAction {
             case checkTodayPopup
             case pushSettingView
         }
@@ -90,7 +90,7 @@ public struct MainFeature: ReducerProtocol {
                 )
                 
             case .settingButtonTapped:
-                return .send(.delegate(.pushSettingView))
+                return .send(.coordinator(.pushSettingView))
                 
             case ._fetchTodaySteps(let steps):
                 state.todaySteps = steps
@@ -134,7 +134,7 @@ public struct MainFeature: ReducerProtocol {
                 state.todaySteps = nil
                 return .none
                 
-            case .delegate:
+            case .coordinator:
                 return .none
             }
         }

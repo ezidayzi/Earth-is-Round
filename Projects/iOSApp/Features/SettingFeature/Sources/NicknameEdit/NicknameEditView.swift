@@ -10,6 +10,8 @@ import SwiftUI
 
 import ComposableArchitecture
 
+import DesignSystem_ios
+
 public struct NicknameEditView: View {
     
     let store: StoreOf<NicknameEditFeature>
@@ -21,10 +23,17 @@ public struct NicknameEditView: View {
     }
 
     public var body: some View {
-        EmptyView()
-            .frame(maxWidth: .infinity)
-            .frame(maxHeight: .infinity)
-            .background(Color.yellow)
+        VStack(spacing: 0) {
+            ERNavigationBar(title: "닉네임 변경", action: {
+                viewStore.send(.naviBackButtonTapped)
+            })
+            .padding(.bottom, 44.5.adjustedH)
+        }
+        .frame(
+            maxWidth: .infinity,
+            maxHeight: .infinity
+        )
+        .toolbar(.hidden, for: .navigationBar)
     }
 }
 

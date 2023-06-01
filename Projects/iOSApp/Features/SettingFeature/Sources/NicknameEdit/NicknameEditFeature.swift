@@ -16,17 +16,27 @@ public struct NicknameEditFeature: ReducerProtocol {
         public init() {}
     }
 
-    public enum Action: Equatable {
+    public enum Action {
         // View Actions
         case naviBackButtonTapped
         
         // Internal Actions
+        
+        // Coordinator
+        case coordinator(CoordinatorAction)
+        
+        public enum CoordinatorAction {
+            case pop
+        }
     }
 
     public var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
             case .naviBackButtonTapped:
+                return .send(.coordinator(.pop))
+                
+            case .coordinator:
                 return .none
             }
         }

@@ -22,7 +22,7 @@ public struct SettingCoordinator: ReducerProtocol {
         public var routes: [Route<SettingScreen.State>]
     }
     
-    public enum Action: Equatable, IndexedRouterAction {
+    public enum Action: IndexedRouterAction {
         case routeAction(Int, action: SettingScreen.Action)
         case updateRoutes([Route<SettingScreen.State>])
     }
@@ -32,10 +32,10 @@ public struct SettingCoordinator: ReducerProtocol {
             switch action {
             case let .routeAction(_, .setting(settingAction)):
                 switch settingAction {
-                case .passwordEditTapped:
+                case .coordinator(.pushPasswordEdit):
                     state.routes.push(.passwordEdit(.init()))
                     
-                case .nicknameEditTapped:
+                case .coordinator(.pushNicknameEdit):
                     state.routes.push(.nicknameEdit(.init()))
                     
                 default: return .none
@@ -43,14 +43,18 @@ public struct SettingCoordinator: ReducerProtocol {
                 
             case let .routeAction(_, .nicknameEdit(nicknameAction)):
                 switch nicknameAction {
-                case .naviBackButtonTapped:
+                case .coordinator(.pop):
                     state.routes.pop()
+                    
+                default: return .none
                 }
-            
+                
             case let .routeAction(_, .passwordEdit(passwordAction)):
                 switch passwordAction {
-                case .naviBackButtonTapped:
+                case .coordinator(.pop):
                     state.routes.pop()
+                    
+                default: return .none
                 }
                 
             default: break

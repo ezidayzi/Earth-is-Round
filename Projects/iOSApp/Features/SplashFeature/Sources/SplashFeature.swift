@@ -8,7 +8,7 @@ public struct SplashFeature: ReducerProtocol {
         public init() {}
     }
 
-    public enum Action: Equatable {
+    public enum Action {
         case splashAnimationFinished
     }
 

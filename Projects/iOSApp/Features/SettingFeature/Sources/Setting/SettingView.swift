@@ -13,18 +13,24 @@ public struct SettingView: View {
         self.store = store
         self.viewStore = ViewStore(store, observe: { $0 })
     }
-
+    
     public var body: some View {
         VStack(spacing: 0) {
-            ERNavigationBar(title: "설정")
-                .padding(.bottom, 44.5.adjustedH)
+            ERNavigationBar(title: "설정", action: {
+                viewStore.send(.naviBackButtonTapped)
+            })
+            .padding(.bottom, 44.5.adjustedH)
             
             VStack(spacing: 1.adjustedH) {
                 
-                settingItem(text: "닉네임 변경")
+                settingItem(text: "닉네임 변경") {
+                    viewStore.send(.nicknameEditTapped)
+                }
                 
-                settingItem(text: "비밀번호 변경")
-                    .padding(.bottom, 20.adjustedH)
+                settingItem(text: "비밀번호 변경")  {
+                    viewStore.send(.passwordEditTapped)
+                }
+                .padding(.bottom, 20.adjustedH)
                 
                 settingItem(text: "개인정보 처리방침")
                 
@@ -64,7 +70,10 @@ public struct SettingView: View {
     }
     
     @ViewBuilder
-    private func settingItem(text: String) -> some View {
+    private func settingItem(
+        text: String,
+        action: (() -> Void)? = nil
+    ) -> some View {
         Text(text)
             .padding(21.adjusted)
             .font(DesignSystemIosFontFamily.AritaDotumOTF.medium.font(size: 15).toSwiftUI)
@@ -72,5 +81,8 @@ public struct SettingView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(ERColor.Black90)
             .cornerRadius(8)
+            .onTapGesture {
+                action?()
+            }
     }
 }

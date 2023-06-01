@@ -3,6 +3,11 @@ import SwiftUI
 import ComposableArchitecture
 import TCACoordinators
 
+import SplashFeature
+import AuthFeature
+import MainFeature
+import SettingFeature
+
 public struct RootCoordinator: ReducerProtocol {
     public init() { }
     
@@ -23,52 +28,120 @@ public struct RootCoordinator: ReducerProtocol {
         return Reduce<State, Action> { state, action in
             switch action {
             case let .routeAction(_, .splash(splashAction)):
-                switch splashAction {
-                case .splashAnimationFinished:
-                    state.routes = [.root(.auth(.init()))]
-                }
+                handleSplashAction(splashAction, state: &state)
                 
-            case let .routeAction(_, .auth(authAction)):
-                switch authAction {
-                case let .routeAction(_, authScreenAction):
-                    switch authScreenAction {
-                    case .signIn(.signInButtonTapped),
-                        .signUp(.signUpButtonTapped):
-                        state.routes = [.root(
-                            .main(.init(
-                                currentWeekDay: 0,
-                                pastSteps: []
-                            )),
-                            embedInNavigationView: true
-                        )]
-                        
-                    default:
-                        return .none
-                    }
-                    
-                default:
-                    return .none
-                }
+            case let .routeAction(_, .auth(authCoordinatorAction)):
+                handleAuthCoordinatorAction(authCoordinatorAction, state: &state)
                 
             case let .routeAction(_, .main(mainAction)):
-                switch mainAction {
-                case .delegate(.checkTodayPopup):
-                    state.routes.presentSheet(.snowmanAlert(.init()))
-                    
-                case .delegate(.pushSettingView):
-                    state.routes.push(.setting(.init()))
-                    
-                default:
-                    return .none
-                }
+                handleMainAction(mainAction, state: &state)
+                
+            case let .routeAction(_, .setting(settingCoordinator)):
+                handleSettingAction(settingCoordinator, state: &state)
                 
             default:
                 break
             }
             
             return .none
+            
         }.forEachRoute {
             RootScreen()
+        }
+    }
+}
+
+// MARK: - Splash
+
+extension RootCoordinator {
+    private func handleSplashAction(
+        _ action: SplashFeature.Action,
+        state: inout State
+    ) {
+        switch action {
+        case .splashAnimationFinished:
+            state.routes = [.root(.auth(.init()))]
+        default:
+            break
+        }
+    }
+}
+
+// MARK: - AuthCoordinator
+
+extension RootCoordinator {
+    private func handleAuthCoordinatorAction(
+        _ action: AuthCoordinator.Action,
+        state: inout State
+    ) {
+        switch action {
+        case let .routeAction(_, authAction):
+            // AuthAction
+            switch authAction {
+            case .signIn(.coordinator(.pop)),
+                    .signUp(.coordinator(.pop)):
+                state.routes.pop()
+                
+            case .signIn(.coordinator(.tmpSignIn)),
+                    .signUp(.coordinator(.tmpSignUp)):
+                state.routes = [.root(
+                    .main(.init(
+                        currentWeekDay: 0,
+                        pastSteps: []
+                    )),
+                    embedInNavigationView: true
+                )]
+                
+            default:
+                break
+            }
+            
+        default:
+            break
+        }
+    }
+}
+
+// MARK: - Main
+
+extension RootCoordinator {
+    private func handleMainAction(
+        _ action: MainFeature.Action,
+        state: inout State
+    ) {
+        switch action {
+        case .coordinator(.checkTodayPopup):
+            state.routes.presentSheet(.snowmanAlert(.init()))
+            
+        case .coordinator(.pushSettingView):
+            state.routes.push(.setting(.init()))
+            
+        default:
+            break
+        }
+    }
+}
+
+// MARK: - Setting Coordinator
+
+extension RootCoordinator {
+    private func handleSettingAction(
+        _ action: SettingCoordinator.Action,
+        state: inout State
+    ) {
+        switch action {
+            // Setting View
+        case let .routeAction(_, action: .setting(settingAction)):
+            switch settingAction {
+            case .coordinator(.pop):
+                state.routes.pop()
+                
+            default:
+                break
+            }
+            
+        default:
+            break
         }
     }
 }

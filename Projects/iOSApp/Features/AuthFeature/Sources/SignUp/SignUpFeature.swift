@@ -35,6 +35,14 @@ public struct SignUpFeature: ReducerProtocol {
         
         // Internal Actions
         case _enableSignUp
+        
+        // Coordinator
+        case coordinator(CoordinatorAction)
+        
+        public enum CoordinatorAction {
+            case pop
+            case tmpSignUp
+        }
     }
 
     public var body: some ReducerProtocol<State, Action> {
@@ -54,14 +62,17 @@ public struct SignUpFeature: ReducerProtocol {
                 return .none
                 
             case .signUpButtonTapped:
-                return .none
+                return .send(.coordinator(.tmpSignUp))
                 
             case .naviBackButtonTapped:
-                return .none
+                return .send(.coordinator(.pop))
                 
             case ._enableSignUp:
                 let isEnabled = state.isValidPassword && state.isValidNickname
                 state.signupIsEnabled = isEnabled
+                return .none
+                
+            case .coordinator:
                 return .none
             }
         }

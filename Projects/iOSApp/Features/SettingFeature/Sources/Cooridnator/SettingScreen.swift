@@ -17,7 +17,7 @@ public struct SettingScreen: ReducerProtocol {
         case passwordEdit(PasswordEditFeature.State)
     }
 
-    public enum Action: Equatable {
+    public enum Action {
         case setting(SettingFeature.Action)
         case nicknameEdit(NicknameEditFeature.Action)
         case passwordEdit(PasswordEditFeature.Action)
