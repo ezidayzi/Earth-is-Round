@@ -55,5 +55,5 @@
 - Swift Concurrency를 이용하여 최적화된 비동기 처리를 구현합니다.
 
 #### Testability
-- 전반적으로 Testable한 코드를 지양합니다.
+- 전반적으로 Testable한 코드를 지향합니다.
 - 이러한 이점을 살려, 복잡한 로직의 경우 Unit Test를 작성하고 신뢰성 및 유지보수성을 확보할 예정입니다.
