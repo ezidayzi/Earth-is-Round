@@ -43,8 +43,65 @@ struct ContentView: View {
     }
 }
 
+struct SnowmanContentView: View {
+    var body: some View {
+        ScrollView {
+            VStack {
+                SnowSet(item: [0, 3, 5, 13, 16])
+                
+                SnowSet(item: [0, 4, 6, 8, 12, 14])
+                
+                SnowSet(item: [0, 4, 7, 13, 17])
+                
+                SnowSet(item: [0, 1, 3, 15, 18])
+                
+                SnowSet(item: [0, 2])
+                
+                ForEach(0..<18) { item in
+                    SnowSet(item: [item])
+                }
+            }
+        }
+        .padding()
+        .background(Color.blue.opacity(0.2))
+    }
+    
+    @ViewBuilder
+    private func SnowSet(item: [Int]) -> some View {
+        HStack {
+            SnowmanView(
+                itemRawValues: item,
+                snowmanType: .largeHeadLargeBody
+            )
+            .frame(width: 50)
+            .frame(height: 50 * 4/3)
+            
+            SnowmanView(
+                itemRawValues: item,
+                snowmanType: .smallHeadLargeBody
+            )
+            .frame(width: 50)
+            .frame(height: 50 * 4/3)
+            
+            SnowmanView(
+                itemRawValues: item,
+                snowmanType: .largeHeadSmallBody
+            )
+            .frame(width: 50)
+            .frame(height: 50 * 4/3)
+            
+            SnowmanView(
+                itemRawValues: item,
+                snowmanType: .smallHeadSmallBody
+            )
+            .frame(width: 50)
+            .frame(height: 50 * 4/3)
+        }
+    }
+}
+
 struct DesignSystemDemoApp_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        SnowmanContentView()
     }
 }

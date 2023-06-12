@@ -6,7 +6,7 @@
 //  Copyright © 2023 EarthIsRound. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
 
 public enum SnowmanType {
     case largeHeadLargeBody
@@ -87,5 +87,25 @@ public enum SnowmanType {
     // type별 bottom을 맞추기 위한 보정값
     var bottomAdjustment: CGFloat {
         shadowOffsetY + shadowSize.height / 2 - 200
+    }
+    
+    var headImage: Image {
+        switch self {
+        case .largeHeadLargeBody, .largeHeadSmallBody:
+            return DesignSystemAsset.Assets.snowmanHeadL.swiftUIImage
+        case .smallHeadLargeBody, .smallHeadSmallBody:
+            return DesignSystemAsset.Assets.snowmanHeadS.swiftUIImage
+        }
+    }
+    
+    var bodyImage: Image {
+        switch self {
+        case .largeHeadLargeBody, .smallHeadLargeBody:
+            return DesignSystemAsset.Assets.snowmanBodyL.swiftUIImage
+        case .largeHeadSmallBody:
+            return DesignSystemAsset.Assets.snowmanBodyS.swiftUIImage
+        case .smallHeadSmallBody:
+            return DesignSystemAsset.Assets.snowmanBodySS.swiftUIImage
+        }
     }
 }
