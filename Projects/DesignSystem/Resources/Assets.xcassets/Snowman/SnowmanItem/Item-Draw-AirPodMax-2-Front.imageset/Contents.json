@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "Item-Draw-AirPodMax-2-Front.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "Item-Draw-AirPodMax-2-Front@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "Item-Draw-AirPodMax-2-Front@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
