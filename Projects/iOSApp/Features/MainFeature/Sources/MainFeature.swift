@@ -36,6 +36,7 @@ public struct MainFeature: ReducerProtocol {
         case prevButtonTapped
         case nextButtonTapped
         case settingButtonTapped
+        case mySnowmanButtonTapped
         
         // Internal Actions
         case _fetchTodaySteps(Int)
@@ -91,6 +92,9 @@ public struct MainFeature: ReducerProtocol {
                 
             case .settingButtonTapped:
                 return .send(.coordinator(.pushSettingView))
+                
+            case .mySnowmanButtonTapped:
+                return .send(.coordinator(.checkTodayPopup))
                 
             case ._fetchTodaySteps(let steps):
                 state.todaySteps = steps

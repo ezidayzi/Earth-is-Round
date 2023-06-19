@@ -40,7 +40,7 @@ public struct SnowmanView: View {
                 Group {
                     // 그림자
                     Ellipse()
-                        .fill(Color.gray.opacity(0.6))
+                        .fill(ERColor.Black70.opacity(0.6))
                         .frame(width: snowmanType.shadowSize.width * scaleFactor, height: snowmanType.shadowSize.height * scaleFactor)
                         .offset(y: snowmanType.shadowOffsetY * scaleFactor)
                         .zIndex(-100)

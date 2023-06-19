@@ -83,6 +83,7 @@ public struct MainView: View {
             .disabled(!viewStore.prevButtonEnabled)
             
             Text(viewStore.weekDayString)
+                .offset(x: -5)
             
             Button(action: {
                 viewStore.send(.nextButtonTapped)
@@ -136,7 +137,7 @@ public struct MainView: View {
         .dynamicCornerRadius(DesignSystemIosAsset.Assets.black70.swiftUIColor)
         .padding(.leading)
         .onTapGesture {
-            // TODO: Present Snowman
+            viewStore.send(.mySnowmanButtonTapped)
         }
     }
     

@@ -31,9 +31,15 @@ public struct SnowmanAlertView: View {
                 .padding(.horizontal, 56.adjusted)
                 .frame(height: 108.adjustedH)
                 
-                // TODO: - 눈사람 추가 구현
+                SnowmanView(
+                    itemRawValues: [0, 3, 5, 13, 16],
+                    snowmanType: .largeHeadLargeBody
+                )
+                .frame(width: 250)
+                .frame(height: 250 * 4/3)
+                
                 Spacer()
-                    .frame(height: 300.adjustedH)
+                    .frame(height: 50)
                 
                 bottomContent
                     .background(
