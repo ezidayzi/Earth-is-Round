@@ -13,7 +13,9 @@ let project = Project.framework(
         .Core.APIClient.iOS,
         .Core.APIClient.watchOS,
         .Core.HealthClient.iOS,
-        .Core.HealthClient.watchOS
+        .Core.HealthClient.watchOS,
+        .Core.LocationClient.iOS,
+        .Core.LocationClient.watchOS
     ],
     externalDependencies: [
         

@@ -49,12 +49,14 @@ public struct ERSnowBall: UIViewRepresentable {
         self._animationSpeed = animationSpeed
     }
     
-    public func makeUIView(context: UIViewRepresentableContext<ERSnowBall>) -> LottieAnimationView {
+    public func makeUIView(context: UIViewRepresentableContext<ERSnowBall>) -> some UIView {
+        let view = UIView(frame: .zero)
+        
         let animationView = LottieAnimationView()
         animationView.animationSpeed = 0
         animationView.animation = Animation.named("snowball", bundle: .module)
         
-        animationView.contentMode = .scaleToFill
+        animationView.contentMode = .scaleAspectFit
         animationView.play()
         animationView.loopMode = .loop
         // background에서 복귀 후 다시 재생하기 위함
@@ -62,10 +64,18 @@ public struct ERSnowBall: UIViewRepresentable {
         
         context.coordinator.animationView = animationView
         
-        return animationView
+        animationView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(animationView)
+        
+        NSLayoutConstraint.activate([
+            animationView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            animationView.heightAnchor.constraint(equalTo: view.heightAnchor)
+        ])
+        
+        return view
     }
     
-    public func updateUIView(_ uiView: LottieAnimationView, context: UIViewRepresentableContext<ERSnowBall>) {
+    public func updateUIView(_ uiView: some UIView, context: UIViewRepresentableContext<ERSnowBall>) {
         let coordinator = context.coordinator
         // animationSpeed가 0이 되면 animation이 stop된다고 추정됨. 다시 play 하는 방법도 고려 가능
         let correctedAnimationSpeed = animationSpeed == 0 ? 0.01 : animationSpeed

@@ -24,6 +24,9 @@ public struct MainView: View {
                 loadingIndicator
             }
         }
+        .onAppear {
+            viewStore.send(.onAppear)
+        }
     }
     
     private var mainContent: some View {
@@ -41,7 +44,13 @@ public struct MainView: View {
             
             Spacer()
             
+            /// - Note (230730) @Duno
+            /// Lottie File의 영역이 부정확하게 잡혀 있음. 디자인 요청 필요.
+            ERSnowBall(animationSpeed: viewStore.binding(\.$currentSpeed))
+                .frame(height: 300)
+            
             achievementRateView
+                .padding(.top, 37)
                 .padding(.bottom, 33)
         }
         .ignoresSafeArea(edges: .top)
@@ -49,9 +58,6 @@ public struct MainView: View {
             maxWidth: .infinity,
             maxHeight: .infinity
         )
-        .onAppear {
-            viewStore.send(.onAppear)
-        }
     }
     
     private var customNavigationBar: some View {

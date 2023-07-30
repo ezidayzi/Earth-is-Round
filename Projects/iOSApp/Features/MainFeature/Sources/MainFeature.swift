@@ -4,6 +4,7 @@ import ComposableArchitecture
 
 import PedometerClient_ios
 import HealthClient_ios
+import LocationClient_ios
 
 public struct MainFeature: ReducerProtocol {
     public init() {}
@@ -12,6 +13,8 @@ public struct MainFeature: ReducerProtocol {
         var todaySteps: Int?
         var currentWeekDay: Int = 0
         var pastSteps: [Int]
+        @BindingState
+        var currentSpeed: Double = 0
         
         var displayedSteps: Int?
         var nextButtonEnabled: Bool = false
@@ -30,8 +33,9 @@ public struct MainFeature: ReducerProtocol {
         }
     }
     
-    public enum Action {
+    public enum Action: BindableAction {
         // View Actions
+        case binding(BindingAction<State>)
         case onAppear
         case prevButtonTapped
         case nextButtonTapped
@@ -41,6 +45,7 @@ public struct MainFeature: ReducerProtocol {
         // Internal Actions
         case _fetchTodaySteps(Int)
         case _fetchPastSteps([Int])
+        case _updateCurrentSpeed(Double)
         case _updateButtonStatus
         case _updateDisplayedStatus
         case _showFetchingStepError
@@ -60,16 +65,22 @@ public struct MainFeature: ReducerProtocol {
     @Dependency(\.healthClient)
     var healthClient
     
+    /// - NOTE(230730) @Duno
+    /// @Dependency를 이용하면 asyncStream의 비동기 값이 전달되지 않는 현상
+    var locationClient = LocationClient.liveValue
+    
     public var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:
-//                state.isLoading = true
+                // state.isLoading = true
                 
                 state.currentWeekDay = Date().weekdayFromMonday
                 
                 return .merge (
                     requestHealthClientAuth(),
+                    requestLocationClinetAuth(),
+                    fetchCurrentSpeed(),
                     fetchPastSteps(),
                     fetchTodaySteps()
                 )
@@ -110,6 +121,11 @@ public struct MainFeature: ReducerProtocol {
                 
                 return .send(._updateButtonStatus)
                 
+            case ._updateCurrentSpeed(let speed):
+                state.currentSpeed = speed
+                
+                return .none
+                
             case ._updateButtonStatus:
                 let existPastSteps = !state.pastSteps.isEmpty
                 
@@ -140,6 +156,9 @@ public struct MainFeature: ReducerProtocol {
                 
             case .coordinator:
                 return .none
+                
+            case .binding:
+                return .none
             }
         }
     }
@@ -157,7 +176,7 @@ extension MainFeature {
             }
         }
     }
-
+    
     private func fetchPastSteps() -> EffectTask<Action> {
         .run { send in
             do {
@@ -177,6 +196,20 @@ extension MainFeature {
                 await send(._fetchPastSteps(pastSteps))
             } catch {
                 // Error 처리
+            }
+        }
+    }
+    
+    private func requestLocationClinetAuth() -> EffectTask<Action> {
+        .run { send in
+            await locationClient.requestAuthorization()
+        }
+    }
+    
+    private func fetchCurrentSpeed() -> EffectTask<Action> {
+        return .run { send in
+            for await speed in locationClient.getCurrentSpeed() {
+                await send(._updateCurrentSpeed(speed))
             }
         }
     }
