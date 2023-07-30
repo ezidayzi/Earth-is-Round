@@ -20,7 +20,7 @@ import Combine
 struct ContentView: View {
     @State private var text = ""
     @State private var isValid = false
-    @State private var animationSpeed: CGFloat = 1.0
+    @State private var animationSpeed: Double = 1.0
     
     var body: some View {
         VStack {
@@ -60,7 +60,7 @@ struct ContentView: View {
                     }
 
                 
-                Slider(value: $animationSpeed, in: 0.0...4.0, label: { Text("Speed") })
+                Slider(value: $animationSpeed, in: 0.0...10.0, label: { Text("Speed") })
             }
             
             WeeklyWalkView(steps: [2030, 15420, 31200, 4030, 304, 132], standard: 5000)
