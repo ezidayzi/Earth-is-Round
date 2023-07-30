@@ -1,6 +1,19 @@
 import ProjectDescription
 
-public extension SettingsDictionary {    
+public extension SettingsDictionary {
+    
+    static let allLoadSettings: Self = [
+        "OTHER_LDFLAGS" : [
+            "$(inherited) -all_load"
+        ]
+    ]
+    
+    static let baseSettings: Self = [
+        "OTHER_LDFLAGS" : [
+            "$(inherited)",
+        ]
+    ]
+    
     func setSwiftActiveComplationConditions(_ value: String) -> SettingsDictionary {
         merging(["SWIFT_ACTIVE_COMPILATION_CONDITIONS": SettingValue(stringLiteral: value)])
     }

@@ -3,7 +3,7 @@ import ProjectDescription
 public extension Project {
     public static let iosAppInfoPlist: [String: InfoPlist.Value] = [
         "CFBundleDevelopmentRegion": "ko",
-        "CFBundleIdentifier": "\(Environment.bundlePrefix).release",
+        "CFBundleIdentifier": "\(Const.bundlePrefix).release",
         "CFBundleDisplayName": "지구는 둥그니까",
         "UIMainStoryboardFile": "",
         "UISupportedInterfaceOrientations": [
@@ -27,9 +27,16 @@ public extension Project {
             "UIInterfaceOrientationPortrait",
             "UIInterfaceOrientationPortraitUpsideDown",
         ],
-        "INFOPLIST_KEY_WKCompanionAppBundleIdentifier": "\(Environment.bundlePrefix).release",
+        "INFOPLIST_KEY_WKCompanionAppBundleIdentifier": "\(Const.bundlePrefix).release",
         "INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp": true,
         "INFOPLIST_KEY_CFBundleDisplayName": "지구는 둥그니까",
+    ]
+    
+    public static let widgetInfoPlist: [String: InfoPlist.Value] = [
+        "CFBundleDisplayName": "$(PRODUCT_NAME)",
+        "NSExtension": [
+            "NSExtensionPointIdentifier": "com.apple.widgetkit-extension",
+        ]
     ]
     
     public static let demoInfoPlist: [String: InfoPlist.Value] = [

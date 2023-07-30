@@ -8,7 +8,7 @@ import EnvPlugin
 public extension Project {
     static func iOSApp(
         name: String,
-        organizationName: String = Environment.workspaceName,
+        organizationName: String = Const.workspaceName,
         targets: Set<FeatureTarget> = Set([.staticFramework, .unitTest, .demo, .testing]),
         entitlements: Path? = nil,
         packages: [Package] = [],
@@ -17,21 +17,16 @@ public extension Project {
         testingDependencies: [TargetDependency] = [] // dependency of extra target for testing
     ) -> Project {
         
-        let configurationName: ConfigurationName = "Development"
-        let deploymentTarget = Environment.iphoneDeploymentTarget
+        let deploymentTarget = Const.iphoneDeploymentTarget
         var projectTargets: [Target] = []
         
-        let settings: SettingsDictionary = ["OTHER_LDFLAGS" : "$(inherited)"]
-            .merging(
-                SettingsDictionary()
-                    .setCodeSignManual()
-            )
+        let settings: SettingsDictionary = .baseSettings.setCodeSignManual()
         
         let target = Target(
             name: name,
             platform: .iOS,
             product: .app,
-            bundleId: "\(Environment.bundlePrefix).release",
+            bundleId: "\(Const.bundlePrefix).release",
             deploymentTarget: deploymentTarget,
             infoPlist: .extendingDefault(with: Project.iosAppInfoPlist),
             sources: ["Sources/**/*.swift"],
@@ -57,7 +52,7 @@ public extension Project {
                 name: "\(name)Testing",
                 platform: .iOS,
                 product: .framework,
-                bundleId: "\(Environment.bundlePrefix).\(name)Testing",
+                bundleId: "\(Const.bundlePrefix).\(name)Testing",
                 deploymentTarget: deploymentTarget,
                 infoPlist: .default,
                 sources: ["Testing/Sources/**/*.swift"],
@@ -77,13 +72,8 @@ public extension Project {
             name: "WidgetExtension",
             platform: .iOS,
             product: .appExtension,
-            bundleId: "\(Environment.bundlePrefix).release.widget",
-            infoPlist: .extendingDefault(with: [
-                "CFBundleDisplayName": "$(PRODUCT_NAME)",
-                "NSExtension": [
-                    "NSExtensionPointIdentifier": "com.apple.widgetkit-extension",
-                ],
-            ]),
+            bundleId: "\(Const.bundlePrefix).release.widget",
+            infoPlist: .extendingDefault(with: widgetInfoPlist),
             sources: "../Extensions/WidgetExtension/Sources/**/*.swift",
             resources: "../Extensions/WidgetExtension/Resources/**",
             dependencies: [
@@ -113,7 +103,7 @@ public extension Project {
                 name: "\(name)Tests",
                 platform: .iOS,
                 product: .unitTests,
-                bundleId: "\(Environment.bundlePrefix).Tests",
+                bundleId: "\(Const.bundlePrefix).Tests",
                 deploymentTarget: deploymentTarget,
                 infoPlist: .default,
                 sources: ["Tests/Sources/**/*.swift"],

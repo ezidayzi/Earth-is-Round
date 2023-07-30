@@ -8,7 +8,7 @@ import EnvPlugin
 public extension Project {
     static func watchApp(
         name: String,
-        organizationName: String = Environment.workspaceName,
+        organizationName: String = Const.workspaceName,
         targets: Set<FeatureTarget> = Set([.staticFramework, .unitTest, .demo, .testing]),
         packages: [Package] = [],
         internalDependencies: [TargetDependency] = [],
@@ -16,8 +16,7 @@ public extension Project {
         testingDependencies: [TargetDependency] = [] // dependency of extra target for testing
     ) -> Project {
         
-        let configurationName: ConfigurationName = "Development"
-        let deploymentTarget = Environment.watchDeploymentTarget
+        let deploymentTarget = Const.watchDeploymentTarget
         var projectTargets: [Target] = []
         
         let settings = Project.watchAppSettings
@@ -26,7 +25,7 @@ public extension Project {
             name: name,
             platform: .watchOS,
             product: .app,
-            bundleId: "\(Environment.bundlePrefix).release.watchApp",
+            bundleId: "\(Const.bundlePrefix).release.watchApp",
             deploymentTarget: deploymentTarget,
             infoPlist: nil,
             sources: ["Sources/**/*.swift"],
@@ -44,7 +43,7 @@ public extension Project {
                 name: "\(name)Testing",
                 platform: .watchOS,
                 product: .framework,
-                bundleId: "\(Environment.bundlePrefix).\(name)Testing",
+                bundleId: "\(Const.bundlePrefix).\(name)Testing",
                 deploymentTarget: deploymentTarget,
                 infoPlist: .default,
                 sources: ["Testing/Sources/**/*.swift"],
@@ -77,7 +76,7 @@ public extension Project {
                 name: "\(name)Tests",
                 platform: .watchOS,
                 product: .unitTests,
-                bundleId: "\(Environment.bundlePrefix).Tests",
+                bundleId: "\(Const.bundlePrefix).Tests",
                 deploymentTarget: deploymentTarget,
                 infoPlist: .default,
                 sources: ["Tests/Sources/**/*.swift"],
@@ -102,7 +101,8 @@ public extension Project {
             settings: .settings(configurations: XCConfig.project),
             targets: projectTargets,
             schemes: watchAppSchemes,
-            additionalFiles: [])
+            additionalFiles: []
+        )
     }
 }
 
