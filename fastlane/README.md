@@ -13,18 +13,15 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
-### set_version_xcconfigs
+## iOS
+
+### ios set_version_xcconfigs
 
 ```sh
-[bundle exec] fastlane set_version_xcconfigs
+[bundle exec] fastlane ios set_version_xcconfigs
 ```
 
 Set Marketing Version in Xcconfig
-
-----
-
-
-## iOS
 
 ### ios set_version
 
@@ -49,6 +46,14 @@ Upload QA App
 ```
 
 Upload QA App
+
+### ios regenerate
+
+```sh
+[bundle exec] fastlane ios regenerate
+```
+
+Regenerate tuist Projects with the specified version
 
 ### ios matchByTeam
 

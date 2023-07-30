@@ -11,7 +11,7 @@ let isCI = (ProcessInfo.processInfo.environment["TUIST_CI"] ?? "0") == "1" ? tru
 public extension Project {
     static func framework(
         name: String,
-        organizationName: String = Environment.workspaceName,
+        organizationName: String = Const.workspaceName,
         platforms: [Platform] = [Platform.iOS],
         targets: Set<FeatureTarget> = Set([.staticFramework, .unitTest, .demo, .testing]),
         packages: [Package] = [],
@@ -24,11 +24,11 @@ public extension Project {
     ) -> Project {
         
         let hasDynamicFramework = targets.contains(.dynamicFramework)
-        let configurationName: ConfigurationName = "Development"
+        let configurationName: ConfigurationName = "DEV"
         var singlePlatform = platforms.first!
         var singleDeplymentTarget = singlePlatform == .iOS
-        ? Environment.iphoneDeploymentTarget
-        : Environment.watchDeploymentTarget
+        ? Const.iphoneDeploymentTarget
+        : Const.watchDeploymentTarget
         
         var projectTargets: [Target] = []
         var schemes: [Scheme] = []
@@ -37,13 +37,13 @@ public extension Project {
         // Interface는 OS별로 중복되지 않기 때문에 platform별 분기를 하지 않음
         
         if targets.contains(.interface) {
-            let settings: SettingsDictionary = ["OTHER_LDFLAGS" : "$(inherited) -all_load"].merging(SettingsDictionary().setCodeSignManual())
+            let settings: SettingsDictionary = .allLoadSettings.setCodeSignManual()
             
             let target =  Target(
                 name: "\(name)Interface",
                 platform: singlePlatform,
                 product: .framework,
-                bundleId: "\(Environment.bundlePrefix).\(name)Interface",
+                bundleId: "\(Const.bundlePrefix).\(name)Interface",
                 deploymentTarget: singleDeplymentTarget,
                 infoPlist: .default,
                 sources: ["Interface/Sources/**/*.swift"],
@@ -55,27 +55,18 @@ public extension Project {
         }
         
         for platform in platforms {
-            let deploymentTarget = platform == .iOS
-            ? Environment.iphoneDeploymentTarget
-            : Environment.watchDeploymentTarget
             
-            var nameWithPlatform = platform == .iOS
-            ? name + "_ios"
-            : name + "_watchos"
+            let deploymentTarget = platform.deploymentTarget
+            var nameWithPlatform = platform.nameWithPlatform(name)
+            var bundleNameWithPlatform = platform.bundleNameWithPlatform(name)
+            var filteredDependencies = platform.filterDependencies(internalDependencies)
             
-            var bundleNameWithPlatform = platform == .iOS
-            ? name + "-ios"
-            : name + "-watchos"
-            
-            let originInternalDependnecies = internalDependencies
-            var internalDependencies = platform == .iOS
-            ? internalDependencies.filter { !$0.isWatchOSDependency }
-            : internalDependencies.filter { $0.isWatchOSDependency }
+            // 플랫폼이 하나인 경우에 suffix 초기화
             
             if platforms.count == 1 {
                 nameWithPlatform = name
                 bundleNameWithPlatform = name
-                internalDependencies = originInternalDependnecies
+                filteredDependencies = internalDependencies
             }
             
             // MARK: - Static Or Dynamic Framework
@@ -86,19 +77,19 @@ public extension Project {
                 : []
                 
                 let settings: SettingsDictionary = hasDynamicFramework
-                ? ["OTHER_LDFLAGS" : "$(inherited) -all_load"].merging(SettingsDictionary().setCodeSignManual())
-                : ["OTHER_LDFLAGS" : "$(inherited)"].merging(SettingsDictionary().setCodeSignManual())
+                ? .allLoadSettings.setCodeSignManual()
+                : .baseSettings.setCodeSignManual()
                 
                 let target = Target(
                     name: nameWithPlatform,
                     platform: platform,
                     product: hasDynamicFramework ? .framework : .staticFramework,
-                    bundleId: "\(Environment.bundlePrefix).\(bundleNameWithPlatform)",
+                    bundleId: "\(Const.bundlePrefix).\(bundleNameWithPlatform)",
                     deploymentTarget: deploymentTarget,
                     infoPlist: .default,
                     sources: ["Sources/**/*.swift"],
                     resources:  hasDynamicFramework ? [.glob(pattern: "Resources/**", excluding: [])] : [],
-                    dependencies: deps + internalDependencies + externalDependencies,
+                    dependencies: deps + filteredDependencies + externalDependencies,
                     settings: .settings(base: settings, configurations: XCConfig.framework)
                 )
                 
@@ -112,7 +103,7 @@ public extension Project {
                     name: "\(nameWithPlatform)Testing",
                     platform: platform,
                     product: .framework,
-                    bundleId: "\(Environment.bundlePrefix).\(bundleNameWithPlatform)Testing",
+                    bundleId: "\(Const.bundlePrefix).\(bundleNameWithPlatform)Testing",
                     deploymentTarget: deploymentTarget,
                     infoPlist: .default,
                     sources: ["Testing/Sources/**/*.swift"],
@@ -123,7 +114,10 @@ public extension Project {
                             .target(name: "\(nameWithPlatform)"),
                         ]
                     ].flatMap { $0 },
-                    settings: .settings(base: SettingsDictionary().setCodeSignManual(), configurations: XCConfig.framework)
+                    settings: .settings(
+                        base: SettingsDictionary().setCodeSignManual(),
+                        configurations: XCConfig.framework
+                    )
                 )
                 
                 projectTargets.append(target)
@@ -139,7 +133,7 @@ public extension Project {
                 case (_, false): deps = [.target(name: nameWithPlatform)]
                 }
                 
-                let bundleId = demoTargetOption?.bundleId ?? "\(Environment.bundlePrefix).\(bundleNameWithPlatform)Demo"
+                let bundleId = demoTargetOption?.bundleId ?? "\(Const.bundlePrefix).\(bundleNameWithPlatform)Demo"
                 let target = Target(
                     name: "\(nameWithPlatform)Demo",
                     platform: platform,
@@ -148,7 +142,10 @@ public extension Project {
                     deploymentTarget: deploymentTarget,
                     infoPlist: .extendingDefault(with: Project.demoInfoPlist),
                     sources: ["Demo/Sources/**/*.swift"],
-                    resources: [.glob(pattern: "Demo/Resources/**", excluding: ["Demo/Resources/dummy.txt"])],
+                    resources: [.glob(
+                        pattern: "Demo/Resources/**",
+                        excluding: ["Demo/Resources/dummy.txt"]
+                    )],
                     dependencies: [
                         deps,
                         [
@@ -186,7 +183,7 @@ public extension Project {
                     name: "\(nameWithPlatform)Tests",
                     platform: platform,
                     product: .unitTests,
-                    bundleId: "\(Environment.bundlePrefix).\(bundleNameWithPlatform)Tests",
+                    bundleId: "\(Const.bundlePrefix).\(bundleNameWithPlatform)Tests",
                     deploymentTarget: deploymentTarget,
                     infoPlist: .default,
                     sources: ["Tests/Sources/**/*.swift"],
@@ -220,7 +217,7 @@ public extension Project {
             settings: .settings(configurations: XCConfig.project),
             targets: projectTargets,
             schemes: schemes,
-            additionalFiles: ["README.md"]
+            additionalFiles: []
         )
     }
 }

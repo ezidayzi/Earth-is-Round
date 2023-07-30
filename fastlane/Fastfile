@@ -1,28 +1,29 @@
 default_platform(:ios)
 
+platform :ios do
+
 ################## Managing xcconfigs
 
-desc 'Set Marketing Version in Xcconfig'
-lane :set_version_xcconfigs do |options|
-    version_bump(options[:version])
-end
+  desc 'Set Marketing Version in Xcconfig'
+  lane :set_version_xcconfigs do |options|
+      version_bump(options[:version])
+  end
 
-def version_bump(target)
-    file_path = 'xcconfigs/Base/Projects/Shared.xcconfig'
-    version_key = 'MARKETING_VERSION'
+  def version_bump(target)
+      file_path = 'xcconfigs/Base/Projects/Shared.xcconfig'
+      version_key = 'MARKETING_VERSION'
 
-    puts "New Version: #{target}"
+      puts "New Version: #{target}"
 
-    update_xcconfig_value(
-      path: file_path,
-      name: version_key,
-      value: target
-    )
-end
+      update_xcconfig_value(
+        path: file_path,
+        name: version_key,
+        value: target
+      )
+  end
 
 ################## Versioning
 
-platform :ios do
   desc 'Set Marketing and Build version'
   lane :set_version do |version|
     increment_version_number(
@@ -39,49 +40,61 @@ platform :ios do
 
 ################## QA
 
-desc 'Upload QA App'
-lane :QA do |options|
-  set_version(version: options[:version])
-  version_number = "#{lane_context[SharedValues::VERSION_NUMBER]}(#{lane_context[SharedValues::BUILD_NUMBER]})"
+  desc 'Upload QA App'
+  lane :QA do |options|
+    set_version(version: options[:version])
+    version_number = "#{lane_context[SharedValues::VERSION_NUMBER]}(#{lane_context[SharedValues::BUILD_NUMBER]})"
 
-  git_commit(path: "./", message: "QA staging")
-  add_git_tag(tag: "v#{options[:version]}")
-  push_to_git_remote
-end
+    git_commit(path: "./", message: "QA staging")
+    add_git_tag(tag: "v#{options[:version]}")
+    push_to_git_remote
+  end
 
-desc 'Upload QA App'
-lane :QA_CD do |options|
-    create_keychain(
-      name: ENV["KEYCHAIN_NAME"],
-      password: ENV["KEYCHAIN_PASSWORD"],
-      timeout: 1800,
-      default_keychain: true,
-      unlock: true,
-      lock_when_sleeps: false
-    )
+  desc 'Upload QA App'
+  lane :QA_CD do |options|
+      create_keychain(
+        name: ENV["KEYCHAIN_NAME"],
+        password: ENV["KEYCHAIN_PASSWORD"],
+        timeout: 1800,
+        default_keychain: true,
+        unlock: true,
+        lock_when_sleeps: false
+      )
 
-    match(
-      git_branch: "master",
-      type: "appstore",
-      readonly: true,
-      keychain_name: ENV["KEYCHAIN_NAME"],
-      keychain_password: ENV["KEYCHAIN_PASSWORD"]
-    )
+      match(
+        git_branch: "master",
+        type: "appstore",
+        readonly: true,
+        keychain_name: ENV["KEYCHAIN_NAME"],
+        keychain_password: ENV["KEYCHAIN_PASSWORD"]
+      )
 
-    app_store_connect_api_key(
-      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
-      issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
-      key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"]
-    )
+      app_store_connect_api_key(
+        key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+        issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
+        key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"]
+      )
 
-    build_app(
-      scheme: "EarthIsRound-QA",
-      include_symbols: true,
-      export_method: "app-store"
-    )
+      build_app(
+        scheme: "EarthIsRound-QA",
+        include_symbols: true,
+        export_method: "app-store"
+      )
 
-    upload_to_testflight
-end
+      upload_to_testflight
+  end
+
+################## Projects
+
+  desc "Regenerate tuist Projects with the specified version"
+  lane :regenerate do |version|
+
+    Dir.chdir("../") do
+      sh("make regenerate")
+    end
+
+    set_version(version: version[:version])
+  end
 
 ################## Match
 
@@ -98,4 +111,5 @@ end
       match(git_branch: "master", type: "appstore", readonly: true)
       match(git_branch: "master", type: "development", readonly: true)
   end
+
 end
