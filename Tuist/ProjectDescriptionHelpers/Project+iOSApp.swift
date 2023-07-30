@@ -72,7 +72,7 @@ public extension Project {
             name: "WidgetExtension",
             platform: .iOS,
             product: .appExtension,
-            bundleId: "\(Const.bundlePrefix).release.widget",
+            bundleId: Const.widgetBundleId,
             infoPlist: .extendingDefault(with: widgetInfoPlist),
             sources: "../Extensions/WidgetExtension/Sources/**/*.swift",
             resources: "../Extensions/WidgetExtension/Resources/**",
@@ -139,19 +139,19 @@ extension Project {
             name: "EarthIsRound-DEV",
             shared: true,
             buildAction: .buildAction(targets: ["EarthIsRound"]),
-            runAction: .runAction(configuration: "Development"),
-            archiveAction: .archiveAction(configuration: "Development"),
-            profileAction: .profileAction(configuration: "Development"),
-            analyzeAction: .analyzeAction(configuration: "Development")
+            runAction: .runAction(configuration: "DEV"),
+            archiveAction: .archiveAction(configuration: "DEV"),
+            profileAction: .profileAction(configuration: "DEV"),
+            analyzeAction: .analyzeAction(configuration: "DEV")
         ),
         .init(
-            name: "EarthIsRound-Test",
+            name: "EarthIsRound-TEST",
             shared: true,
             buildAction: .buildAction(targets: ["EarthIsRound"]),
-            runAction: .runAction(configuration: "Test"),
-            archiveAction: .archiveAction(configuration: "Test"),
-            profileAction: .profileAction(configuration: "Test"),
-            analyzeAction: .analyzeAction(configuration: "Test")
+            runAction: .runAction(configuration: "TEST"),
+            archiveAction: .archiveAction(configuration: "TEST"),
+            profileAction: .profileAction(configuration: "TEST"),
+            analyzeAction: .analyzeAction(configuration: "TEST")
         ),
         .init(
             name: "EarthIsRound-QA",
@@ -163,13 +163,13 @@ extension Project {
             analyzeAction: .analyzeAction(configuration: "QA")
         ),
         .init(
-            name: "EarthIsRound-Release",
+            name: "EarthIsRound-PROD",
             shared: true,
             buildAction: .buildAction(targets: ["EarthIsRound"]),
-            runAction: .runAction(configuration: "Release"),
-            archiveAction: .archiveAction(configuration: "Release"),
-            profileAction: .profileAction(configuration: "Release"),
-            analyzeAction: .analyzeAction(configuration: "Release")
+            runAction: .runAction(configuration: "PROD"),
+            archiveAction: .archiveAction(configuration: "PROD"),
+            profileAction: .profileAction(configuration: "PROD"),
+            analyzeAction: .analyzeAction(configuration: "PROD")
         )
     ]
 }

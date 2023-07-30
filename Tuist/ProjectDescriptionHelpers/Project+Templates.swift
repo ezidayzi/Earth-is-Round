@@ -24,7 +24,7 @@ public extension Project {
     ) -> Project {
         
         let hasDynamicFramework = targets.contains(.dynamicFramework)
-        let configurationName: ConfigurationName = "Development"
+        let configurationName: ConfigurationName = "DEV"
         var singlePlatform = platforms.first!
         var singleDeplymentTarget = singlePlatform == .iOS
         ? Const.iphoneDeploymentTarget
@@ -142,7 +142,10 @@ public extension Project {
                     deploymentTarget: deploymentTarget,
                     infoPlist: .extendingDefault(with: Project.demoInfoPlist),
                     sources: ["Demo/Sources/**/*.swift"],
-                    resources: [.glob(pattern: "Demo/Resources/**", excluding: ["Demo/Resources/dummy.txt"])],
+                    resources: [.glob(
+                        pattern: "Demo/Resources/**",
+                        excluding: ["Demo/Resources/dummy.txt"]
+                    )],
                     dependencies: [
                         deps,
                         [
@@ -214,7 +217,7 @@ public extension Project {
             settings: .settings(configurations: XCConfig.project),
             targets: projectTargets,
             schemes: schemes,
-            additionalFiles: ["README.md"]
+            additionalFiles: []
         )
     }
 }

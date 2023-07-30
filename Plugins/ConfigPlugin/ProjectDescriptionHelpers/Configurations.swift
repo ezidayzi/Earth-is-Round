@@ -10,29 +10,29 @@ public struct XCConfig {
     }
     
     public static let framework: [Configuration] = [
-        .debug(name: "Development", xcconfig: Path.framework),
-        .debug(name: "Test", xcconfig: Path.framework),
+        .debug(name: "DEV", xcconfig: Path.framework),
+        .debug(name: "TEST", xcconfig: Path.framework),
         .release(name: "QA", xcconfig: Path.framework),
-        .release(name: "Release", xcconfig: Path.framework),
+        .release(name: "PROD", xcconfig: Path.framework),
     ]
     
     public static let tests: [Configuration] = [
-        .debug(name: "Development", xcconfig: Path.tests),
-        .debug(name: "Test", xcconfig: Path.tests),
+        .debug(name: "DEV", xcconfig: Path.tests),
+        .debug(name: "TEST", xcconfig: Path.tests),
         .release(name: "QA", xcconfig: Path.tests),
-        .release(name: "Release", xcconfig: Path.tests),
+        .release(name: "PROD", xcconfig: Path.tests),
     ]
     public static let demo: [Configuration] = [
-        .debug(name: "Development", xcconfig: Path.demo),
-        .debug(name: "Test", xcconfig: Path.demo),
+        .debug(name: "DEV", xcconfig: Path.demo),
+        .debug(name: "TEST", xcconfig: Path.demo),
         .release(name: "QA", xcconfig: Path.demo),
-        .release(name: "Release", xcconfig: Path.demo),
+        .release(name: "PROD", xcconfig: Path.demo),
     ]
     public static let project: [Configuration] = [
-        .debug(name: "Development", xcconfig: Path.project("Development")),
-        .debug(name: "Test", xcconfig: Path.project("Test")),
+        .debug(name: "DEV", xcconfig: Path.project("DEV")),
+        .debug(name: "TEST", xcconfig: Path.project("TEST")),
         .release(name: "QA", xcconfig: Path.project("QA")),
-        .release(name: "Release", xcconfig: Path.project("Release")),
+        .release(name: "PROD", xcconfig: Path.project("PROD")),
     ]
 }
 

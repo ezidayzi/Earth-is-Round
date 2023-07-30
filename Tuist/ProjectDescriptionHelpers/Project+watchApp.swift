@@ -112,19 +112,19 @@ extension Project {
             name: "EarthIsRoundWatchApp-DEV",
             shared: true,
             buildAction: .buildAction(targets: ["EarthIsRoundWatchApp"]),
-            runAction: .runAction(configuration: "Development"),
-            archiveAction: .archiveAction(configuration: "Development"),
-            profileAction: .profileAction(configuration: "Development"),
-            analyzeAction: .analyzeAction(configuration: "Development")
+            runAction: .runAction(configuration: "DEV"),
+            archiveAction: .archiveAction(configuration: "DEV"),
+            profileAction: .profileAction(configuration: "DEV"),
+            analyzeAction: .analyzeAction(configuration: "DEV")
         ),
         .init(
-            name: "EarthIsRoundWatchApp-Test",
+            name: "EarthIsRoundWatchApp-TEST",
             shared: true,
             buildAction: .buildAction(targets: ["EarthIsRoundWatchApp"]),
-            runAction: .runAction(configuration: "Test"),
-            archiveAction: .archiveAction(configuration: "Test"),
-            profileAction: .profileAction(configuration: "Test"),
-            analyzeAction: .analyzeAction(configuration: "Test")
+            runAction: .runAction(configuration: "TEST"),
+            archiveAction: .archiveAction(configuration: "TEST"),
+            profileAction: .profileAction(configuration: "TEST"),
+            analyzeAction: .analyzeAction(configuration: "TEST")
         ),
         .init(
             name: "EarthIsRoundWatchApp-QA",
@@ -136,13 +136,13 @@ extension Project {
             analyzeAction: .analyzeAction(configuration: "QA")
         ),
         .init(
-            name: "EarthIsRoundWatchApp-Release",
+            name: "EarthIsRoundWatchApp-PROD",
             shared: true,
             buildAction: .buildAction(targets: ["EarthIsRoundWatchApp"]),
-            runAction: .runAction(configuration: "Release"),
-            archiveAction: .archiveAction(configuration: "Release"),
-            profileAction: .profileAction(configuration: "Release"),
-            analyzeAction: .analyzeAction(configuration: "Release")
+            runAction: .runAction(configuration: "PROD"),
+            archiveAction: .archiveAction(configuration: "PROD"),
+            profileAction: .profileAction(configuration: "PROD"),
+            analyzeAction: .analyzeAction(configuration: "PROD")
         )
     ]
 }
