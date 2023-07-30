@@ -9,17 +9,19 @@ import EnvPlugin
 let isCI = (ProcessInfo.processInfo.environment["TUIST_CI"] ?? "0") == "1" ? true : false
 
 public extension Project {
-    static func framework(name: String,
-                          organizationName: String = Environment.workspaceName,
-                          platforms: [Platform] = [Platform.iOS],
-                          targets: Set<FeatureTarget> = Set([.staticFramework, .unitTest, .demo, .testing]),
-                          packages: [Package] = [],
-                          internalDependencies: [TargetDependency] = [],
-                          externalDependencies: [TargetDependency] = [],
-                          interfaceDependencies: [TargetDependency] = [], // feature interface dependency
-                          testingDependencies: [TargetDependency] = [], // dependency of extra target for testing
-                          demoDependencies: [TargetDependency] = [], // feature demo excutable dependency
-                          demoTargetOption: DemoTargetOption? = nil) -> Project {
+    static func framework(
+        name: String,
+        organizationName: String = Environment.workspaceName,
+        platforms: [Platform] = [Platform.iOS],
+        targets: Set<FeatureTarget> = Set([.staticFramework, .unitTest, .demo, .testing]),
+        packages: [Package] = [],
+        internalDependencies: [TargetDependency] = [],
+        externalDependencies: [TargetDependency] = [],
+        interfaceDependencies: [TargetDependency] = [], // feature interface dependency
+        testingDependencies: [TargetDependency] = [], // dependency of extra target for testing
+        demoDependencies: [TargetDependency] = [], // feature demo excutable dependency
+        demoTargetOption: DemoTargetOption? = nil
+    ) -> Project {
         
         let hasDynamicFramework = targets.contains(.dynamicFramework)
         let configurationName: ConfigurationName = "Development"
@@ -36,18 +38,18 @@ public extension Project {
         
         if targets.contains(.interface) {
             let settings: SettingsDictionary = ["OTHER_LDFLAGS" : "$(inherited) -all_load"].merging(SettingsDictionary().setCodeSignManual())
-
+            
             let target =  Target(
-                    name: "\(name)Interface",
-                    platform: singlePlatform,
-                    product: .framework,
-                    bundleId: "\(Environment.bundlePrefix).\(name)Interface",
-                    deploymentTarget: singleDeplymentTarget,
-                    infoPlist: .default,
-                    sources: ["Interface/Sources/**/*.swift"],
-                    dependencies: interfaceDependencies,
-                    settings: .settings(base: settings, configurations: XCConfig.framework)
-                )
+                name: "\(name)Interface",
+                platform: singlePlatform,
+                product: .framework,
+                bundleId: "\(Environment.bundlePrefix).\(name)Interface",
+                deploymentTarget: singleDeplymentTarget,
+                infoPlist: .default,
+                sources: ["Interface/Sources/**/*.swift"],
+                dependencies: interfaceDependencies,
+                settings: .settings(base: settings, configurations: XCConfig.framework)
+            )
             
             projectTargets.append(target)
         }
@@ -82,7 +84,7 @@ public extension Project {
                 let deps: [TargetDependency] = targets.contains(.interface)
                 ? [.target(name: "\(nameWithPlatform)Interface")]
                 : []
-
+                
                 let settings: SettingsDictionary = hasDynamicFramework
                 ? ["OTHER_LDFLAGS" : "$(inherited) -all_load"].merging(SettingsDictionary().setCodeSignManual())
                 : ["OTHER_LDFLAGS" : "$(inherited)"].merging(SettingsDictionary().setCodeSignManual())
@@ -218,7 +220,8 @@ public extension Project {
             settings: .settings(configurations: XCConfig.project),
             targets: projectTargets,
             schemes: schemes,
-            additionalFiles: ["README.md"])
+            additionalFiles: ["README.md"]
+        )
     }
 }
 

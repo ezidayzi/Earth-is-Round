@@ -19,6 +19,7 @@ public extension TargetDependency {
     public struct Core {
         public struct PedometerClient {}
         public struct HealthClient {}
+        public struct LocationClient {}
         public struct APIClient {}
     }
     public struct Shared {}
@@ -126,6 +127,11 @@ public extension Dep.Core.APIClient {
 public extension Dep.Core.HealthClient {
     static let iOS = Dep.project(target: "HealthClient_ios", path: .relativeToCore("HealthClient"))
     static let watchOS = Dep.project(target: "HealthClient_watchos", path: .relativeToCore("HealthClient"))
+}
+
+public extension Dep.Core.LocationClient {
+    static let iOS = Dep.project(target: "LocationClient_ios", path: .relativeToCore("LocationClient"))
+    static let watchOS = Dep.project(target: "LocationClient_watchos", path: .relativeToCore("LocationClient"))
 }
 
 // MARK: - DesignSystemp

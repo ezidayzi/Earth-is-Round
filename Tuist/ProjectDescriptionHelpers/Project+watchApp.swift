@@ -6,13 +6,14 @@ import ConfigPlugin
 import EnvPlugin
 
 public extension Project {
-    static func watchApp(name: String,
-                         organizationName: String = Environment.workspaceName,
-                         targets: Set<FeatureTarget> = Set([.staticFramework, .unitTest, .demo, .testing]),
-                         packages: [Package] = [],
-                         internalDependencies: [TargetDependency] = [],
-                         externalDependencies: [TargetDependency] = [],
-                         testingDependencies: [TargetDependency] = [] // dependency of extra target for testing
+    static func watchApp(
+        name: String,
+        organizationName: String = Environment.workspaceName,
+        targets: Set<FeatureTarget> = Set([.staticFramework, .unitTest, .demo, .testing]),
+        packages: [Package] = [],
+        internalDependencies: [TargetDependency] = [],
+        externalDependencies: [TargetDependency] = [],
+        testingDependencies: [TargetDependency] = [] // dependency of extra target for testing
     ) -> Project {
         
         let configurationName: ConfigurationName = "Development"
