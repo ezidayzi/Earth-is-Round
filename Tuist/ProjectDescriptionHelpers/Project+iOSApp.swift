@@ -6,14 +6,15 @@ import ConfigPlugin
 import EnvPlugin
 
 public extension Project {
-    static func iOSApp(name: String,
-                       organizationName: String = Environment.workspaceName,
-                       targets: Set<FeatureTarget> = Set([.staticFramework, .unitTest, .demo, .testing]),
-                       entitlements: Path? = nil,
-                       packages: [Package] = [],
-                       internalDependencies: [TargetDependency] = [],
-                       externalDependencies: [TargetDependency] = [],
-                       testingDependencies: [TargetDependency] = [] // dependency of extra target for testing
+    static func iOSApp(
+        name: String,
+        organizationName: String = Environment.workspaceName,
+        targets: Set<FeatureTarget> = Set([.staticFramework, .unitTest, .demo, .testing]),
+        entitlements: Path? = nil,
+        packages: [Package] = [],
+        internalDependencies: [TargetDependency] = [],
+        externalDependencies: [TargetDependency] = [],
+        testingDependencies: [TargetDependency] = [] // dependency of extra target for testing
     ) -> Project {
         
         let configurationName: ConfigurationName = "Development"
@@ -137,7 +138,8 @@ public extension Project {
             settings: .settings(configurations: XCConfig.project),
             targets: projectTargets,
             schemes: appSchemes,
-            additionalFiles: [])
+            additionalFiles: []
+        )
     }
 }
 

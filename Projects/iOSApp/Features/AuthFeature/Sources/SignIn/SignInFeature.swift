@@ -19,7 +19,7 @@ public struct SignInFeature: ReducerProtocol {
         public init() {}
     }
     
-    public enum Action: BindableAction, Equatable {
+    public enum Action: BindableAction {
         // View Actions
         case binding(BindingAction<State>)
         case signInButtonTapped

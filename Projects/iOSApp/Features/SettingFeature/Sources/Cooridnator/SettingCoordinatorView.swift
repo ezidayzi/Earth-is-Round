@@ -25,17 +25,17 @@ public struct SettingCoordinatorView: View {
         TCARouter(store) { store in
             SwitchStore(store) {
                 CaseLet(
-                    state: /SettingScreen.State.setting,
+                    /SettingScreen.State.setting,
                     action: SettingScreen.Action.setting,
                     then: SettingView.init
                 )
                 CaseLet(
-                    state: /SettingScreen.State.passwordEdit,
+                    /SettingScreen.State.passwordEdit,
                     action: SettingScreen.Action.passwordEdit,
                     then: PasswordEditView.init
                 )
                 CaseLet(
-                    state: /SettingScreen.State.nicknameEdit,
+                    /SettingScreen.State.nicknameEdit,
                     action: SettingScreen.Action.nicknameEdit,
                     then: NicknameEditView.init
                 )

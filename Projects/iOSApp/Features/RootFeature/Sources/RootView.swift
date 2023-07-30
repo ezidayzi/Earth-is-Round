@@ -25,37 +25,37 @@ public struct RootCoordinatorView: View {
         TCARouter(store) { store in
             SwitchStore(store) {
                 CaseLet(
-                    state: /RootScreen.State.splash,
+                    /RootScreen.State.splash,
                     action: RootScreen.Action.splash,
                     then: SplashView.init
                 )
                 CaseLet(
-                    state: /RootScreen.State.main,
+                    /RootScreen.State.main,
                     action: RootScreen.Action.main,
                     then: MainView.init
                 )
                 CaseLet(
-                    state: /RootScreen.State.auth,
+                    /RootScreen.State.auth,
                     action: RootScreen.Action.auth,
                     then: AuthCoordinatorView.init
                 )
                 CaseLet(
-                    state: /RootScreen.State.setting,
+                    /RootScreen.State.setting,
                     action: RootScreen.Action.setting,
                     then: SettingCoordinatorView.init
                 )
                 CaseLet(
-                    state: /RootScreen.State.archive,
+                    /RootScreen.State.archive,
                     action: RootScreen.Action.archive,
                     then: ArchiveView.init
                 )
                 CaseLet(
-                    state: /RootScreen.State.snowmanAlert,
+                    /RootScreen.State.snowmanAlert,
                     action: RootScreen.Action.snowmanAlert,
                     then: SnowmanAlertView.init
                 )
                 CaseLet(
-                    state: /RootScreen.State.itemAlert,
+                    /RootScreen.State.itemAlert,
                     action: RootScreen.Action.itemAlert,
                     then: ItemAlertView.init
                 )
