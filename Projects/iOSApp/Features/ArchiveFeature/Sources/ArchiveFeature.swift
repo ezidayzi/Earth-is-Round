@@ -55,19 +55,19 @@ public struct ArchiveFeature: ReducerProtocol {
                             uuid: UUID(),
                             week: 1,
                             snowmanType: .largeHeadSmallBody,
-                            snowmanItem: [.airPodMax2, .boots, .carrot, .sunglass]
+                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
                         ),
                         WeeklyArchive(
                             uuid: UUID(),
                             week: 2,
                             snowmanType: .largeHeadSmallBody,
-                            snowmanItem: [.airPodMax2, .boots, .carrot, .sunglass]
+                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
                         ),
                         WeeklyArchive(
                             uuid: UUID(),
                             week: 3,
                             snowmanType: .largeHeadSmallBody,
-                            snowmanItem: [.airPodMax2, .boots, .carrot, .sunglass]
+                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
                         )
                     ]
                 ),
@@ -79,19 +79,19 @@ public struct ArchiveFeature: ReducerProtocol {
                             uuid: UUID(),
                             week: 1,
                             snowmanType: .largeHeadSmallBody,
-                            snowmanItem: [.airPodMax2, .boots, .carrot, .sunglass]
+                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
                         ),
                         WeeklyArchive(
                             uuid: UUID(),
                             week: 2,
                             snowmanType: .largeHeadSmallBody,
-                            snowmanItem: [.airPodMax2, .boots, .carrot, .sunglass]
+                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
                         ),
                         WeeklyArchive(
                             uuid: UUID(),
                             week: 3,
                             snowmanType: .largeHeadSmallBody,
-                            snowmanItem: [.airPodMax2, .boots, .carrot, .sunglass]
+                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
                         )
                     ]
                 ),
@@ -103,19 +103,19 @@ public struct ArchiveFeature: ReducerProtocol {
                             uuid: UUID(),
                             week: 1,
                             snowmanType: .largeHeadSmallBody,
-                            snowmanItem: [.airPodMax2, .boots, .carrot, .sunglass]
+                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
                         ),
                         WeeklyArchive(
                             uuid: UUID(),
                             week: 2,
                             snowmanType: .largeHeadSmallBody,
-                            snowmanItem: [.airPodMax2, .boots, .carrot, .sunglass]
+                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
                         ),
                         WeeklyArchive(
                             uuid: UUID(),
                             week: 3,
                             snowmanType: .largeHeadSmallBody,
-                            snowmanItem: [.airPodMax2, .boots, .carrot, .sunglass]
+                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
                         )
                     ]
                 )

@@ -27,7 +27,7 @@ public struct ArchiveView: View {
                                 ArchiveGridItem(
                                     week: "\(weeklyArchive.week)주차",
                                     snowmanType: weeklyArchive.snowmanType,
-                                    snowmanItemType: weeklyArchive.snowmanItem
+                                    snowmanItemTypes: weeklyArchive.snowmanItemTypes
                                 )
                             }
                         }, header: {
@@ -54,7 +54,7 @@ public struct ArchiveView: View {
 fileprivate struct ArchiveGridItem: View {
     let week: String
     let snowmanType: SnowmanType
-    let snowmanItemType: [SnowmanItemType]
+    let snowmanItemTypes: [SnowmanItemType]
 
     var body: some View {
         GeometryReader { geometry in
@@ -62,7 +62,7 @@ fileprivate struct ArchiveGridItem: View {
                 .fill(ERColor.Black90)
                 .overlay {
                     SnowmanView(
-                        itemRawValues: snowmanItemType.map { $0.rawValue },
+                        itemRawValues: snowmanItemTypes.map { $0.rawValue },
                         snowmanType: snowmanType
                     )
                     .padding(.init(top: 36, leading: 16, bottom: 20, trailing: 16))

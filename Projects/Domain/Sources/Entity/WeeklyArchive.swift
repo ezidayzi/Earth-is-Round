@@ -14,18 +14,18 @@ public struct WeeklyArchive {
     public let uuid: UUID
     public let week: Int
     public let snowmanType: SnowmanType
-    public let snowmanItem: [SnowmanItemType]
+    public let snowmanItemTypes: [SnowmanItemType]
 
     public init(
         uuid: UUID,
         week: Int,
         snowmanType: SnowmanType,
-        snowmanItem: [SnowmanItemType]
+        snowmanItemTypes: [SnowmanItemType]
     ) {
         self.uuid = uuid
         self.week = week
         self.snowmanType = snowmanType
-        self.snowmanItem = snowmanItem
+        self.snowmanItemTypes = snowmanItemTypes
     }
 }
 
