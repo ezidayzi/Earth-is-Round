@@ -59,7 +59,7 @@ fileprivate struct ArchiveGridItem: View {
     var body: some View {
         GeometryReader { geometry in
             Rectangle()
-                .fill(ERColor.Black90)
+                .fill(ERColor.Blue80)
                 .overlay {
                     SnowmanView(
                         itemRawValues: snowmanItemTypes.map { $0.rawValue },
