@@ -8,12 +8,10 @@
 
 import SwiftUI
 
-public enum SnowmanType {
-    case largeHeadLargeBody
-    case largeHeadSmallBody
-    case smallHeadLargeBody
-    case smallHeadSmallBody
-    
+import Shared_ios
+
+public extension SnowmanType {
+
     var headSize: CGSize {
         switch self {
         case .largeHeadLargeBody, .largeHeadSmallBody:

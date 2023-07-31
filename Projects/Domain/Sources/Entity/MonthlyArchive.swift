@@ -8,8 +8,6 @@
 
 import Foundation
 
-import DesignSystem_ios
-
 public struct MonthlyArchive {
     public let uuid: UUID
     public let month: Int

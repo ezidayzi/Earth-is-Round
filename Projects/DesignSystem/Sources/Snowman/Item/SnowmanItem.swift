@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+import Shared_ios
+
 public struct SnowmanItem {
     
     enum AttachmentPoint {

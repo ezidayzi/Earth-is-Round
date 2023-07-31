@@ -8,7 +8,7 @@
 
 import Foundation
 
-import DesignSystem_ios
+import Shared_ios
 
 public struct WeeklyArchive {
     public let uuid: UUID

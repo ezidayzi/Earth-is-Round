@@ -2,6 +2,7 @@ import SwiftUI
 
 import ComposableArchitecture
 import DesignSystem_ios
+import Shared_ios
 
 public struct ArchiveView: View {
     
