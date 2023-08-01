@@ -16,6 +16,7 @@ public enum ERColor {
     public static let Black50 = Color("Black50", bundle: .module)
     public static let Black70 = Color("Black70", bundle: .module)
     public static let Black90 = Color("Black90", bundle: .module)
+    public static let Blue80 = Color("Blue80", bundle: .module)
     public static let Main = Color("Main", bundle: .module)
     public static let White = Color("White", bundle: .module)
 }

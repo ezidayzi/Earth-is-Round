@@ -14,11 +14,16 @@ public enum I18N {
     }
     
     public struct Common {
-        
+        public static let month = "월"
+        public static let week = "주차"
     }
     
     public struct Main {
         
+    }
+
+    public struct Archive {
+        public static let mySnowman = "내 눈사람"
     }
 }
 
