@@ -14,11 +14,15 @@ public struct ArchiveFeature: ReducerProtocol {
     }
 
     public enum Action: Equatable {
+        // View Actions
         case naviBackButtonTapped
-        case coordinator(CoordinatorAction)
         case onAppear
 
+        // Internal Actions
         case _fetchArchiveList([MonthlyArchive])
+
+        // Coordinator
+        case coordinator(CoordinatorAction)
 
         public enum CoordinatorAction {
             case pop

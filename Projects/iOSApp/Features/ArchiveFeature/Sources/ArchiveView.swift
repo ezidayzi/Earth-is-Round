@@ -16,7 +16,7 @@ public struct ArchiveView: View {
 
     public var body: some View {
         VStack(spacing: 0) {
-            ERNavigationBar(title: "내 눈사람", action: {
+            ERNavigationBar(title: I18N.Archive.mySnowman, action: {
                 viewStore.send(.naviBackButtonTapped)
             })
             ScrollView {
@@ -25,14 +25,14 @@ public struct ArchiveView: View {
                         Section(content: {
                             ForEach(mothlyArchive.weeklyArchive, id: \.self) { weeklyArchive in
                                 ArchiveGridItem(
-                                    week: "\(weeklyArchive.week)주차",
+                                    week: "\(weeklyArchive.week)\(I18N.Common.week)",
                                     snowmanType: weeklyArchive.snowmanType,
                                     snowmanItemTypes: weeklyArchive.snowmanItemTypes
                                 )
                             }
                         }, header: {
                             HStack {
-                                Text("\(mothlyArchive.month)월")
+                                Text("\(mothlyArchive.month)\(I18N.Common.month)")
                                     .font(DesignSystemIosFontFamily.AritaDotumOTF.semiBold.font(size: 18).toSwiftUI)
                                 Spacer()
                             }
@@ -65,9 +65,8 @@ fileprivate struct ArchiveGridItem: View {
                         itemRawValues: snowmanItemTypes.map { $0.rawValue },
                         snowmanType: snowmanType
                     )
-                    .padding(.init(top: 36, leading: 16, bottom: 20, trailing: 16))
-                    .frame(width: geometry.size.width)
-                    .frame(height: geometry.size.width * 4/3)
+                    .frame(width: geometry.size.width - 32)
+                    .frame(height: (geometry.size.width - 32) * 4/3)
                 }
 
             Text(week)
