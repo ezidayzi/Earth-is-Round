@@ -50,79 +50,79 @@ public struct ArchiveFeature: ReducerProtocol {
     private func fetchArchiveList() -> EffectTask<Action> {
         .run { send in
             // 서버 통신
-            let list = [
-                MonthlyArchive(
-                    uuid: UUID(),
-                    month: 12,
-                    weeklyArchive: [
-                        WeeklyArchive(
-                            uuid: UUID(),
-                            week: 1,
-                            snowmanType: .largeHeadSmallBody,
-                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
-                        ),
-                        WeeklyArchive(
-                            uuid: UUID(),
-                            week: 2,
-                            snowmanType: .largeHeadSmallBody,
-                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
-                        ),
-                        WeeklyArchive(
-                            uuid: UUID(),
-                            week: 3,
-                            snowmanType: .largeHeadSmallBody,
-                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
-                        )
-                    ]
-                ),
-                MonthlyArchive(
-                    uuid: UUID(),
-                    month: 1,
-                    weeklyArchive: [
-                        WeeklyArchive(
-                            uuid: UUID(),
-                            week: 1,
-                            snowmanType: .largeHeadSmallBody,
-                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
-                        ),
-                        WeeklyArchive(
-                            uuid: UUID(),
-                            week: 2,
-                            snowmanType: .largeHeadSmallBody,
-                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
-                        ),
-                        WeeklyArchive(
-                            uuid: UUID(),
-                            week: 3,
-                            snowmanType: .largeHeadSmallBody,
-                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
-                        )
-                    ]
-                ),
-                MonthlyArchive(
-                    uuid: UUID(),
-                    month: 2,
-                    weeklyArchive: [
-                        WeeklyArchive(
-                            uuid: UUID(),
-                            week: 1,
-                            snowmanType: .largeHeadSmallBody,
-                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
-                        ),
-                        WeeklyArchive(
-                            uuid: UUID(),
-                            week: 2,
-                            snowmanType: .largeHeadSmallBody,
-                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
-                        ),
-                        WeeklyArchive(
-                            uuid: UUID(),
-                            week: 3,
-                            snowmanType: .largeHeadSmallBody,
-                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
-                        )
-                    ]
-                )
+            let list: [MonthlyArchive] = [
+//                MonthlyArchive(
+//                    uuid: UUID(),
+//                    month: 12,
+//                    weeklyArchive: [
+//                        WeeklyArchive(
+//                            uuid: UUID(),
+//                            week: 1,
+//                            snowmanType: .largeHeadSmallBody,
+//                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
+//                        ),
+//                        WeeklyArchive(
+//                            uuid: UUID(),
+//                            week: 2,
+//                            snowmanType: .largeHeadSmallBody,
+//                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
+//                        ),
+//                        WeeklyArchive(
+//                            uuid: UUID(),
+//                            week: 3,
+//                            snowmanType: .largeHeadSmallBody,
+//                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
+//                        )
+//                    ]
+//                ),
+//                MonthlyArchive(
+//                    uuid: UUID(),
+//                    month: 1,
+//                    weeklyArchive: [
+//                        WeeklyArchive(
+//                            uuid: UUID(),
+//                            week: 1,
+//                            snowmanType: .largeHeadSmallBody,
+//                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
+//                        ),
+//                        WeeklyArchive(
+//                            uuid: UUID(),
+//                            week: 2,
+//                            snowmanType: .largeHeadSmallBody,
+//                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
+//                        ),
+//                        WeeklyArchive(
+//                            uuid: UUID(),
+//                            week: 3,
+//                            snowmanType: .largeHeadSmallBody,
+//                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
+//                        )
+//                    ]
+//                ),
+//                MonthlyArchive(
+//                    uuid: UUID(),
+//                    month: 2,
+//                    weeklyArchive: [
+//                        WeeklyArchive(
+//                            uuid: UUID(),
+//                            week: 1,
+//                            snowmanType: .largeHeadSmallBody,
+//                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
+//                        ),
+//                        WeeklyArchive(
+//                            uuid: UUID(),
+//                            week: 2,
+//                            snowmanType: .largeHeadSmallBody,
+//                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
+//                        ),
+//                        WeeklyArchive(
+//                            uuid: UUID(),
+//                            week: 3,
+//                            snowmanType: .largeHeadSmallBody,
+//                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
+//                        )
+//                    ]
+//                )
             ]
             await send(._fetchArchiveList(list))
         }
