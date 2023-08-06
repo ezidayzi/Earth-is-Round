@@ -8,6 +8,7 @@ public struct ArchiveView: View {
     
     let store: StoreOf<ArchiveFeature>
     @ObservedObject var viewStore: ViewStoreOf<ArchiveFeature>
+    @State private var isArchiveListEmpty = true
 
     public init(store: StoreOf<ArchiveFeature>) {
         self.store = store
@@ -15,39 +16,56 @@ public struct ArchiveView: View {
     }
 
     public var body: some View {
-        VStack(spacing: 0) {
-            ERNavigationBar(title: I18N.Archive.mySnowman, action: {
+        VStack {
+            ERNavigationBar(
+                title: I18N.Archive.mySnowman,
+                backgroundColor: isArchiveListEmpty ? ERColor.Black90 : ERColor.White
+            ) {
                 viewStore.send(.naviBackButtonTapped)
-            })
-            ScrollView {
-                LazyVGrid(columns: (1...2).map { _ in return GridItem(.flexible()) }, spacing: 6) {
-                    ForEach(viewStore.archiveList ?? [], id: \.self) { mothlyArchive in
-                        Section(content: {
-                            ForEach(mothlyArchive.weeklyArchive, id: \.self) { weeklyArchive in
-                                ArchiveGridItem(
-                                    week: "\(weeklyArchive.week)\(I18N.Common.week)",
-                                    snowmanType: weeklyArchive.snowmanType,
-                                    snowmanItemTypes: weeklyArchive.snowmanItemTypes
-                                )
-                            }
-                        }, header: {
-                            HStack {
-                                Text("\(mothlyArchive.month)\(I18N.Common.month)")
-                                    .font(DesignSystemIosFontFamily.AritaDotumOTF.semiBold.font(size: 18).toSwiftUI)
-                                Spacer()
-                            }
-                            .frame(height: 60)
-                        })
-                    }
-                }
-                .padding(16)
             }
-            .scrollIndicators(.hidden)
+
+            if let archiveList = viewStore.archiveList, !archiveList.isEmpty {
+                ScrollView {
+                    LazyVGrid(columns: (1...2).map { _ in return GridItem(.flexible()) }, spacing: 6) {
+                        ForEach(viewStore.archiveList ?? [], id: \.self) { mothlyArchive in
+                            Section(content: {
+                                ForEach(mothlyArchive.weeklyArchive, id: \.self) { weeklyArchive in
+                                    ArchiveGridItem(
+                                        week: "\(weeklyArchive.week)\(I18N.Common.week)",
+                                        snowmanType: weeklyArchive.snowmanType,
+                                        snowmanItemTypes: weeklyArchive.snowmanItemTypes
+                                    )
+                                }
+                            }, header: {
+                                HStack {
+                                    Text("\(mothlyArchive.month)\(I18N.Common.month)")
+                                        .font(DesignSystemIosFontFamily.AritaDotumOTF.semiBold.font(size: 18).toSwiftUI)
+                                    Spacer()
+                                }
+                                .frame(height: 60)
+                            })
+                        }
+                    }
+                    .padding(16)
+                }
+                .scrollIndicators(.hidden)
+            } else {
+                SnowmanEmptyView()
+                    .padding()
+            }
         }
+        .background(isArchiveListEmpty ? ERColor.Black90 : ERColor.White)
         .toolbar(.hidden, for: .navigationBar)
         .onAppear {
             viewStore.send(.onAppear)
         }
+        .onChange(of: viewStore.archiveList) { _ in
+            updateArchiveListEmpty()
+        }
+    }
+
+    private func updateArchiveListEmpty() {
+        isArchiveListEmpty = viewStore.archiveList?.isEmpty ?? true
     }
 }
 
@@ -85,3 +103,52 @@ fileprivate struct ArchiveGridItem: View {
     }
 }
 
+fileprivate struct SnowmanEmptyView: View {
+
+    private enum Metric {
+        static let snowmanImageSize: CGFloat = 88
+        static let speechBalloonHeight: CGFloat = 108
+        static let imageHeight = snowmanImageSize + speechBalloonHeight
+    }
+
+    var body: some View {
+        GeometryReader { geo in
+            VStack(spacing: 0) {
+                Spacer()
+                    .frame(height: (geo.size.height - Metric.imageHeight) * 2 / 5)
+                Group {
+                    ERSpeechBalloon(text: {
+                        Text("눈사람 is empty")
+                            .foregroundColor(ERColor.Black50)
+                    }, color: ERColor.White)
+                    .padding(.horizontal,100)
+                    .frame(maxHeight: Metric.speechBalloonHeight)
+
+                    ZStack {
+                        Rectangle()
+                            .fill(.clear)
+                        Image(asset: DesignSystemIosAsset.Assets.itemDrawButton)
+                            .resizable()
+                            .frame(width: 35, height: 12)
+                            .offset(x: 5, y: -14)
+                        Image(asset: DesignSystemIosAsset.Assets.itemDrawCarrot)
+                            .resizable()
+                            .frame(width: 30, height: 20)
+                            .offset(x: -11, y: -5)
+                        Image(asset: DesignSystemIosAsset.Assets.itemDrawStones)
+                            .resizable()
+                            .frame(width: 43, height: 17)
+                            .offset(x: 2, y: 8)
+                    }
+                    .frame(
+                        width: Metric.snowmanImageSize,
+                        height: Metric.snowmanImageSize,
+                        alignment: .topLeading)
+                    .offset(y: -10)
+                }
+                Spacer()
+                    .frame(height: (geo.size.height - Metric.imageHeight)  * 3 / 5)
+            }
+        }
+    }
+}

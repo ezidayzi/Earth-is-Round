@@ -14,12 +14,15 @@ public struct ERNavigationBar: View {
     
     let action: (() -> Void)?
     let title: String
+    let backgroundColor: Color
     
     public init(
         title: String,
+        backgroundColor: Color = ERColor.White,
         action: (() -> Void)? = nil
     ) {
         self.action = action
+        self.backgroundColor = backgroundColor
         self.title = title
     }
 
@@ -41,6 +44,6 @@ public struct ERNavigationBar: View {
         }
         .frame(height: 44)
         .frame(maxWidth: .infinity)
-        .background(ERColor.White)
+        .background(backgroundColor)
     }
 }
