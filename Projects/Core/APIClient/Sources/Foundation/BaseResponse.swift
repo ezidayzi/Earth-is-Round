@@ -13,7 +13,7 @@ public struct BaseResponse<T: Decodable>: Decodable {
     public let errorCode: ErrorCode?
 }
 
-public enum ErrorCode: String, Decodable {
+public enum ErrorCode: String, Decodable, Error {
     case duplicateNickname = "DUPLICATE_NICKNAME"
     case accessDeny = "ACCESS_DENY"
     case unauthorized = "UNAUTHORIZED"
@@ -26,7 +26,7 @@ public enum ErrorCode: String, Decodable {
     case notExistUser = "NOT_EXIST_USER"
     case notMatchPassword = "NOT_MATCH_PASSWORD"
 
-    var description: String {
+    public var description: String {
         switch self {
         case .duplicateNickname:
             return "중복된 nickname"

@@ -17,8 +17,14 @@ public struct AuthFeature: ReducerProtocol {
     }
 
     public enum Action: Equatable {
-        case signInButtonTapped
-        case signUpButtonTapped
+
+        // Coordinator
+        case coordinator(CoordinatorAction)
+        
+        public enum CoordinatorAction {
+            case signIn
+            case signUp
+        }
     }
 
     public var body: some ReducerProtocol<State, Action> {

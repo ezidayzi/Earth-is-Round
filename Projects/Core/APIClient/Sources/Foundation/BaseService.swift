@@ -13,7 +13,11 @@ import Shared_ios
 public protocol Serviceable {
     static func performRequest<T: Decodable>(
         _ target: any Requestable
-    ) async throws -> T
+    ) async throws -> Result<T, ErrorCode>
+
+    static func performRequest(
+        _ target: any Requestable
+    ) async throws -> Result<Bool, ErrorCode>
 }
 
 extension Serviceable {
@@ -23,7 +27,40 @@ extension Serviceable {
     
     public static func performRequest<T: Decodable>(
         _ target: any Requestable
-    ) async throws -> T {
+    ) async throws -> Result<T, ErrorCode> {
+        willSend(try target.asUrlRequest())
+
+        let (data, response) = try await session.data(
+            for: target.asUrlRequest()
+        )
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw APIError.requestFailed
+        }
+
+        didRecieve(response: httpResponse, data: data)
+        let decoder = JSONDecoder()
+        let baseResponse = try decoder.decode(BaseResponse<T>.self, from: data)
+
+        do {
+            guard
+                (200..<300).contains(httpResponse.statusCode),
+                let response = baseResponse.response
+            else {
+                guard let errorCode = baseResponse.errorCode else {
+                    throw APIError.decodingFailed(description: "ErrorCode decoding failed")
+                }
+                return .failure(errorCode)
+            }
+            return .success(response)
+        } catch {
+            throw APIError.decodingFailed(description: error.localizedDescription)
+        }
+    }
+
+    public static func performRequest(
+        _ target: any Requestable
+    ) async throws -> Result<Bool, ErrorCode> {
         willSend(try target.asUrlRequest())
 
         let (data, response) = try await session.data(
@@ -36,18 +73,19 @@ extension Serviceable {
 
         didRecieve(response: httpResponse, data: data)
 
+        let decoder = JSONDecoder()
+        let baseResponse = try decoder.decode(BaseResponse<Bool>.self, from: data)
+
         do {
-            let decoder = JSONDecoder()
-            let baseResponse = try decoder.decode(BaseResponse<T>.self, from: data)
-            guard (200..<300).contains(httpResponse.statusCode),
-                    let response = baseResponse.response
+            guard
+                (200..<300).contains(httpResponse.statusCode)
             else {
                 guard let errorCode = baseResponse.errorCode else {
                     throw APIError.decodingFailed(description: "ErrorCode decoding failed")
                 }
-                throw APIError.responseError(errorCode: errorCode)
+                return .failure(errorCode)
             }
-            return response
+            return .success(true)
         } catch {
             throw APIError.decodingFailed(description: error.localizedDescription)
         }

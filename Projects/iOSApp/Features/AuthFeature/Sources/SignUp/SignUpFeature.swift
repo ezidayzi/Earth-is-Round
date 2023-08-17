@@ -47,7 +47,7 @@ public struct SignUpFeature: ReducerProtocol {
         
         public enum CoordinatorAction {
             case pop
-            case tmpSignUp
+            case toMain
         }
     }
 
@@ -82,7 +82,7 @@ public struct SignUpFeature: ReducerProtocol {
                 return .none
 
             case ._successSignUp:
-                return .send(.coordinator(.tmpSignUp))
+                return .send(.coordinator(.toMain))
 
             case ._failureSignUp:
                 return .none
@@ -101,11 +101,14 @@ extension SignUpFeature {
     private func requestSignUp(nickname: String, password: String) -> EffectTask<Action> {
         .run { send in
             do {
-                let loginResponse = try await userAPI.signUp(nickname, password)
-                print("Login Response: \(loginResponse)")
-                await send(._successSignUp)
+                let result = try await userAPI.signUp(nickname, password)
+                switch result {
+                case .success:
+                    await send(._successSignUp)
+                case .failure:
+                    await send(._failureSignUp)
+                }
             } catch {
-                print(error)
                 await send(._failureSignUp)
             }
         }

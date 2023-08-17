@@ -42,7 +42,7 @@ public struct SignInFeature: ReducerProtocol {
             case pop
             // Note(230602)
             // SingIn 및 SingUp 로직 Delegate로 분리하기
-            case tmpSignIn
+            case toMain
         }
     }
     
@@ -77,7 +77,7 @@ public struct SignInFeature: ReducerProtocol {
                 return .none
 
             case ._successSignIn:
-                return .send(.coordinator(.tmpSignIn))
+                return .send(.coordinator(.toMain))
 
             case ._failureSignIn:
                 return .none
@@ -93,9 +93,15 @@ public struct SignInFeature: ReducerProtocol {
     private func requestLogin(nickname: String, password: String) -> EffectTask<Action> {
         .run { send in
             do {
-                let loginResponse = try await userAPI.login(nickname, password)
-                print("Login Response: \(loginResponse)")
-                await send(._successSignIn)
+                let result = try await userAPI.login(nickname, password)
+                switch result {
+                case .success(let loginResponse):
+                    print("Login Response: \(loginResponse)")
+                    await send(._successSignIn)
+                case .failure(let failure):
+                    print("Login Failure: \(failure.description)")
+                    await send(._failureSignIn)
+                }
             } catch {
                 print(error)
                 await send(._failureSignIn)

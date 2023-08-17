@@ -39,12 +39,12 @@ public struct AuthView: View {
             
             VStack(spacing: Metric.buttonSpacing) {
                 Button("회원가입") {
-                    viewStore.send(.signUpButtonTapped)
+                    viewStore.send(.coordinator(.signUp))
                 }
                 .erButton(labelColor: ERColor.White, backgroundColor: ERColor.Main)
                 
                 Button("로그인") {
-                    viewStore.send(.signInButtonTapped)
+                    viewStore.send(.coordinator(.signIn))
                 }
                 .erButton(labelColor: ERColor.Black10, backgroundColor: ERColor.White)
                 .dynamicCornerRadius(ERColor.Black70)
