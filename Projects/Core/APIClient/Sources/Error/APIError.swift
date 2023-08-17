@@ -1,9 +1,9 @@
 //
 //  APIError.swift
-//  Shared_ios
+//  APIClient_ios
 //
-//  Created by Junho Lee on 2023/04/18.
-//  Copyright © 2023 com.earthIsRound. All rights reserved.
+//  Created by 김윤서 on 2023/08/17.
+//  Copyright © 2023 EarthIsRound. All rights reserved.
 //
 
 import Foundation
@@ -11,7 +11,7 @@ import Foundation
 public enum APIError: Error {
 
     case requestFailed
-    case responseError(description: String)
+    case responseError(errorCode: ErrorCode)
     case decodingFailed(description: String)
     case invalidRequestError
 
@@ -19,8 +19,8 @@ public enum APIError: Error {
         switch self {
         case .requestFailed:
             return "Request Failed error"
-        case let .responseError(description):
-            return "Response Error: Status Code \(description)"
+        case let .responseError(errorCode):
+            return "Response Error: Status Code \(errorCode.description)"
         case let .decodingFailed(description):
             return "JSON Decoding Failed: \(description)"
         case .invalidRequestError:
@@ -28,4 +28,3 @@ public enum APIError: Error {
         }
     }
 }
-

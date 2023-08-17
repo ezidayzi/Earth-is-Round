@@ -17,8 +17,8 @@ import ComposableArchitecture
 // MARK: - UserAPI
 
 public struct UserAPI {
-    public let signUp: (_ nickname: String, _ password: String) async throws -> Bool
-    public let login: (_ nickname: String, _ password: String) async throws -> LoginResponse
+    public let signUp: (_ nickname: String, _ password: String) async throws -> Result<Bool, ErrorCode>
+    public let login: (_ nickname: String, _ password: String) async throws -> Result<LoginResponse, ErrorCode>
 }
 
 // MARK: DependencyKey

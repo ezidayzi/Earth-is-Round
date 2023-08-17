@@ -1,11 +1,16 @@
+import APIClient_ios
 import ComposableArchitecture
 import Dependencies
 
 import Shared_ios
 
 public struct SignInFeature: ReducerProtocol {
+
+    @Dependency(\.userAPI)
+    var userAPI
+
     public init() {}
-    
+
     public struct State: Equatable {
         @BindingState
         var nickname = ""
@@ -27,6 +32,8 @@ public struct SignInFeature: ReducerProtocol {
         
         // Internal Actions
         case _enableSignIn
+        case _successSignIn
+        case _failureSignIn
         
         // Coordinator
         case coordinator(CoordinatorAction)
@@ -35,7 +42,7 @@ public struct SignInFeature: ReducerProtocol {
             case pop
             // Note(230602)
             // SingIn 및 SingUp 로직 Delegate로 분리하기
-            case tmpSignIn
+            case toMain
         }
     }
     
@@ -56,14 +63,23 @@ public struct SignInFeature: ReducerProtocol {
                 return .none
                 
             case .signInButtonTapped:
-                return .send(.coordinator(.tmpSignIn))
-                
+                return requestLogin(
+                    nickname: state.nickname,
+                    password: state.password
+                )
+
             case .naviBackButtonTapped:
                 return .send(.coordinator(.pop))
                 
             case ._enableSignIn:
                 let isEnabled = state.isValidPassword && state.isValidNickname
                 state.signinIsEnabled = isEnabled
+                return .none
+
+            case ._successSignIn:
+                return .send(.coordinator(.toMain))
+
+            case ._failureSignIn:
                 return .none
                 
             case .coordinator:
@@ -72,5 +88,24 @@ public struct SignInFeature: ReducerProtocol {
         }
         
         BindingReducer()
+    }
+
+    private func requestLogin(nickname: String, password: String) -> EffectTask<Action> {
+        .run { send in
+            do {
+                let result = try await userAPI.login(nickname, password)
+                switch result {
+                case .success(let loginResponse):
+                    print("Login Response: \(loginResponse)")
+                    await send(._successSignIn)
+                case .failure(let failure):
+                    print("Login Failure: \(failure.description)")
+                    await send(._failureSignIn)
+                }
+            } catch {
+                print(error)
+                await send(._failureSignIn)
+            }
+        }
     }
 }

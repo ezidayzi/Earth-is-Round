@@ -13,53 +13,53 @@ import TCACoordinators
 
 public struct AuthCoordinator: ReducerProtocol {
     public init() { }
-    
+
     public struct State: Equatable, IndexedRouterState {
         public init() {
             self.routes = [.root(.auth(.init()), embedInNavigationView: true)]
         }
-        
+
         public var routes: [Route<AuthScreen.State>]
     }
-    
+
     public enum Action: IndexedRouterAction {
         case routeAction(Int, action: AuthScreen.Action)
         case updateRoutes([Route<AuthScreen.State>])
     }
-    
+
     public var body: some ReducerProtocol<State, Action> {
         return Reduce<State, Action> { state, action in
             switch action {
             case let .routeAction(_, .auth(authAction)):
                 switch authAction {
-                case .signInButtonTapped:
+                case .coordinator(.signIn):
                     state.routes.push(.signIn(.init()))
-                case .signUpButtonTapped:
+                case .coordinator(.signUp):
                     state.routes.push(.signUp(.init()))
                 }
-                
+
             case let .routeAction(_, .signIn(signInAction)):
                 switch signInAction {
-                case .naviBackButtonTapped:
+                case .coordinator(.pop):
                     state.routes.pop()
-                    
+
                 default:
                     return .none
                 }
-                
+
             case let .routeAction(_, .signUp(signUpAction)):
                 switch signUpAction {
-                case .naviBackButtonTapped:
+                case .coordinator(.pop):
                     state.routes.pop()
-                    
+
                 default:
                     return .none
                 }
-                
+
             default:
                 break
             }
-            
+
             return .none
         }.forEachRoute {
             AuthScreen()
