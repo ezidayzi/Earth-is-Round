@@ -78,9 +78,9 @@ extension RootCoordinator {
         case let .routeAction(_, authAction):
             // AuthAction
             switch authAction {
-            case .signIn(.coordinator(.pop)),
-                    .signUp(.coordinator(.pop)):
-                state.routes.pop()
+//            case .signIn(.coordinator(.pop)),
+//                    .signUp(.coordinator(.pop)):
+//                state.routes.pop()
                 
             case .signIn(.coordinator(.tmpSignIn)),
                     .signUp(.coordinator(.tmpSignUp)):

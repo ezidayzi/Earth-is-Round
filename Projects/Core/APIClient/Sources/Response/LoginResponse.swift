@@ -8,6 +8,6 @@
 
 import Foundation
 
-public struct LoginResponse: Codable {
+public struct LoginResponse: Decodable {
     public let nickname, token: String
 }

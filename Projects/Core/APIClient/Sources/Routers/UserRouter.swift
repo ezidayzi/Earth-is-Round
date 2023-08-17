@@ -30,7 +30,6 @@ extension UserRouter: BaseRouter {
                 .login(let nickname, let password):
             params["nickname"] = nickname
             params["password"] = password
-        default: break
         }
         return params
     }
@@ -40,7 +39,7 @@ extension UserRouter: BaseRouter {
     }
     
     var method: HttpMethod {
-        return .GET
+        return .POST
     }
 }
 

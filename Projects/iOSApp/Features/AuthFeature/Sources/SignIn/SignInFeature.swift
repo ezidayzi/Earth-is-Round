@@ -1,11 +1,16 @@
+import APIClient_ios
 import ComposableArchitecture
 import Dependencies
 
 import Shared_ios
 
 public struct SignInFeature: ReducerProtocol {
+
+    @Dependency(\.userAPI)
+    var userAPI
+
     public init() {}
-    
+
     public struct State: Equatable {
         @BindingState
         var nickname = ""
@@ -27,6 +32,8 @@ public struct SignInFeature: ReducerProtocol {
         
         // Internal Actions
         case _enableSignIn
+        case _successSignIn
+        case _failureSignIn
         
         // Coordinator
         case coordinator(CoordinatorAction)
@@ -56,14 +63,23 @@ public struct SignInFeature: ReducerProtocol {
                 return .none
                 
             case .signInButtonTapped:
-                return .send(.coordinator(.tmpSignIn))
-                
+                return requestLogin(
+                    nickname: state.nickname,
+                    password: state.password
+                )
+
             case .naviBackButtonTapped:
                 return .send(.coordinator(.pop))
                 
             case ._enableSignIn:
                 let isEnabled = state.isValidPassword && state.isValidNickname
                 state.signinIsEnabled = isEnabled
+                return .none
+
+            case ._successSignIn:
+                return .send(.coordinator(.tmpSignIn))
+
+            case ._failureSignIn:
                 return .none
                 
             case .coordinator:
@@ -72,5 +88,18 @@ public struct SignInFeature: ReducerProtocol {
         }
         
         BindingReducer()
+    }
+
+    private func requestLogin(nickname: String, password: String) -> EffectTask<Action> {
+        .run { send in
+            do {
+                let loginResponse = try await userAPI.login(nickname, password)
+                print("Login Response: \(loginResponse)")
+                await send(._successSignIn)
+            } catch {
+                print(error)
+                await send(._failureSignIn)
+            }
+        }
     }
 }

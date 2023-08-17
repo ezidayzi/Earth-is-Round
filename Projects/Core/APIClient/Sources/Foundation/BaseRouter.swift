@@ -42,8 +42,7 @@ extension BaseRouter {
     func asUrlRequest() throws -> URLRequest {
         // path
         var components = URLComponents(string: baseURL)
-        components?.path = version + path
-        
+        components?.path.append(version + path)
         // queryParams
         if !query.isEmpty {
             components?.queryItems = query.map {

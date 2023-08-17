@@ -12,6 +12,10 @@ import Dependencies
 import Shared_ios
 
 public struct SignUpFeature: ReducerProtocol {
+
+    @Dependency(\.userAPI)
+    var userAPI
+
     public init() {}
     
     public struct State: Equatable {
@@ -35,6 +39,8 @@ public struct SignUpFeature: ReducerProtocol {
         
         // Internal Actions
         case _enableSignUp
+        case _successSignUp
+        case _failureSignUp
         
         // Coordinator
         case coordinator(CoordinatorAction)
@@ -62,7 +68,10 @@ public struct SignUpFeature: ReducerProtocol {
                 return .none
                 
             case .signUpButtonTapped:
-                return .send(.coordinator(.tmpSignUp))
+                return requestSignUp(
+                    nickname: state.nickname,
+                    password: state.password
+                )
                 
             case .naviBackButtonTapped:
                 return .send(.coordinator(.pop))
@@ -71,12 +80,34 @@ public struct SignUpFeature: ReducerProtocol {
                 let isEnabled = state.isValidPassword && state.isValidNickname
                 state.signupIsEnabled = isEnabled
                 return .none
-                
+
+            case ._successSignUp:
+                return .send(.coordinator(.tmpSignUp))
+
+            case ._failureSignUp:
+                return .none
+
             case .coordinator:
                 return .none
             }
         }
         
         BindingReducer()
+    }
+
+}
+
+extension SignUpFeature {
+    private func requestSignUp(nickname: String, password: String) -> EffectTask<Action> {
+        .run { send in
+            do {
+                let loginResponse = try await userAPI.signUp(nickname, password)
+                print("Login Response: \(loginResponse)")
+                await send(._successSignUp)
+            } catch {
+                print(error)
+                await send(._failureSignUp)
+            }
+        }
     }
 }
