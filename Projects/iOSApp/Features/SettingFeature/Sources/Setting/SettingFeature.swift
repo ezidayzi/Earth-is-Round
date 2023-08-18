@@ -14,6 +14,7 @@ public struct SettingFeature: ReducerProtocol {
         case naviBackButtonTapped
         case nicknameEditTapped
         case passwordEditTapped
+        case logoutTapped
         
         // Internal Actions
         
@@ -24,6 +25,7 @@ public struct SettingFeature: ReducerProtocol {
             case pop
             case pushNicknameEdit
             case pushPasswordEdit
+            case toSplash
         }
     }
 
@@ -38,9 +40,14 @@ public struct SettingFeature: ReducerProtocol {
                 
             case .naviBackButtonTapped:
                 return .send(.coordinator(.pop))
+
+            case .logoutTapped:
+                KeychainClient.clear()
+                return .send(.coordinator(.toSplash))
                 
             case .coordinator:
                 return .none
+
             }
         }
     }

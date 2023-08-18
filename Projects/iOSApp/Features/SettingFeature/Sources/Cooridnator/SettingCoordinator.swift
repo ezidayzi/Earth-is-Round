@@ -37,7 +37,7 @@ public struct SettingCoordinator: ReducerProtocol {
                     
                 case .coordinator(.pushNicknameEdit):
                     state.routes.push(.nicknameEdit(.init()))
-                    
+
                 default: return .none
                 }
                 
