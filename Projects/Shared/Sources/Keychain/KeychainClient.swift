@@ -20,7 +20,7 @@ public struct KeychainClient {
     @KeychainValue(key: ServiceKey.nickname.rawValue)
     public static var nickname: String?
 
-    public static func clear() {
+    public static func deleteAll() {
         KeychainClient.token = nil
         KeychainClient.nickname = nil
     }

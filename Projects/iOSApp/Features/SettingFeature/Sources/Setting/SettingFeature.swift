@@ -42,7 +42,7 @@ public struct SettingFeature: ReducerProtocol {
                 return .send(.coordinator(.pop))
 
             case .logoutTapped:
-                KeychainClient.clear()
+                KeychainClient.deleteAll()
                 return .send(.coordinator(.toSplash))
                 
             case .coordinator:
