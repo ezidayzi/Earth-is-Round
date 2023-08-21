@@ -98,13 +98,14 @@ public struct SignUpFeature: ReducerProtocol {
 }
 
 extension SignUpFeature {
+    
     private func requestSignUp(nickname: String, password: String) -> EffectTask<Action> {
         .run { send in
             do {
-                let result = try await userAPI.signUp(nickname, password)
-                switch result {
+                let signUpResult = try await userAPI.signUp(nickname, password)
+                switch signUpResult {
                 case .success:
-                    await send(._successSignUp)
+                    try await requestLogin(send, nickname: nickname, password: password)
                 case .failure:
                     await send(._failureSignUp)
                 }
@@ -113,4 +114,25 @@ extension SignUpFeature {
             }
         }
     }
+
+    private func requestLogin(
+        _ send: Send<SignUpFeature.Action>,
+        nickname: String,
+        password: String
+    ) async throws {
+        do {
+            let loginResult = try await userAPI.login(nickname, password)
+            switch loginResult {
+            case let .success(loginResponse):
+                KeychainClient.token = loginResponse.token
+                KeychainClient.nickname = loginResponse.nickname
+                await send(._successSignUp)
+            case .failure:
+                await send(._failureSignUp)
+            }
+        } catch {
+            await send(._failureSignUp)
+        }
+    }
+
 }

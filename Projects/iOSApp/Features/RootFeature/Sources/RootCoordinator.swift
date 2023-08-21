@@ -59,7 +59,15 @@ extension RootCoordinator {
         state: inout State
     ) {
         switch action {
-        case .splashAnimationFinished:
+        case .coordinator(.toMain):
+            state.routes = [.root(
+                .main(.init(
+                    currentWeekDay: 0,
+                    pastSteps: []
+                )),
+                embedInNavigationView: true
+            )]
+        case .coordinator(.toAuth):
             state.routes = [.root(.auth(.init()))]
         default:
             break
@@ -131,6 +139,9 @@ extension RootCoordinator {
             switch settingAction {
             case .coordinator(.pop):
                 state.routes.pop()
+
+            case .coordinator(.toSplash):
+                state.routes = [.root(.splash(.init()), embedInNavigationView: true)]
                 
             default:
                 break

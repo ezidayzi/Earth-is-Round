@@ -42,7 +42,9 @@ public struct SettingView: View {
                 settingItem(text: "눈사람 굴리는 사람들")
                     .padding(.bottom, 20.adjustedH)
                 
-                settingItem(text: "로그아웃")
+                settingItem(text: "로그아웃") {
+                    viewStore.send(.logoutTapped)
+                }
                 
                 HStack {
                     Spacer()
