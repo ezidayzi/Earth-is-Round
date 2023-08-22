@@ -29,8 +29,14 @@ extension BaseRouter {
         return Config.Network.baseURL
     }
     
-    var headers: [String: String] {
-        return ["Content-Type": "application/json"]
+    var headers: [String : String] {
+        guard let token = KeychainClient.token else {
+            return ["Content-Type": "application/json"]
+        }
+        return [
+            "Content-Type": "application/json",
+            "Authorization" : "Bearer \(token)"
+        ]
     }
     
     var version: String {

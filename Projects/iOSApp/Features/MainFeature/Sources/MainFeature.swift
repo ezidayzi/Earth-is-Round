@@ -2,6 +2,8 @@ import Foundation
 
 import ComposableArchitecture
 
+import APIClient_ios
+import Shared_ios
 import PedometerClient_ios
 import HealthClient_ios
 import LocationClient_ios
@@ -64,6 +66,12 @@ public struct MainFeature: ReducerProtocol {
     
     @Dependency(\.healthClient)
     var healthClient
+
+    @Dependency(\.userDefaultsClient)
+    var userDefaultsClient
+
+    @Dependency(\.stepAPI)
+    var stepAPI
     
     /// - NOTE(230730) @Duno
     /// @Dependency를 이용하면 asyncStream의 비동기 값이 전달되지 않는 현상
@@ -80,6 +88,7 @@ public struct MainFeature: ReducerProtocol {
                 return .merge (
                     requestHealthClientAuth(),
                     requestLocationClinetAuth(),
+                    uploadStepsByPeriod(),
                     fetchCurrentSpeed(),
                     fetchPastSteps(),
                     fetchTodaySteps()
@@ -119,7 +128,10 @@ public struct MainFeature: ReducerProtocol {
             case ._fetchPastSteps(let pastSteps):
                 state.pastSteps = pastSteps
                 
-                return .send(._updateButtonStatus)
+                return .concatenate(
+                    .send(._updateButtonStatus),
+                    .send(._updateDisplayedStatus)
+                )
                 
             case ._updateCurrentSpeed(let speed):
                 state.currentSpeed = speed
@@ -212,6 +224,47 @@ extension MainFeature {
                 await send(._updateCurrentSpeed(speed))
             }
         }
+    }
+
+    private func uploadStepsByPeriod() -> EffectTask<Action> {
+        return .run { send in
+            do {
+                guard
+                    let start = userDefaultsClient
+                        .stringForKey(UserDefaultsKey.lastLoginDate)
+                        .toDate()
+                else {
+                    updateLastLoginDate()
+                    return
+                }
+
+                guard
+                    let end = Date().today,
+                    start.dateOnly < end.dateOnly
+                else {
+                    return
+                }
+
+                let pastSteps = try await healthClient.getStepsByPeriod(start, end)
+                let steps = pastSteps.map { date, count in
+                    return Step(date: date.toString(withFormat: .yearMonthDay), count: count)
+                }
+                let result = try await stepAPI.uploadSteps(steps)
+                switch result {
+                case .success(let response):
+                    updateLastLoginDate()
+                    print(response)
+                case let .failure(error):
+                    print(error)
+                }
+            } catch {
+
+            }
+        }
+    }
+
+    private func updateLastLoginDate() {
+        userDefaultsClient.setString(Date().toString(withFormat: .standard), UserDefaultsKey.lastLoginDate)
     }
 }
 

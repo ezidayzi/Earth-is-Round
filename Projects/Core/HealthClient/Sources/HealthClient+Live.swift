@@ -51,6 +51,43 @@ public extension HealthClient {
                 }
                 healthStore.execute(query)
             }
+        } getStepsByPeriod: { start, end in
+            let predicate = HKQuery.predicateForSamples(
+                withStart: start,
+                end: end,
+                options: .strictStartDate
+            )
+            let query = HKStatisticsCollectionQuery(
+                quantityType: stepCountType,
+                quantitySamplePredicate: predicate,
+                options: [.cumulativeSum],
+                anchorDate: start,
+                intervalComponents: DateComponents(day: 1)
+            )
+            return try await withCheckedThrowingContinuation { continuation in
+                var stepsByDate: [Date: Int] = [:]
+
+                query.initialResultsHandler = { query, results, error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                    } else if let results = results {
+                        results.enumerateStatistics(from: start, to: end) { statistics, stop in
+
+                            if let sumQuantity = statistics.sumQuantity() {
+                                let steps = Int(sumQuantity.doubleValue(for: HKUnit.count()))
+                                stepsByDate[statistics.startDate] = steps
+
+                                dump(statistics.startDate)
+                            }
+                        }
+
+                        continuation.resume(returning: stepsByDate)
+                    } else {
+                        continuation.resume(returning: [:])
+                    }
+                }
+                healthStore.execute(query)
+            }
         }
     }()
 }

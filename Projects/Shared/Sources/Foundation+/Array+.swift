@@ -15,3 +15,19 @@ public extension Array {
         : nil
     }
 }
+
+extension Array where Element: Encodable {
+    public func toDict() -> [[String: Any]] {
+        return self.compactMap { element in
+            do {
+                let jsonData = try JSONEncoder().encode(element)
+                if let dict = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
+                    return dict
+                }
+            } catch {
+                print("Error converting object to dictionary: \(error)")
+            }
+            return nil
+        }
+    }
+}

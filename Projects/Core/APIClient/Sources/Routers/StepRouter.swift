@@ -8,10 +8,7 @@
 
 import Foundation
 
-public struct Step {
-    let date: String
-    let count: Int
-}
+import Shared_ios
 
 enum StepRouter {
     case uploadSteps(steps: [Step])
@@ -29,7 +26,7 @@ extension StepRouter: BaseRouter {
         var params: [String: Any] = [:]
         switch self {
         case let .uploadSteps(steps):
-            params["steps"] = steps
+            params["steps"] = steps.toDict()
         }
         return params
     }
@@ -42,4 +39,3 @@ extension StepRouter: BaseRouter {
         return .POST
     }
 }
-

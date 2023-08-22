@@ -1,4 +1,4 @@
-git_url("git@github.com:L-j-h-c/fastlane-match.git")
+git_url("https://github.com/L-j-h-c/fastlane-match.git")
 
 storage_mode("git")
 
@@ -7,7 +7,7 @@ type("development") # The default type, can be: appstore, adhoc, enterprise or d
 app_identifier(["com.earthIsRound.release", "com.earthIsRound.release.widget"])
 username("ckrgkswnsgh@icloud.com") # Your Apple Developer Portal username
 
-# For all available options run `fastlane match --help`
+# For all available options run `fastlane match —help`
 # Remove the # in the beginning of the line to enable the other options
 
 # The docs are available on https://docs.fastlane.tools/actions/match

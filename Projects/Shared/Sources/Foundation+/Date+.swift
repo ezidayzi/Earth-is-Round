@@ -20,12 +20,24 @@ public extension Date {
 }
 
 public extension Date {
+    var startOfDay: Date {
+        return Calendar.current.startOfDay(for: self)
+    }
+
+    var yesterday: Self? {
+        return Calendar.current.date(
+            byAdding: .day,
+            value: -1,
+            to: startOfDay
+        )
+    }
+
     var today: Self? {
         return Calendar.current.date(
             bySettingHour: 0,
             minute: 0,
             second: 0,
-            of: self
+            of: startOfDay
         )
     }
     
@@ -55,5 +67,23 @@ public extension Date {
         return weekday == 1
         ? weekday + 5
         : weekday - 2
+    }
+
+    enum DateFormatType: String {
+        case standard = "yyyy-MM-dd HH:mm:ss"
+        case yearMonthDay = "yyyy-MM-dd"
+    }
+
+    func toString(withFormat format: DateFormatType) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format.rawValue
+        dateFormatter.timeZone = .autoupdatingCurrent
+        return dateFormatter.string(from: self)
+    }
+
+    var dateOnly: Date {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month, .day], from: self)
+        return calendar.date(from: components) ?? self
     }
 }
