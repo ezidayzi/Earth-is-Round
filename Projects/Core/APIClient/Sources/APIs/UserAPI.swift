@@ -17,8 +17,8 @@ import ComposableArchitecture
 // MARK: - UserAPI
 
 public struct UserAPI {
-    public let signUp: (_ nickname: String, _ password: String) async throws -> Result<Bool, ErrorCode>
-    public let login: (_ nickname: String, _ password: String) async throws -> Result<LoginResponse, ErrorCode>
+    public let signUp: (_ nickname: String, _ password: String) async -> Result<Bool, Error>
+    public let login: (_ nickname: String, _ password: String) async -> Result<LoginResponse, Error>
 }
 
 // MARK: DependencyKey
@@ -35,9 +35,9 @@ public extension DependencyValues {
 extension UserAPI: Serviceable {
     public static let liveValue: Self = {
         return .init { nickname, password in
-            try await performRequest(UserRouter.signUp(nickname: nickname, password: password))
+            await performRequest(UserRouter.signUp(nickname: nickname, password: password))
         } login: { nickname, password in
-            try await performRequest(UserRouter.login(nickname: nickname, password: password))
+            await performRequest(UserRouter.login(nickname: nickname, password: password))
         }
     }()
 }

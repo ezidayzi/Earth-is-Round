@@ -249,7 +249,7 @@ extension MainFeature {
                 let steps = pastSteps.map { date, count in
                     return Step(date: date.toString(withFormat: .yearMonthDay), count: count)
                 }
-                let result = try await stepAPI.uploadSteps(steps)
+                let result = await stepAPI.uploadSteps(steps)
                 switch result {
                 case .success(let response):
                     updateLastLoginDate()

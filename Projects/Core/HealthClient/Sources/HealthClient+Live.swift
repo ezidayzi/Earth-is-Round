@@ -76,8 +76,6 @@ public extension HealthClient {
                             if let sumQuantity = statistics.sumQuantity() {
                                 let steps = Int(sumQuantity.doubleValue(for: HKUnit.count()))
                                 stepsByDate[statistics.startDate] = steps
-
-                                dump(statistics.startDate)
                             }
                         }
 

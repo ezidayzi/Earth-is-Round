@@ -17,7 +17,7 @@ import ComposableArchitecture
 // MARK: - UserAPI
 
 public struct StepAPI {
-    public let uploadSteps: (_ steps: [Step]) async throws -> Result<SnowmanItemListResponse, ErrorCode>
+    public let uploadSteps: (_ steps: [Step]) async -> Result<SnowmanItemListResponse, Error>
 }
 
 // MARK: DependencyKey
@@ -34,7 +34,7 @@ public extension DependencyValues {
 extension StepAPI: Serviceable {
     public static let liveValue: Self = {
         return .init { steps in
-            try await performRequest(StepRouter.uploadSteps(steps: steps))
+            await performRequest(StepRouter.uploadSteps(steps: steps))
         }
     }()
 }
