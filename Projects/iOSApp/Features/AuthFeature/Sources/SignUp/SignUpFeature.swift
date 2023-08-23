@@ -101,15 +101,11 @@ extension SignUpFeature {
     
     private func requestSignUp(nickname: String, password: String) -> EffectTask<Action> {
         .run { send in
-            do {
-                let signUpResult = try await userAPI.signUp(nickname, password)
-                switch signUpResult {
-                case .success:
-                    try await requestLogin(send, nickname: nickname, password: password)
-                case .failure:
-                    await send(._failureSignUp)
-                }
-            } catch {
+            let signUpResult = await userAPI.signUp(nickname, password)
+            switch signUpResult {
+            case .success:
+                try await requestLogin(send, nickname: nickname, password: password)
+            case .failure:
                 await send(._failureSignUp)
             }
         }
@@ -119,18 +115,14 @@ extension SignUpFeature {
         _ send: Send<SignUpFeature.Action>,
         nickname: String,
         password: String
-    ) async throws {
-        do {
-            let loginResult = try await userAPI.login(nickname, password)
-            switch loginResult {
-            case let .success(loginResponse):
-                KeychainClient.token = loginResponse.token
-                KeychainClient.nickname = loginResponse.nickname
-                await send(._successSignUp)
-            case .failure:
-                await send(._failureSignUp)
-            }
-        } catch {
+    ) async {
+        let loginResult = await userAPI.login(nickname, password)
+        switch loginResult {
+        case let .success(loginResponse):
+            KeychainClient.token = loginResponse.token
+            KeychainClient.nickname = loginResponse.nickname
+            await send(._successSignUp)
+        case .failure:
             await send(._failureSignUp)
         }
     }

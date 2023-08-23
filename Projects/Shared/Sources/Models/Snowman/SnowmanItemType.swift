@@ -6,7 +6,7 @@
 //  Copyright © 2023 EarthIsRound. All rights reserved.
 //
 
-public enum SnowmanItemType: Int {
+public enum SnowmanItemType: Int, Decodable {
     // Priority 1 : Eye, Mouth
     case button
     case stones

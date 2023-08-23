@@ -92,20 +92,17 @@ public struct SignInFeature: ReducerProtocol {
 
     private func requestLogin(nickname: String, password: String) -> EffectTask<Action> {
         .run { send in
-            do {
-                let result = try await userAPI.login(nickname, password)
-                switch result {
-                case .success(let loginResponse):
-                    print("Login Response: \(loginResponse)")
-                    KeychainClient.token = loginResponse.token
-                    KeychainClient.nickname = loginResponse.nickname
-                    await send(._successSignIn)
-                case .failure(let failure):
-                    print("Login Failure: \(failure.description)")
-                    await send(._failureSignIn)
-                }
-            } catch {
-                print(error)
+            let result = await userAPI.login(nickname, password)
+            switch result {
+            case .success(let loginResponse):
+                print("Login Response: \(loginResponse)")
+                KeychainClient.token = loginResponse.token
+                KeychainClient.nickname = loginResponse.nickname
+                await send(._successSignIn)
+            case .failure(let failure as ErrorCode):
+                print("Login Failure: \(failure.description)")
+                await send(._failureSignIn)
+            case .failure:
                 await send(._failureSignIn)
             }
         }
