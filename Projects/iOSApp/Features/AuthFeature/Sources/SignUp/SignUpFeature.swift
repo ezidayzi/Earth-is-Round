@@ -104,7 +104,7 @@ extension SignUpFeature {
             let signUpResult = await userAPI.signUp(nickname, password)
             switch signUpResult {
             case .success:
-                try await requestLogin(send, nickname: nickname, password: password)
+                await requestLogin(send, nickname: nickname, password: password)
             case .failure:
                 await send(._failureSignUp)
             }

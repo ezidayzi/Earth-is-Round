@@ -19,6 +19,7 @@ import ComposableArchitecture
 public struct UserAPI {
     public let signUp: (_ nickname: String, _ password: String) async -> Result<Bool, Error>
     public let login: (_ nickname: String, _ password: String) async -> Result<LoginResponse, Error>
+    public let updateNickname: (_ nickname: String) async -> Result<Bool, Error>
 }
 
 // MARK: DependencyKey
@@ -38,6 +39,8 @@ extension UserAPI: Serviceable {
             await performRequest(UserRouter.signUp(nickname: nickname, password: password))
         } login: { nickname, password in
             await performRequest(UserRouter.login(nickname: nickname, password: password))
+        } updateNickname: { nickname in
+            await performRequest(UserRouter.updateNickname(nickname: nickname))
         }
     }()
 }
