@@ -67,7 +67,7 @@ extension BaseRouter {
         urlRequest.allHTTPHeaderFields = headers
         
         // httpBody
-        if method == .POST {
+        if !params.isEmpty {
             urlRequest.httpBody = try JSONSerialization.data(withJSONObject: params)
         }
         

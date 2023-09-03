@@ -12,6 +12,7 @@ enum UserRouter {
     case signUp(nickname: String, password: String)
     case login(nickname: String, password: String)
     case updateNickname(nickname: String)
+    case updatePassword(password: String)
 }
 
 extension UserRouter: BaseRouter {
@@ -23,6 +24,8 @@ extension UserRouter: BaseRouter {
             return "/users/login"
         case .updateNickname:
             return "/users"
+        case .updatePassword:
+            return "/users/password"
         }
     }
     
@@ -33,8 +36,11 @@ extension UserRouter: BaseRouter {
                 .login(let nickname, let password):
             params["nickname"] = nickname
             params["password"] = password
+        case let .updatePassword(password):
+            params["password"] = password
         default:
             break
+            
         }
         return params
     }
@@ -52,7 +58,7 @@ extension UserRouter: BaseRouter {
         switch self {
         case .login, .signUp:
             return .POST
-        case .updateNickname:
+        case .updateNickname, .updatePassword:
             return .PATCH
         }
     }

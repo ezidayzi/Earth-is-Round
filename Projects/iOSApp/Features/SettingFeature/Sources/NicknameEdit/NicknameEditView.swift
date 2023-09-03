@@ -39,7 +39,7 @@ public struct NicknameEditView: View {
                     .font(DesignSystemIosFontFamily.AritaDotumOTF.medium.font(size: 13).toSwiftUI)
                     .foregroundColor(ERColor.Alert)
                     .frame(height: 32.adjustedH)
-                    .padding(.leading)
+                    .padding(.leading, 12)
                 Spacer()
                     .frame(height: 30.adjustedH)
                 Button("저장") {

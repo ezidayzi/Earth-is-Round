@@ -139,7 +139,8 @@ extension RootCoordinator {
             switch settingAction {
             case .coordinator(.toSplash):
                 state.routes = [.root(.splash(.init()), embedInNavigationView: true)]
-                
+            case .coordinator(.pop):
+                state.routes.pop()
             default:
                 break
             }
