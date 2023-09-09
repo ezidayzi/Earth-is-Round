@@ -28,21 +28,20 @@ public struct MainView: View {
             viewStore.send(.onAppear)
         }
     }
-    
+
     private var mainContent: some View {
-        VStack() {
-            customNavigationBar
-            
-            VStack(alignment: .leading) {
-                stepsContent
-                    .padding(.top, 44)
-                    .padding(.leading, 22)
-                
-                snowmanButton
-                    .padding(.leading, 22)
-            }
-            
+        VStack {
+            logoNavigationBar
+
             Spacer()
+                .frame(height: 42.adjustedH)
+
+            weekDayButton
+                .padding(.leading, 20)
+
+            stepsContent
+                .padding(.top, 40.adjustedH)
+                .padding(.leading, 20)
             
             /// - Note (230730) @Duno
             /// Lottie File의 영역이 부정확하게 잡혀 있음. 디자인 요청 필요.
@@ -50,77 +49,93 @@ public struct MainView: View {
                 .frame(height: 300)
             
             achievementRateView
-                .padding(.top, 37)
-                .padding(.bottom, 33)
+                .padding(.top, 34)
+                .padding(.bottom, 14)
+
+            snowmanButton
+                .padding(.bottom, 62.adjustedH)
         }
         .ignoresSafeArea(edges: .top)
         .frame(
             maxWidth: .infinity,
             maxHeight: .infinity
         )
+        .background(DesignSystemIosAsset.Assets.backgroundBlue.swiftUIColor)
     }
     
-    private var customNavigationBar: some View {
-        HStack {
-            weekDayButton
-            
-            Spacer()
-            
-            Button(action: {
-                viewStore.send(.settingButtonTapped)
-            }) {
-                DesignSystemIosAsset.Assets.icnSetting.swiftUIImage
+    private var logoNavigationBar: some View {
+        ZStack {
+            HStack {
+                Spacer()
+                Image(asset: DesignSystemAsset.Assets.logoTitle)
+                    .resizable()
+                    .frame(width: 118, height: 17)
+                Spacer()
+            }
+
+            HStack {
+                Spacer()
+                Button(action: {
+                    viewStore.send(.settingButtonTapped)
+                }) {
+                    DesignSystemIosAsset.Assets.icnSetting.swiftUIImage
+                }
+                .padding(.trailing, 14)
             }
         }
-        .padding(.horizontal, 22)
         .padding(.top, UIApplication.shared.windows.first?.safeAreaInsets.top)
     }
     
     private var weekDayButton: some View {
-        HStack(spacing: 20) {
-            Button(action: {
-                viewStore.send(.prevButtonTapped)
-            }) {
-                DesignSystemIosAsset.Assets.icnLeftArrow.swiftUIImage
-                    .renderingMode(.template)
-                    .foregroundColor(viewStore.prevButtonEnabled ? .blue : .gray)
-                    .frame(width: 35, height: 35)
+        HStack {
+            HStack(spacing: 12) {
+                Button(action: {
+                    viewStore.send(.prevButtonTapped)
+                }) {
+                    DesignSystemIosAsset.Assets.icnLeftArrow.swiftUIImage
+                        .renderingMode(.template)
+                        .foregroundColor(viewStore.prevButtonEnabled ? .blue : .gray)
+                        .frame(width: 18, height: 18)
+                }
+                .disabled(!viewStore.prevButtonEnabled)
+
+                Text(viewStore.weekDayString)
+                    .offset(x: -5)
+
+                Button(action: {
+                    viewStore.send(.nextButtonTapped)
+                }) {
+                    DesignSystemIosAsset.Assets.icnRightArrow.swiftUIImage
+                        .renderingMode(.template)
+                        .foregroundColor(viewStore.nextButtonEnabled ? .blue : .gray)
+                }
+                .disabled(!viewStore.nextButtonEnabled)
             }
-            .disabled(!viewStore.prevButtonEnabled)
-            
-            Text(viewStore.weekDayString)
-                .offset(x: -5)
-            
-            Button(action: {
-                viewStore.send(.nextButtonTapped)
-            }) {
-                DesignSystemIosAsset.Assets.icnRightArrow.swiftUIImage
-                    .renderingMode(.template)
-                    .foregroundColor(viewStore.nextButtonEnabled ? .blue : .gray)
-            }
-            .disabled(!viewStore.nextButtonEnabled)
+            Spacer()
         }
     }
     
     private var stepsContent: some View {
-        VStack {
-            HStack {
-                stepsText
-                
-                Spacer()
-            }
-            .padding(.leading)
+        HStack {
+            stepsText
+            Spacer()
         }
+        .padding(.leading)
     }
     
     private var stepsText: some View {
         IfLet(viewStore.displayedSteps) { steps in
             VStack(alignment: .leading) {
-                Text("오늘은 \(steps)보")
-                    .font(DesignSystemIosFontFamily.AritaDotumOTF.bold.font(size: 30).toSwiftUI)
+                Text("오늘은")
+                    .font(DesignSystemIosFontFamily.AritaDotumOTF.semiBold.font(size: 17).toSwiftUI)
                     .foregroundColor(DesignSystemIosAsset.Assets.black10.swiftUIColor)
+                    .padding(.bottom, 6)
+                Text("\(steps)보")
+                    .font(DesignSystemIosFontFamily.AritaDotumOTF.bold.font(size: 32).toSwiftUI)
+                    .foregroundColor(DesignSystemIosAsset.Assets.black10.swiftUIColor)
+                    .padding(.bottom, 8)
                 Text("굴러가는 중")
-                    .font(DesignSystemIosFontFamily.AritaDotumOTF.medium.font(size: 30).toSwiftUI)
+                    .font(DesignSystemIosFontFamily.AritaDotumOTF.medium.font(size: 32).toSwiftUI)
                     .foregroundColor(DesignSystemIosAsset.Assets.black10.swiftUIColor)
             }
         } elseContent: {
@@ -129,34 +144,20 @@ public struct MainView: View {
     }
     
     private var snowmanButton: some View {
-        HStack {
-            DesignSystemIosAsset.Assets.icnSnowman.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 20, height: 20)
-            Text("내 눈사람")
-                .font(DesignSystemIosFontFamily.AritaDotumOTF.semiBold.font(size: 14).toSwiftUI)
-                .foregroundColor(DesignSystemIosAsset.Assets.black20.swiftUIColor)
-        }
-        .padding()
-        .background(Capsule().fill(DesignSystemIosAsset.Assets.black90.swiftUIColor))
-        .dynamicCornerRadius(DesignSystemIosAsset.Assets.black70.swiftUIColor)
-        .padding(.leading)
-        .onTapGesture {
+        Button("내 눈사람", action: {
             viewStore.send(.mySnowmanButtonTapped)
-        }
+        })
+        .erButton(
+            labelColor: DesignSystemIosAsset.Assets.white.swiftUIColor,
+            backgroundColor: DesignSystemIosAsset.Assets.black10.swiftUIColor
+        )
+        .frame(width: 141)
     }
     
     private var achievementRateView: some View {
-        HStack(spacing: 8) {
-            DesignSystemIosAsset.Assets.icnSnow.swiftUIImage
-                .resizable()
-                .frame(width: 18, height: 19)
-            
-            Text("달성률 \(viewStore.achievementRate)%")
-                .font(DesignSystemIosFontFamily.AritaDotumOTF.medium.font(size: 16).toSwiftUI)
-                .foregroundColor(DesignSystemIosAsset.Assets.black20.swiftUIColor)
-        }
+        Text("달성률 \(viewStore.achievementRate)%")
+            .font(DesignSystemIosFontFamily.AritaDotumOTF.medium.font(size: 16).toSwiftUI)
+            .foregroundColor(DesignSystemIosAsset.Assets.black20.swiftUIColor)
     }
     
     private var loadingIndicator: some View {

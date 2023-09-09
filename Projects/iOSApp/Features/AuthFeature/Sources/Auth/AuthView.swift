@@ -32,7 +32,7 @@ public struct AuthView: View {
         VStack {
             Spacer()
             
-            DesignSystemIosAsset.Assets.splashTitle.swiftUIImage
+            DesignSystemIosAsset.Assets.logoTitle.swiftUIImage
             
             Spacer()
                 .frame(height: Metric.imageButtonSpacing)

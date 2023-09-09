@@ -26,7 +26,7 @@ public struct SplashView: View {
     public var body: some View {
         VStack {
             Spacer(minLength: 336 - 44)
-            DesignSystemIosAsset.Assets.splashTitle.swiftUIImage
+            DesignSystemIosAsset.Assets.logoTitle.swiftUIImage
             Spacer()
             Text("@2023.earthisround All rights reserved.")
                 .font(DesignSystemIosFontFamily.AritaDotumOTF.medium.font(size: 15).toSwiftUI)
