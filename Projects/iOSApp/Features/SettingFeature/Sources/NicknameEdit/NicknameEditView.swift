@@ -27,12 +27,34 @@ public struct NicknameEditView: View {
             ERNavigationBar(title: "닉네임 변경", action: {
                 viewStore.send(.naviBackButtonTapped)
             })
-            .padding(.bottom, 44.5.adjustedH)
+            .padding(.bottom, 54.adjustedH)
+            VStack {
+                ERTextField(
+                    text: viewStore.binding(\.$nickname),
+                    isValid: viewStore.isValidNickname,
+                    maxLength: 12,
+                    placeholder: "영문 4 ~ 12자로 입력해 주세요."
+                )
+                Text(viewStore.helperText)
+                    .font(DesignSystemIosFontFamily.AritaDotumOTF.medium.font(size: 13).toSwiftUI)
+                    .foregroundColor(ERColor.Alert)
+                    .frame(height: 32.adjustedH)
+                    .padding(.leading, 12)
+                Spacer()
+                    .frame(height: 30.adjustedH)
+                Button("저장") {
+                    viewStore.send(.editButtonTapped, animation: Animation.easeIn(duration: 0.2))
+                }
+                .erButton(
+                    labelColor: viewStore.isValidNickname
+                    ? ERColor.White : ERColor.Black50,
+                    backgroundColor: viewStore.isValidNickname
+                    ? ERColor.Main : ERColor.Black90
+                )
+                .disabled(!viewStore.isValidNickname)
+                Spacer()
+            }.horizontalPadding()
         }
-        .frame(
-            maxWidth: .infinity,
-            maxHeight: .infinity
-        )
         .toolbar(.hidden, for: .navigationBar)
     }
 }

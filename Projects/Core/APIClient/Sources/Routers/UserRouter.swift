@@ -11,6 +11,8 @@ import Foundation
 enum UserRouter {
     case signUp(nickname: String, password: String)
     case login(nickname: String, password: String)
+    case updateNickname(nickname: String)
+    case updatePassword(password: String)
 }
 
 extension UserRouter: BaseRouter {
@@ -20,6 +22,10 @@ extension UserRouter: BaseRouter {
             return "/users/signup"
         case .login:
             return "/users/login"
+        case .updateNickname:
+            return "/users"
+        case .updatePassword:
+            return "/users/password"
         }
     }
     
@@ -30,16 +36,31 @@ extension UserRouter: BaseRouter {
                 .login(let nickname, let password):
             params["nickname"] = nickname
             params["password"] = password
+        case let .updatePassword(password):
+            params["password"] = password
+        default:
+            break
+            
         }
         return params
     }
     
     var query: [String : String?] {
-        return [:]
+        switch self {
+        case let .updateNickname(nickname):
+            return ["nickname": nickname]
+        default:
+            return [:]
+        }
     }
     
     var method: HttpMethod {
-        return .POST
+        switch self {
+        case .login, .signUp:
+            return .POST
+        case .updateNickname, .updatePassword:
+            return .PATCH
+        }
     }
 }
 
