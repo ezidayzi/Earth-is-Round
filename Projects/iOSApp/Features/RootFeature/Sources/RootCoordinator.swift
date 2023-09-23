@@ -1,4 +1,5 @@
 import SwiftUI
+import ArchiveFeature
 
 import ComposableArchitecture
 import TCACoordinators
@@ -35,6 +36,9 @@ public struct RootCoordinator: ReducerProtocol {
                 
             case let .routeAction(_, .main(mainAction)):
                 handleMainAction(mainAction, state: &state)
+
+            case let .routeAction(_, .archive(archiveAction)):
+                handleMainAction(archiveAction, state: &state)
                 
             case let .routeAction(_, .setting(settingCoordinator)):
                 handleSettingAction(settingCoordinator, state: &state)
@@ -119,7 +123,25 @@ extension RootCoordinator {
             
         case .coordinator(.pushSettingView):
             state.routes.push(.setting(.init()))
+
+        case .coordinator(.toArchive):
+            state.routes.push(.archive(.init()))
             
+        default:
+            break
+        }
+    }
+}
+
+// MARK: - Archive
+extension RootCoordinator {
+    private func handleMainAction(
+        _ action: ArchiveFeature.Action,
+        state: inout State
+    ) {
+        switch action {
+        case .coordinator(.pop):
+            state.routes.pop()
         default:
             break
         }

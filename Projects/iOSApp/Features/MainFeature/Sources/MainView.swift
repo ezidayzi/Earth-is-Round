@@ -100,7 +100,7 @@ public struct MainView: View {
                 .disabled(!viewStore.prevButtonEnabled)
 
                 Text(viewStore.weekDayString)
-                    .offset(x: -5)
+                    .offset(x: -3)
 
                 Button(action: {
                     viewStore.send(.nextButtonTapped)
@@ -149,7 +149,7 @@ public struct MainView: View {
         })
         .erButton(
             labelColor: DesignSystemIosAsset.Assets.white.swiftUIColor,
-            backgroundColor: DesignSystemIosAsset.Assets.black10.swiftUIColor
+            backgroundColor: DesignSystemIosAsset.Assets.main.swiftUIColor
         )
         .frame(width: 141)
     }

@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 import ComposableArchitecture
 
@@ -17,6 +18,7 @@ public struct MainFeature: ReducerProtocol {
         var pastSteps: [Int]
         @BindingState
         var currentSpeed: Double = 0
+        var itemImage: [Image] = []
         
         var displayedSteps: Int?
         var nextButtonEnabled: Bool = false
@@ -50,12 +52,14 @@ public struct MainFeature: ReducerProtocol {
         case _updateCurrentSpeed(Double)
         case _updateButtonStatus
         case _updateDisplayedStatus
+        case _updateSnowmanItemSataus
         case _showFetchingStepError
         
         // Coordinator
         case coordinator(CoordinatorAction)
         
         public enum CoordinatorAction {
+            case toArchive
             case checkTodayPopup
             case pushSettingView
         }
@@ -114,7 +118,7 @@ public struct MainFeature: ReducerProtocol {
                 return .send(.coordinator(.pushSettingView))
                 
             case .mySnowmanButtonTapped:
-                return .send(.coordinator(.checkTodayPopup))
+                return .send(.coordinator(.toArchive))
                 
             case ._fetchTodaySteps(let steps):
                 state.todaySteps = steps
@@ -160,6 +164,10 @@ public struct MainFeature: ReducerProtocol {
                 let standard = 5000
                 state.achievementRate = (state.displayedSteps ?? 0) * 100 / standard
                 
+                return .none
+
+            case ._updateSnowmanItemSataus:
+
                 return .none
                 
             case ._showFetchingStepError:
@@ -229,12 +237,18 @@ extension MainFeature {
     private func uploadStepsByPeriod() -> EffectTask<Action> {
         return .run { send in
             do {
+//                guard
+//                    let start = userDefaultsClient
+//                        .stringForKey(UserDefaultsKey.lastLoginDate)
+//                        .toDate()
+//                else {
+//                    updateLastLoginDate()
+//                    return
+//                }
+
                 guard
-                    let start = userDefaultsClient
-                        .stringForKey(UserDefaultsKey.lastLoginDate)
-                        .toDate()
+                    let start = Date().yesterday
                 else {
-                    updateLastLoginDate()
                     return
                 }
 
@@ -245,14 +259,25 @@ extension MainFeature {
                     return
                 }
 
-                let pastSteps = try await healthClient.getStepsByPeriod(start, end)
-                let steps = pastSteps.map { date, count in
-                    return Step(date: date.toString(withFormat: .yearMonthDay), count: count)
-                }
+//                let pastSteps = try await healthClient.getStepsByPeriod(start, end)
+//                let steps = pastSteps.map { date, count in
+//                    return Step(
+//                        date: date.toString(withFormat: .yearMonthDay),
+//                        count: count
+//                    )
+//                }
+                let steps: [Step] = [
+                    Step(date: "2023-09-17", count: 4000),
+                    Step(date: "2023-09-18", count: 5000),
+                    Step(date: "2023-09-19", count: 6000),
+                    Step(date: "2023-09-20", count: 7000),
+                ]
                 let result = await stepAPI.uploadSteps(steps)
                 switch result {
-                case .success(let response):
+                case let .success(response):
                     updateLastLoginDate()
+                    let images = response.items
+//                    itemImage.append()
                     print(response)
                 case let .failure(error):
                     print(error)
@@ -261,6 +286,9 @@ extension MainFeature {
 
             }
         }
+    }
+
+    private func saveSnowmanItemList(){
     }
 
     private func updateLastLoginDate() {

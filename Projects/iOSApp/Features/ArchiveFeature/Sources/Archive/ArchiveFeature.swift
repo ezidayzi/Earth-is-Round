@@ -35,13 +35,16 @@ public struct ArchiveFeature: ReducerProtocol {
             switch action {
             case .naviBackButtonTapped:
                 return .send(.coordinator(.pop))
-            case .coordinator:
-                return .none
+
             case .onAppear:
                 state.isLoading = true
                 return fetchArchiveList()
+
             case let ._fetchArchiveList(list):
                 state.archiveList = list
+                return .none
+
+            case .coordinator:
                 return .none
             }
         }
