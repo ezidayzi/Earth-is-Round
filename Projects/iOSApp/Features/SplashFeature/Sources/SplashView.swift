@@ -41,7 +41,7 @@ public struct SplashView: View {
                     try await Task.sleep(nanoseconds: 1_000_000_000)
                     viewStore.send(.splashAnimationFinished, animation: .default)
                 } catch {
-                    
+
                 }
             }
         }

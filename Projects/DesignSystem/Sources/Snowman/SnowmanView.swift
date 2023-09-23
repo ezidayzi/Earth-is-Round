@@ -23,7 +23,7 @@ public struct SnowmanView: View {
     
     public init(itemRawValues: [Int], snowmanType: SnowmanType) {
         self.items = itemRawValues
-            .compactMap { SnowmanItemType(rawValue: $0) }
+            .compactMap { SnowmanItemType(priority: $0) }
             .map { SnowmanItem(type: $0) }
         self.snowmanType = snowmanType
     }

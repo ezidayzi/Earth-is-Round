@@ -19,7 +19,7 @@ public struct ArchiveView: View {
         VStack {
             ERNavigationBar(
                 title: I18N.Archive.mySnowman,
-                backgroundColor: isArchiveListEmpty ? ERColor.Black90 : ERColor.White
+                backgroundColor: isArchiveListEmpty ? ERColor.BackgroundBlue : ERColor.White
             ) {
                 viewStore.send(.naviBackButtonTapped)
             }
@@ -54,7 +54,7 @@ public struct ArchiveView: View {
                     .padding()
             }
         }
-        .background(isArchiveListEmpty ? ERColor.Black90 : ERColor.White)
+        .background(isArchiveListEmpty ? ERColor.BackgroundBlue : ERColor.White)
         .toolbar(.hidden, for: .navigationBar)
         .onAppear {
             viewStore.send(.onAppear)
@@ -80,7 +80,7 @@ fileprivate struct ArchiveGridItem: View {
                 .fill(ERColor.Blue80)
                 .overlay {
                     SnowmanView(
-                        itemRawValues: snowmanItemTypes.map { $0.rawValue },
+                        itemRawValues: snowmanItemTypes.map { $0.priority },
                         snowmanType: snowmanType
                     )
                     .frame(width: geometry.size.width - 32)
