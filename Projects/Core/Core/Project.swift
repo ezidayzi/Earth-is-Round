@@ -15,7 +15,9 @@ let project = Project.framework(
         .Core.HealthClient.iOS,
         .Core.HealthClient.watchOS,
         .Core.LocationClient.iOS,
-        .Core.LocationClient.watchOS
+        .Core.LocationClient.watchOS,
+        .Core.LocalStorageClient.iOS,
+        .Core.LocalStorageClient.watchOS
     ],
     externalDependencies: [
         
