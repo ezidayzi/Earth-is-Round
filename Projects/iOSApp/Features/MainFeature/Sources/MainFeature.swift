@@ -8,6 +8,7 @@ import Shared_ios
 import PedometerClient_ios
 import HealthClient_ios
 import LocationClient_ios
+import LocalStorageClient_ios
 
 public struct MainFeature: ReducerProtocol {
     public init() {}
@@ -16,9 +17,11 @@ public struct MainFeature: ReducerProtocol {
         var todaySteps: Int?
         var currentWeekDay: Int = 0
         var pastSteps: [Int]
+        var snowmanItems: [ItemPoint] = []
+
         @BindingState
         var currentSpeed: Double = 0
-        var itemImage: [Image] = []
+
         
         var displayedSteps: Int?
         var nextButtonEnabled: Bool = false
@@ -54,6 +57,7 @@ public struct MainFeature: ReducerProtocol {
         case _updateDisplayedStatus
         case _updateSnowmanItemSataus
         case _showFetchingStepError
+        case _fetchSnowmanItems([ItemPoint])
         
         // Coordinator
         case coordinator(CoordinatorAction)
@@ -76,6 +80,9 @@ public struct MainFeature: ReducerProtocol {
 
     @Dependency(\.stepAPI)
     var stepAPI
+
+    @Dependency(\.localStorageClient)
+    var localStorageClient
     
     /// - NOTE(230730) @Duno
     /// @Dependency를 이용하면 asyncStream의 비동기 값이 전달되지 않는 현상
@@ -103,7 +110,8 @@ public struct MainFeature: ReducerProtocol {
                 
                 return .concatenate(
                     .send(._updateButtonStatus),
-                    .send(._updateDisplayedStatus)
+                    .send(._updateDisplayedStatus),
+                    fetchSnowmanItem(weekDay: state.currentWeekDay)
                 )
                 
             case .nextButtonTapped:
@@ -111,7 +119,8 @@ public struct MainFeature: ReducerProtocol {
                 
                 return .concatenate(
                     .send(._updateButtonStatus),
-                    .send(._updateDisplayedStatus)
+                    .send(._updateDisplayedStatus),
+                    fetchSnowmanItem(weekDay: state.currentWeekDay)
                 )
                 
             case .settingButtonTapped:
@@ -173,7 +182,11 @@ public struct MainFeature: ReducerProtocol {
             case ._showFetchingStepError:
                 state.todaySteps = nil
                 return .none
-                
+
+            case ._fetchSnowmanItems(let items):
+                state.snowmanItems = items
+                return .none
+
             case .coordinator:
                 return .none
                 
@@ -237,14 +250,14 @@ extension MainFeature {
     private func uploadStepsByPeriod() -> EffectTask<Action> {
         return .run { send in
             do {
-//                guard
-//                    let start = userDefaultsClient
-//                        .stringForKey(UserDefaultsKey.lastLoginDate)
-//                        .toDate()
-//                else {
-//                    updateLastLoginDate()
-//                    return
-//                }
+                //                guard
+                //                    let start = userDefaultsClient
+                //                        .stringForKey(UserDefaultsKey.lastLoginDate)
+                //                        .toDate()
+                //                else {
+                //                    updateLastLoginDate()
+                //                    return
+                //                }
 
                 guard
                     let start = Date().yesterday
@@ -259,13 +272,13 @@ extension MainFeature {
                     return
                 }
 
-//                let pastSteps = try await healthClient.getStepsByPeriod(start, end)
-//                let steps = pastSteps.map { date, count in
-//                    return Step(
-//                        date: date.toString(withFormat: .yearMonthDay),
-//                        count: count
-//                    )
-//                }
+                //                let pastSteps = try await healthClient.getStepsByPeriod(start, end)
+                //                let steps = pastSteps.map { date, count in
+                //                    return Step(
+                //                        date: date.toString(withFormat: .yearMonthDay),
+                //                        count: count
+                //                    )
+                //                }
                 let steps: [Step] = [
                     Step(date: "2023-09-17", count: 4000),
                     Step(date: "2023-09-18", count: 5000),
@@ -276,9 +289,7 @@ extension MainFeature {
                 switch result {
                 case let .success(response):
                     updateLastLoginDate()
-                    let images = response.items
-//                    itemImage.append()
-                    print(response)
+                    let isSaved = await saveSnowmanItemList(response: response)
                 case let .failure(error):
                     print(error)
                 }
@@ -288,11 +299,49 @@ extension MainFeature {
         }
     }
 
-    private func saveSnowmanItemList(){
+    private func fetchSnowmanItem(weekDay: Int) -> EffectTask<Action> {
+        return .run { send in
+            let currentDate = Date()
+            guard
+                let date = Calendar.current.date(
+                    byAdding: .day,
+                    value: weekDay - currentDate.weekdayFromMonday,
+                    to: currentDate
+                )?.toString(withFormat: .yearMonthDay)
+            else { return }
+
+            let result = await localStorageClient.getSnowmanItem(date)
+            switch result {
+            case .success(let itemInfo):
+                await send(._fetchSnowmanItems(itemInfo.itemPoint))
+            case .failure:
+                break
+            }
+        }
+    }
+
+    private func saveSnowmanItemList(response: SnowmanItemListResponse) async -> Bool {
+        let groupedItem = Dictionary(grouping: response.items, by: { $0.getDate })
+        let dailyItems = groupedItem.map { (key, value) in
+            return SnowmanItemInfo(
+                date: key,
+                itemPoint: value.map { ItemPoint(itemType: $0.name, x: 50, y: 50) }
+            )
+        }
+        let result = await localStorageClient.initSnowmanItems(dailyItems)
+        switch result {
+        case .success:
+            return true
+        case .failure:
+            return false
+        }
     }
 
     private func updateLastLoginDate() {
-        userDefaultsClient.setString(Date().toString(withFormat: .standard), UserDefaultsKey.lastLoginDate)
+        userDefaultsClient.setString(
+            Date().toString(withFormat: .standard),
+            UserDefaultsKey.lastLoginDate
+        )
     }
 }
 

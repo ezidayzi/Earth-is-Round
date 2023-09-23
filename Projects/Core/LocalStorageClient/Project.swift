@@ -12,7 +12,6 @@ let project = Project.framework(
         .Shared.watchOS,
     ],
     externalDependencies: [
-        .SPM.External.RealmSwift
     ],
     interfaceDependencies: [
 

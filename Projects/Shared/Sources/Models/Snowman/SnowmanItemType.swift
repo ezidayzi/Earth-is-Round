@@ -6,7 +6,7 @@
 //  Copyright © 2023 EarthIsRound. All rights reserved.
 //
 
-public enum SnowmanItemType: String, Decodable {
+public enum SnowmanItemType: String, Codable {
     // Priority 1 : Eye, Mouth
     case button = "button"
     case stones = "stones"
