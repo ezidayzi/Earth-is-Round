@@ -1,3 +1,4 @@
+import Combine
 import Foundation
 import SwiftUI
 
@@ -12,7 +13,7 @@ import LocalStorageClient_ios
 
 public struct MainFeature: ReducerProtocol {
     public init() {}
-    
+
     public struct State: Equatable {
         var todaySteps: Int?
         var currentWeekDay: Int = 0
@@ -22,13 +23,13 @@ public struct MainFeature: ReducerProtocol {
         @BindingState
         var currentSpeed: Double = 0
 
-        
+
         var displayedSteps: Int?
         var nextButtonEnabled: Bool = false
         var prevButtonEnabled: Bool = false
         var achievementRate: Int = 0
         var isLoading: Bool = false
-        
+
         public init(
             todaySteps: Int? = nil,
             currentWeekDay: Int,
@@ -39,7 +40,7 @@ public struct MainFeature: ReducerProtocol {
             self.pastSteps = pastSteps
         }
     }
-    
+
     public enum Action: BindableAction {
         // View Actions
         case binding(BindingAction<State>)
@@ -48,8 +49,10 @@ public struct MainFeature: ReducerProtocol {
         case nextButtonTapped
         case settingButtonTapped
         case mySnowmanButtonTapped
-        
+        case updateSnowmanItemPosition(index: Int, x: CGFloat, y: CGFloat)
+
         // Internal Actions
+        case _uploadStepsByPeriod
         case _fetchTodaySteps(Int)
         case _fetchPastSteps([Int])
         case _updateCurrentSpeed(Double)
@@ -58,20 +61,20 @@ public struct MainFeature: ReducerProtocol {
         case _updateSnowmanItemSataus
         case _showFetchingStepError
         case _fetchSnowmanItems([ItemPoint])
-        
+
         // Coordinator
         case coordinator(CoordinatorAction)
-        
+
         public enum CoordinatorAction {
             case toArchive
             case checkTodayPopup
             case pushSettingView
         }
     }
-    
+
     @Dependency(\.pedometerClient)
     var pedometerClient
-    
+
     @Dependency(\.healthClient)
     var healthClient
 
@@ -83,19 +86,19 @@ public struct MainFeature: ReducerProtocol {
 
     @Dependency(\.localStorageClient)
     var localStorageClient
-    
+
     /// - NOTE(230730) @Duno
     /// @Dependency를 이용하면 asyncStream의 비동기 값이 전달되지 않는 현상
     var locationClient = LocationClient.liveValue
-    
+
     public var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:
                 // state.isLoading = true
-                
-                state.currentWeekDay = Date().weekdayFromMonday
-                
+
+                state.currentWeekDay = Date().yesterday!.weekdayFromMonday
+
                 return .merge (
                     requestHealthClientAuth(),
                     requestLocationClinetAuth(),
@@ -104,81 +107,89 @@ public struct MainFeature: ReducerProtocol {
                     fetchPastSteps(),
                     fetchTodaySteps()
                 )
-                
+
             case .prevButtonTapped:
                 state.currentWeekDay -= 1
-                
+
                 return .concatenate(
                     .send(._updateButtonStatus),
                     .send(._updateDisplayedStatus),
                     fetchSnowmanItem(weekDay: state.currentWeekDay)
                 )
-                
+
             case .nextButtonTapped:
                 state.currentWeekDay += 1
-                
+
                 return .concatenate(
                     .send(._updateButtonStatus),
                     .send(._updateDisplayedStatus),
                     fetchSnowmanItem(weekDay: state.currentWeekDay)
                 )
-                
+
             case .settingButtonTapped:
                 return .send(.coordinator(.pushSettingView))
-                
+
             case .mySnowmanButtonTapped:
                 return .send(.coordinator(.toArchive))
-                
+
+            case ._uploadStepsByPeriod:
+
+                return .concatenate(
+                    uploadStepsByPeriod(),
+                    fetchSnowmanItem(weekDay: state.currentWeekDay)
+                )
+
             case ._fetchTodaySteps(let steps):
                 state.todaySteps = steps
-                
+
                 return .concatenate(
                     .send(._updateButtonStatus),
                     .send(._updateDisplayedStatus)
                 )
-                
+
                 // OnApper에서 처음 한 번 실행
             case ._fetchPastSteps(let pastSteps):
                 state.pastSteps = pastSteps
-                
+
                 return .concatenate(
                     .send(._updateButtonStatus),
                     .send(._updateDisplayedStatus)
                 )
-                
+
             case ._updateCurrentSpeed(let speed):
                 state.currentSpeed = speed
-                
+
                 return .none
-                
+
             case ._updateButtonStatus:
-                let existPastSteps = !state.pastSteps.isEmpty
-                
+                //                let existPastSteps = !state.pastSteps.isEmpty
+                let existPastSteps = true
+
                 let enableNextButton = state.currentWeekDay < state.pastSteps.count && existPastSteps
                 state.nextButtonEnabled = enableNextButton
-                
+
                 let enablePrevButton = state.currentWeekDay > 0 && existPastSteps
                 state.prevButtonEnabled = enablePrevButton
-                
+
                 return .none
-                
+
             case ._updateDisplayedStatus:
                 state.displayedSteps = state.currentWeekDay + 1 > state.pastSteps.count
                 ? state.todaySteps ?? 0
                 : state.pastSteps[state.currentWeekDay]
-                
+
                 state.isLoading = false
-                
+
                 // TODO: UserDefaults Client에서 가져오기
                 let standard = 5000
                 state.achievementRate = (state.displayedSteps ?? 0) * 100 / standard
-                
+
                 return .none
 
             case ._updateSnowmanItemSataus:
 
                 return .none
-                
+
             case ._showFetchingStepError:
                 state.todaySteps = nil
                 return .none
@@ -187,9 +198,16 @@ public struct MainFeature: ReducerProtocol {
                 state.snowmanItems = items
                 return .none
 
+            case .updateSnowmanItemPosition(index: let index, x: let x, y: let y):
+                if index >= 0 && index < state.snowmanItems.count {
+                    state.snowmanItems[index].x = x
+                    state.snowmanItems[index].y = y
+                }
+                return .none
+
             case .coordinator:
                 return .none
-                
+
             case .binding:
                 return .none
             }
@@ -209,7 +227,7 @@ extension MainFeature {
             }
         }
     }
-    
+
     private func fetchPastSteps() -> EffectTask<Action> {
         .run { send in
             do {
@@ -220,7 +238,7 @@ extension MainFeature {
             }
         }
     }
-    
+
     private func requestHealthClientAuth() -> EffectTask<Action> {
         .run { send in
             do {
@@ -232,13 +250,13 @@ extension MainFeature {
             }
         }
     }
-    
+
     private func requestLocationClinetAuth() -> EffectTask<Action> {
         .run { send in
             await locationClient.requestAuthorization()
         }
     }
-    
+
     private func fetchCurrentSpeed() -> EffectTask<Action> {
         return .run { send in
             for await speed in locationClient.getCurrentSpeed() {
@@ -284,6 +302,9 @@ extension MainFeature {
                     Step(date: "2023-09-18", count: 5000),
                     Step(date: "2023-09-19", count: 6000),
                     Step(date: "2023-09-20", count: 7000),
+                    Step(date: "2023-09-21", count: 7000),
+                    Step(date: "2023-09-22", count: 7000),
+                    Step(date: "2023-09-23", count: 7000),
                 ]
                 let result = await stepAPI.uploadSteps(steps)
                 switch result {
@@ -301,7 +322,7 @@ extension MainFeature {
 
     private func fetchSnowmanItem(weekDay: Int) -> EffectTask<Action> {
         return .run { send in
-            let currentDate = Date()
+            let currentDate = Date().yesterday!
             guard
                 let date = Calendar.current.date(
                     byAdding: .day,
@@ -313,6 +334,7 @@ extension MainFeature {
             let result = await localStorageClient.getSnowmanItem(date)
             switch result {
             case .success(let itemInfo):
+                print(itemInfo)
                 await send(._fetchSnowmanItems(itemInfo.itemPoint))
             case .failure:
                 break
@@ -337,6 +359,10 @@ extension MainFeature {
         }
     }
 
+//    private func _updateSnowmanItemPositon() async {
+//        let result = await localStorageClient.updateSnowmanItems
+//    }
+
     private func updateLastLoginDate() {
         userDefaultsClient.setString(
             Date().toString(withFormat: .standard),
@@ -359,3 +385,4 @@ extension MainFeature.State {
         }
     }
 }
+

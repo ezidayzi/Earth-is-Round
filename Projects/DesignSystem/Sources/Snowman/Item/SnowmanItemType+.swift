@@ -10,7 +10,7 @@ import Shared_ios
 import SwiftUI
 
 extension SnowmanItemType {
-    var image: Image {
+    public var image: Image {
         switch self {
         case .button: return DesignSystemAsset.Assets.itemDrawButton.swiftUIImage
         case .stones:return DesignSystemAsset.Assets.itemDrawStones.swiftUIImage

@@ -6,6 +6,7 @@
 //  Copyright © 2023 EarthIsRound. All rights reserved.
 //
 import Shared_ios
+import Foundation
 
 public struct SnowmanItemInfo: Codable {
     public let date: String
@@ -17,12 +18,14 @@ public struct SnowmanItemInfo: Codable {
     }
 }
 
-public struct ItemPoint: Codable {
+public struct ItemPoint: Codable, Identifiable {
+    public let id: String
     public let itemType: SnowmanItemType
-    public let x: Double
-    public let y: Double
+    public var x: CGFloat
+    public var y: CGFloat
 
     public init(itemType: SnowmanItemType, x: Double, y: Double) {
+        self.id = UUID().uuidString
         self.itemType = itemType
         self.x = x
         self.y = y

@@ -5,24 +5,53 @@ import ComposableArchitecture
 import DesignSystem_ios
 
 public struct MainView: View {
-    
+
     let store: StoreOf<MainFeature>
     @ObservedObject var viewStore: ViewStoreOf<MainFeature>
-    
+
     public init(store: StoreOf<MainFeature>) {
         self.store = store
         self.viewStore = ViewStore(store, observe: { $0 })
     }
-    
+
     public var body: some View {
         ZStack {
             VStack {
                 mainContent
             }
-            
+
             if viewStore.isLoading {
                 loadingIndicator
             }
+
+            ForEach(viewStore.snowmanItems.indices, id: \.self) { index in
+                let item = viewStore.snowmanItems[index]
+                let imageSize: CGFloat = 100
+                let minX: CGFloat = imageSize / 2
+                let maxX: CGFloat = UIScreen.main.bounds.width - imageSize / 2
+                let minY: CGFloat = UIScreen.main.bounds.height / 2 - 60 -  imageSize / 2
+                let maxY: CGFloat = UIScreen.main.bounds.height - 60 -  imageSize / 2
+
+                let dragGesture = DragGesture()
+                    .onChanged { value in
+                        var newX = value.location.x
+                        var newY = value.location.y
+
+                        newX = min(maxX, max(minX, newX))
+                        newY = min(maxY, max(minY, newY))
+
+                        viewStore.send(.updateSnowmanItemPosition(index: index, x: newX, y: newY))
+                    }
+                    .onEnded { _ in
+                        // 저장
+                    }
+
+                item.itemType.image
+                    .frame(width: imageSize, height: imageSize)
+                    .position(x: item.x, y: item.y)
+                    .gesture(dragGesture)
+            }
+
         }
         .onAppear {
             viewStore.send(.onAppear)
@@ -42,12 +71,12 @@ public struct MainView: View {
             stepsContent
                 .padding(.top, 40.adjustedH)
                 .padding(.leading, 20)
-            
+
             /// - Note (230730) @Duno
             /// Lottie File의 영역이 부정확하게 잡혀 있음. 디자인 요청 필요.
             ERSnowBall(animationSpeed: viewStore.binding(\.$currentSpeed))
                 .frame(height: 300)
-            
+
             achievementRateView
                 .padding(.top, 34)
                 .padding(.bottom, 14)
@@ -62,7 +91,7 @@ public struct MainView: View {
         )
         .background(DesignSystemIosAsset.Assets.backgroundBlue.swiftUIColor)
     }
-    
+
     private var logoNavigationBar: some View {
         ZStack {
             HStack {
@@ -85,7 +114,7 @@ public struct MainView: View {
         }
         .padding(.top, UIApplication.shared.windows.first?.safeAreaInsets.top)
     }
-    
+
     private var weekDayButton: some View {
         HStack {
             HStack(spacing: 12) {
@@ -114,7 +143,7 @@ public struct MainView: View {
             Spacer()
         }
     }
-    
+
     private var stepsContent: some View {
         HStack {
             stepsText
@@ -122,7 +151,7 @@ public struct MainView: View {
         }
         .padding(.leading)
     }
-    
+
     private var stepsText: some View {
         IfLet(viewStore.displayedSteps) { steps in
             VStack(alignment: .leading) {
@@ -142,7 +171,7 @@ public struct MainView: View {
             Text("걸음 수 접근 권한이 없습니다.")
         }
     }
-    
+
     private var snowmanButton: some View {
         Button("내 눈사람", action: {
             viewStore.send(.mySnowmanButtonTapped)
@@ -153,19 +182,19 @@ public struct MainView: View {
         )
         .frame(width: 141)
     }
-    
+
     private var achievementRateView: some View {
         Text("달성률 \(viewStore.achievementRate)%")
             .font(DesignSystemIosFontFamily.AritaDotumOTF.medium.font(size: 16).toSwiftUI)
             .foregroundColor(DesignSystemIosAsset.Assets.black20.swiftUIColor)
     }
-    
+
     private var loadingIndicator: some View {
         Group {
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color.black.opacity(0.7))
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
+
             ProgressView()
                 .progressViewStyle(CircularProgressViewStyle())
                 .foregroundColor(.black)
@@ -173,3 +202,4 @@ public struct MainView: View {
         }
     }
 }
+

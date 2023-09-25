@@ -27,7 +27,7 @@ public extension Date {
     var yesterday: Self? {
         return Calendar.current.date(
             byAdding: .day,
-            value: -1,
+            value: -2,
             to: startOfDay
         )
     }

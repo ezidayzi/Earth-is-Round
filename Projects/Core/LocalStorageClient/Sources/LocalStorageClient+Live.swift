@@ -45,16 +45,18 @@ public extension LocalStorageClient {
                     return .failure(LocalStorageError.unknownError)
                 }
             },
-            getSnowmanItem: { date in
+            getSnowmanItem: { date in                
                 guard
                     let encodedData = defaults.data(forKey: UserDefaultsKey.snowmanItems)
                 else {
                     return .failure(LocalStorageError.fileNotFound)
                 }
-
+                print(date)
                 do {
                     let items = try decoder.decode([SnowmanItemInfo].self, from: encodedData)
+                    print(items)
                     let filteredItems = items.filter { $0.date == date }
+                    dump(filteredItems)
                     if let item = filteredItems.first {
                         return .success(item)
                     } else {
