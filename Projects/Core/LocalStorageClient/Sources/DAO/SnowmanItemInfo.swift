@@ -10,7 +10,7 @@ import Foundation
 
 public struct SnowmanItemInfo: Codable {
     public let date: String
-    public let itemPoint: [ItemPoint]
+    public var itemPoint: [ItemPoint]
 
     public init(date: String, itemPoint: [ItemPoint]) {
         self.date = date

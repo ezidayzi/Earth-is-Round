@@ -12,5 +12,6 @@ public enum LocalStorageError: Error {
     case fileNotFound
     case readError
     case writeError
+    case deleteError
     case unknownError
 }

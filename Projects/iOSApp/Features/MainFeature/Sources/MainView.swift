@@ -24,34 +24,7 @@ public struct MainView: View {
                 loadingIndicator
             }
 
-            ForEach(viewStore.snowmanItems.indices, id: \.self) { index in
-                let item = viewStore.snowmanItems[index]
-                let imageSize: CGFloat = 100
-                let minX: CGFloat = imageSize / 2
-                let maxX: CGFloat = UIScreen.main.bounds.width - imageSize / 2
-                let minY: CGFloat = UIScreen.main.bounds.height / 2 - 60 -  imageSize / 2
-                let maxY: CGFloat = UIScreen.main.bounds.height - 60 -  imageSize / 2
-
-                let dragGesture = DragGesture()
-                    .onChanged { value in
-                        var newX = value.location.x
-                        var newY = value.location.y
-
-                        newX = min(maxX, max(minX, newX))
-                        newY = min(maxY, max(minY, newY))
-
-                        viewStore.send(.updateSnowmanItemPosition(index: index, x: newX, y: newY))
-                    }
-                    .onEnded { _ in
-                        // 저장
-                    }
-
-                item.itemType.image
-                    .frame(width: imageSize, height: imageSize)
-                    .position(x: item.x, y: item.y)
-                    .gesture(dragGesture)
-            }
-
+            snowmanItems
         }
         .onAppear {
             viewStore.send(.onAppear)
@@ -181,6 +154,39 @@ public struct MainView: View {
             backgroundColor: DesignSystemIosAsset.Assets.main.swiftUIColor
         )
         .frame(width: 141)
+    }
+
+    private var snowmanItems: some View {
+        ForEach(viewStore.snowmanItems.indices, id: \.self) { index in
+            let item = viewStore.snowmanItems[index]
+            let imageSize: CGFloat = 100
+            let minX: CGFloat = imageSize / 2
+            let maxX: CGFloat = UIScreen.main.bounds.width - imageSize / 2
+            let minY: CGFloat = 298.adjustedH -  imageSize / 2
+            let maxY: CGFloat = UIScreen.main.bounds.height - imageSize / 2
+
+            let dragGesture = DragGesture()
+                .onChanged { value in
+                    var newX = value.location.x
+                    var newY = value.location.y
+
+                    newX = min(maxX, max(minX, newX))
+                    newY = min(maxY, max(minY, newY))
+
+                    viewStore.send(.updateSnowmanItemPosition(index: index, x: newX, y: newY))
+                }
+                .onEnded { value in
+                    viewStore.send(.saveSnowmanItemPositoion(index: index, x:  value.location.x, y: value.location.y))
+                }
+
+            item.itemType.image
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: imageSize, height: imageSize)
+                .position(x: item.x, y: item.y)
+                .gesture(dragGesture)
+        }
+
     }
 
     private var achievementRateView: some View {
