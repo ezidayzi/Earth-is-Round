@@ -11,6 +11,5 @@ let project = Project.framework(
         .SPM.External.Alamofire,
         .SPM.External.TCA,
         .SPM.External.TCACoordinator
-//        .SPM.External.RealmSwift
     ]
 )
