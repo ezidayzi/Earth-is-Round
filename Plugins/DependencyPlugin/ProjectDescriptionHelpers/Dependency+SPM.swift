@@ -29,7 +29,7 @@ public extension Dep.SPM.External {
     static let TCA = TargetDependency.external(name: "ComposableArchitecture")
     static let TCACoordinator = TargetDependency.external(name: "TCACoordinators")
     static let Lottie = TargetDependency.external(name: "Lottie")
-    
+
     // Demo
     static let FLEX = TargetDependency.external(name: "FLEX")
     

@@ -21,6 +21,7 @@ public extension TargetDependency {
         public struct HealthClient {}
         public struct LocationClient {}
         public struct APIClient {}
+        public struct LocalStorageClient {}
     }
     public struct Shared {}
     public struct ThirdPartyLibs {}
@@ -132,6 +133,11 @@ public extension Dep.Core.HealthClient {
 public extension Dep.Core.LocationClient {
     static let iOS = Dep.project(target: "LocationClient_ios", path: .relativeToCore("LocationClient"))
     static let watchOS = Dep.project(target: "LocationClient_watchos", path: .relativeToCore("LocationClient"))
+}
+
+public extension Dep.Core.LocalStorageClient {
+    static let iOS = Dep.project(target: "LocalStorageClient_ios", path: .relativeToCore("LocalStorageClient"))
+    static let watchOS = Dep.project(target: "LocalStorageClient_watchos", path: .relativeToCore("LocalStorageClient"))
 }
 
 // MARK: - DesignSystemp

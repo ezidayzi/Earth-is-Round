@@ -10,10 +10,10 @@ import Shared_ios
 import Foundation
 
 public struct SnowmanItemListResponse: Decodable {
-    public let items: [SnowmanItemInfo]
+    public let items: [SnowmanItemInfoResponse]
 }
 
-public struct SnowmanItemInfo: Decodable {
+public struct SnowmanItemInfoResponse: Decodable {
     public let getDate: String
     public let name: SnowmanItemType
 }
