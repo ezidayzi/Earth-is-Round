@@ -69,6 +69,23 @@ public extension Date {
         : weekday - 2
     }
 
+    // 월요일을 기준으로 주차 계산
+    var weekNumberStartingOnMonday: Int {
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: self)
+        let day = calendar.component(.day, from: self)
+
+        guard
+            let firstDayOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: self)),
+            let firstWeekdayOfMonth = calendar.dateComponents([.weekday], from: firstDayOfMonth).weekday
+        else {
+             return 0
+        }
+        let offset = (weekday - firstWeekdayOfMonth + 7) % 7
+        let weekNumber = (day + offset - 1) / 7 + 1
+        return weekNumber
+    }
+
     enum DateFormatType: String {
         case standard = "yyyy-MM-dd HH:mm:ss"
         case yearMonthDay = "yyyy-MM-dd"

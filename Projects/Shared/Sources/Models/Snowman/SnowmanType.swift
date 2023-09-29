@@ -11,4 +11,17 @@ public enum SnowmanType {
     case largeHeadSmallBody
     case smallHeadLargeBody
     case smallHeadSmallBody
+
+    public init(headSize: Int, bodySize: Int) {
+        switch (headSize, bodySize) {
+        case (2..., 2...):
+            self = .largeHeadLargeBody
+        case (2..., _):
+            self = .largeHeadSmallBody
+        case (_, 2...):
+            self = .smallHeadLargeBody
+        default:
+            self = .smallHeadSmallBody
+        }
+    }
 }
