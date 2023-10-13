@@ -15,9 +15,9 @@ public extension String {
         return formatter.string(from: NSNumber(value: Double(self) ?? 0)) ?? ""
     }
 
-    func toDate() -> Date? {
+    func toDate(dateFormat: Date.DateFormatType = .standard) -> Date? {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        dateFormatter.dateFormat = dateFormat.rawValue
         dateFormatter.timeZone = .autoupdatingCurrent
         if let date = dateFormatter.date(from: self) {
             return date

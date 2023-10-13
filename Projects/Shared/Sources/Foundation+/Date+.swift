@@ -49,6 +49,14 @@ public extension Date {
         )
     }
 
+    var lastSunday: Self? {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: self)
+        let daysUntilLastSunday = (calendar.component(.weekday, from: today) + 7 - 1) % 7
+        let lastSunday = calendar.date(byAdding: .day, value: -daysUntilLastSunday, to: today)
+        return lastSunday
+    }
+
     var month: Int {
         return Calendar.current.component(.month, from: self)
     }

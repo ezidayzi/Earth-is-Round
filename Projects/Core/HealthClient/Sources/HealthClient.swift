@@ -7,6 +7,7 @@ public struct HealthClient {
     public let requestAuthorization: () async throws -> Void
     public let getStepsFromMonday: () async throws -> [Int]
     public let getStepsByPeriod: (_ start: Date, _ end: Date) async throws -> [Date: Int]
+    public let getTotalStepsByPeriod: (_ start: Date, _ end: Date) async throws -> Int
 }
 
 // MARK: DependencyKey

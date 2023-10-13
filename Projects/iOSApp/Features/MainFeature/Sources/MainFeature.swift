@@ -18,11 +18,10 @@ public struct MainFeature: ReducerProtocol {
         var todaySteps: Int?
         var currentWeekDay: Int = 0
         var pastSteps: [Int]
-        var snowmanItems: [ItemPoint] = []
+        var snowmanItemPoints: [ItemPoint] = []
 
         @BindingState
         var currentSpeed: Double = 0
-
 
         var displayedSteps: Int?
         var nextButtonEnabled: Bool = false
@@ -85,6 +84,9 @@ public struct MainFeature: ReducerProtocol {
     @Dependency(\.stepAPI)
     var stepAPI
 
+    @Dependency(\.snowmenAPI)
+    var snowmenAPI
+
     @Dependency(\.localStorageClient)
     var localStorageClient
 
@@ -106,7 +108,8 @@ public struct MainFeature: ReducerProtocol {
                     uploadStepsByPeriod(),
                     fetchCurrentSpeed(),
                     fetchPastSteps(),
-                    fetchTodaySteps()
+                    fetchTodaySteps(),
+                    calculateSnowman()
                 )
 
             case .prevButtonTapped:
@@ -135,14 +138,14 @@ public struct MainFeature: ReducerProtocol {
 
 
             case let .updateSnowmanItemPosition(index, x, y):
-                if index >= 0 && index < state.snowmanItems.count {
-                    state.snowmanItems[index].x = x
-                    state.snowmanItems[index].y = y
+                if index >= 0 && index < state.snowmanItemPoints.count {
+                    state.snowmanItemPoints[index].x = x
+                    state.snowmanItemPoints[index].y = y
                 }
                 return .none
 
             case let .saveSnowmanItemPositoion(index, x, y):
-                var updatedItem = state.snowmanItems[index]
+                var updatedItem = state.snowmanItemPoints[index]
                 updatedItem.x = x
                 updatedItem.y = y
                 return saveSnowmanItemPosition(weekDay: state.currentWeekDay, itemPoint: updatedItem)
@@ -209,7 +212,7 @@ public struct MainFeature: ReducerProtocol {
                 return .none
 
             case ._fetchSnowmanItems(let items):
-                state.snowmanItems = items
+                state.snowmanItemPoints = items
                 return .none
 
             case .coordinator:
@@ -346,6 +349,72 @@ extension MainFeature {
                 )?.toString(withFormat: .yearMonthDay)
             else { return }
             _ = await localStorageClient.updateSnowmanItemPoint(date, itemPoint)
+        }
+    }
+
+    private func calculateSnowman() -> EffectTask<Action> {
+        return .run { send in
+            do {
+                guard let lastSunday = Date().lastSunday else { return }
+                guard
+                    let lastCalculationDate = userDefaultsClient
+                        .stringForKey(UserDefaultsKey.lastCalculationDate)
+                        .toDate(dateFormat: .yearMonthDay)
+                else {
+                    userDefaultsClient.setString(
+                        lastSunday.toString(withFormat: .yearMonthDay),
+                        UserDefaultsKey.lastCalculationDate
+                    )
+                    return
+                }
+
+                if lastCalculationDate == lastSunday {
+                    return
+                }
+
+                let calendar = Calendar.current
+                var currentDate = lastSunday
+                var sundayDates: [Date] = []
+
+                let maxCalculatingCount = 5
+
+                for _ in 0..<maxCalculatingCount {
+                    if lastCalculationDate >= currentDate {
+                        break
+                    }
+                    sundayDates.append(currentDate)
+                    currentDate = calendar.date(byAdding: .day, value: -7, to: currentDate) ?? currentDate
+                }
+                var calculatingList: [WeeklySnowmenSizeInfo] = []
+                for sundayDate in sundayDates {
+                    let monday = calendar.date(byAdding: .day, value: -7, to: sundayDate) ?? sundayDate
+                    let friday = calendar.date(byAdding: .day, value: -3, to: sundayDate) ?? sundayDate
+                    let sunday = calendar.date(byAdding: .day, value: 1, to: sundayDate) ?? sundayDate
+                    let stepsFromMondayToThursday = try await healthClient.getTotalStepsByPeriod(monday, friday)
+                    let stepsFromFridayToSunday = try await healthClient.getTotalStepsByPeriod(friday, sunday)
+                    calculatingList.append(
+                        WeeklySnowmenSizeInfo(
+                            calculateDate: sundayDate.toString(withFormat: .yearMonthDay),
+                            stepsFromMondayToThursday: stepsFromMondayToThursday,
+                            stepsFromFridayToSunday: stepsFromFridayToSunday
+                        )
+                    )
+                }
+
+                let result = await snowmenAPI.calculate(calculatingList)
+                switch result {
+                case .success:
+                    userDefaultsClient.setString(
+                        lastSunday.toString(withFormat: .yearMonthDay),
+                        UserDefaultsKey.lastCalculationDate
+                    )
+                case let .failure(error):
+                    throw error
+                }
+            }
+            catch {
+                // 에러 처리
+            }
         }
     }
 

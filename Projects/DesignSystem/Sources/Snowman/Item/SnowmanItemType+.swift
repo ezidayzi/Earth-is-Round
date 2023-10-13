@@ -12,25 +12,25 @@ import SwiftUI
 extension SnowmanItemType {
     public var image: Image {
         switch self {
-        case .button: return DesignSystemAsset.Assets.itemDrawButton.swiftUIImage
-        case .stones:return DesignSystemAsset.Assets.itemDrawStones.swiftUIImage
+        case .button: return DesignSystemAsset.Assets.stickerButton.swiftUIImage
+        case .stones:return DesignSystemAsset.Assets.stickerStones.swiftUIImage
         case .saw: return DesignSystemAsset.Assets.itemDrawSaw.swiftUIImage
-        case .carrot: return DesignSystemAsset.Assets.itemDrawCarrot.swiftUIImage
-        case .radish: return DesignSystemAsset.Assets.itemDrawRadish.swiftUIImage
-        case .gloves: return DesignSystemAsset.Assets.itemDrawGloves.swiftUIImage
+        case .carrot: return DesignSystemAsset.Assets.stickerCarrot.swiftUIImage
+        case .radish: return DesignSystemAsset.Assets.stickerCarrot.swiftUIImage
+        case .gloves: return DesignSystemAsset.Assets.stickerGloves.swiftUIImage
         case .cardigan: return DesignSystemAsset.Assets.itemDrawCardiganFront.swiftUIImage
-        case .branch: return DesignSystemAsset.Assets.itemDrawBranchBack.swiftUIImage
-        case .earMuff: return DesignSystemAsset.Assets.itemDrawEarMuffFront.swiftUIImage
-        case .airPodMax1: return DesignSystemAsset.Assets.itemDrawAirPodMax1Front.swiftUIImage
-        case .airPodMax2: return DesignSystemAsset.Assets.itemDrawAirPodMax2Front.swiftUIImage
-        case .airPodMax3: return DesignSystemAsset.Assets.itemDrawAirPodMax3Front.swiftUIImage
-        case .muffler1: return DesignSystemAsset.Assets.itemDrawMuffler1.swiftUIImage
-        case .muffler2: return DesignSystemAsset.Assets.itemDrawMuffler2.swiftUIImage
+        case .branch: return DesignSystemAsset.Assets.stickerBranch.swiftUIImage
+        case .earMuff: return DesignSystemAsset.Assets.stickerEarMuff.swiftUIImage
+        case .airPodMax1: return DesignSystemAsset.Assets.stickerAirPodMax1.swiftUIImage
+        case .airPodMax2: return DesignSystemAsset.Assets.stickerAirPodMax2.swiftUIImage
+        case .airPodMax3: return DesignSystemAsset.Assets.stickerAirPodMax3.swiftUIImage
+        case .muffler1: return DesignSystemAsset.Assets.stickerMuffler1.swiftUIImage
+        case .muffler2: return DesignSystemAsset.Assets.stickerMuffler2.swiftUIImage
         case .boots: return DesignSystemAsset.Assets.itemDrawBoots.swiftUIImage
-        case .bikini: return DesignSystemAsset.Assets.itemDrawBikini.swiftUIImage
-        case .can: return DesignSystemAsset.Assets.itemDrawCan.swiftUIImage
-        case .santaHat: return DesignSystemAsset.Assets.itemDrawSantaHat.swiftUIImage
-        case .sunglass: return DesignSystemAsset.Assets.itemDrawSunglass.swiftUIImage
+        case .bikini: return DesignSystemAsset.Assets.stickerBikini.swiftUIImage
+        case .can: return DesignSystemAsset.Assets.stickerCan.swiftUIImage
+        case .santaHat: return DesignSystemAsset.Assets.stickerSantaHat.swiftUIImage
+        case .sunglass: return DesignSystemAsset.Assets.stickerSunglass.swiftUIImage
 
         }
     }
