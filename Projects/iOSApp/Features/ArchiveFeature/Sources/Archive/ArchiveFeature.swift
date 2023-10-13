@@ -68,14 +68,16 @@ public struct ArchiveFeature: ReducerProtocol {
                 let snowmenByMonth = Dictionary(grouping: records) { snowman in
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "yyyy-MM"
-                    return dateFormatter.string(from: snowman.startDate.toDate() ?? Date())
+                    return dateFormatter.string(from: snowman.startDate.toDate(dateFormat: .yearMonthDay) ?? Date())
                 }
 
                 for (month, snowmenInMonth) in snowmenByMonth {
                     let weeklyArchives = snowmenInMonth.map { snowman in
                         WeeklyArchive(
                             uuid: UUID(),
-                            week: snowman.startDate.toDate()?.weekNumberStartingOnMonday ?? 0,
+                            week: snowman.startDate.toDate(
+                                dateFormat: .yearMonthDay
+                            )?.weekNumberStartingOnMonday ?? 0,
                             snowmanType: SnowmanType(headSize: snowman.headSize, bodySize: snowman.bodySize),
                             snowmanItemTypes: snowman.usedItems
                         )
@@ -83,7 +85,7 @@ public struct ArchiveFeature: ReducerProtocol {
 
                     monthlyArchives.append(MonthlyArchive(
                         uuid: UUID(),
-                        month: month.toDate()?.month ?? 0,
+                        month: month.toDate(dateFormat: .yearMonth)?.month ?? 0,
                         weeklyArchive: weeklyArchives
                     ))
                 }
@@ -92,12 +94,6 @@ public struct ArchiveFeature: ReducerProtocol {
             case .failure:
                 await send(._fetchArchiveList([]))
             }
-
-
-            let list: [MonthlyArchive] = [
-
-            ]
-            await send(._fetchArchiveList(list))
         }
     }
 }

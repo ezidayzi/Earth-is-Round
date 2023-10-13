@@ -97,6 +97,7 @@ public extension Date {
     enum DateFormatType: String {
         case standard = "yyyy-MM-dd HH:mm:ss"
         case yearMonthDay = "yyyy-MM-dd"
+        case yearMonth = "yyyy-MM"
     }
 
     func toString(withFormat format: DateFormatType) -> String {
