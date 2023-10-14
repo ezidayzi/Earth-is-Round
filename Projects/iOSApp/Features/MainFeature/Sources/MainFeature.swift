@@ -109,7 +109,7 @@ public struct MainFeature: ReducerProtocol {
                     fetchCurrentSpeed(),
                     fetchPastSteps(),
                     fetchTodaySteps(),
-                    calculateSnowman()
+                    calculateSnowmen()
                 )
 
             case .prevButtonTapped:
@@ -352,7 +352,7 @@ extension MainFeature {
         }
     }
 
-    private func calculateSnowman() -> EffectTask<Action> {
+    private func calculateSnowmen() -> EffectTask<Action> {
         return .run { send in
             do {
                 guard let lastSunday = Date().lastSunday else { return }
