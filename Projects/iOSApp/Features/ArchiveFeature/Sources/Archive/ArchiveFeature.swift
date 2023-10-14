@@ -89,6 +89,11 @@ public struct ArchiveFeature: ReducerProtocol {
                         weeklyArchive: weeklyArchives
                     ))
                 }
+                monthlyArchives.sort()
+                
+                for index in monthlyArchives.indices {
+                    monthlyArchives[index].weeklyArchive.sort()
+                }
                 await send(._fetchArchiveList(monthlyArchives))
                 
             case .failure:
