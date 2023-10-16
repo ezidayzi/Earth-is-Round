@@ -9,4 +9,5 @@
 public enum UserDefaultsKey {
     public static let lastLoginDate: String = "lastLoginDate"
     public static let snowmanItems: String = "snowmanItems"
+    public static let lastCalculationDate: String = "lastCalculatingDate"
 }

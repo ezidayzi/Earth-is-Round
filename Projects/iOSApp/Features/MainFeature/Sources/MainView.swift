@@ -157,9 +157,9 @@ public struct MainView: View {
     }
 
     private var snowmanItems: some View {
-        ForEach(viewStore.snowmanItems.indices, id: \.self) { index in
-            let item = viewStore.snowmanItems[index]
-            let imageSize: CGFloat = 100
+        ForEach(viewStore.snowmanItemPoints.indices, id: \.self) { index in
+            let item = viewStore.snowmanItemPoints[index]
+            let imageSize: CGFloat = 130
             let minX: CGFloat = imageSize / 2
             let maxX: CGFloat = UIScreen.main.bounds.width - imageSize / 2
             let minY: CGFloat = 298.adjustedH -  imageSize / 2
@@ -209,3 +209,8 @@ public struct MainView: View {
     }
 }
 
+extension CGSize {
+    static func + (lhs: Self, rhs: Self) -> Self {
+        CGSize(width: lhs.width + rhs.width, height: lhs.height + rhs.height)
+    }
+}

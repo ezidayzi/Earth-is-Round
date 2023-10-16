@@ -11,7 +11,7 @@ import Foundation
 public struct MonthlyArchive {
     public let uuid: UUID
     public let month: Int
-    public let weeklyArchive: [WeeklyArchive]
+    public var weeklyArchive: [WeeklyArchive]
 
     public init(
         uuid: UUID,
@@ -31,5 +31,11 @@ extension MonthlyArchive: Equatable, Hashable {
 
     public func hash(into hasher: inout Hasher) {
         hasher.combine(uuid)
+    }
+}
+
+extension MonthlyArchive: Comparable {
+    public static func < (lhs: MonthlyArchive, rhs: MonthlyArchive) -> Bool {
+        return lhs.month > rhs.month
     }
 }

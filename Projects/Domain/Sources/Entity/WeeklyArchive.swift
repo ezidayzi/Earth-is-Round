@@ -38,3 +38,9 @@ extension WeeklyArchive: Equatable, Hashable {
         hasher.combine(uuid)
     }
 }
+
+extension WeeklyArchive: Comparable {
+    public static func < (lhs: WeeklyArchive, rhs: WeeklyArchive) -> Bool {
+        return lhs.week < rhs.week
+    }
+}

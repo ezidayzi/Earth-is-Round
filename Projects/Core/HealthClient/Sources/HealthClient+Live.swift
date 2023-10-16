@@ -20,9 +20,11 @@ public extension HealthClient {
         } getStepsFromMonday: {
             let calendar = Calendar.current
             
-            guard let today = Date().today,
-                  let monday = Date().monday else { return [] }
-            
+            guard
+                let today = Date().today,
+                let monday = Date().yesterday?.monday
+            else { return [] }
+
             let predicate = HKQuery.predicateForSamples(
                 withStart: monday,
                 end: today,
@@ -82,6 +84,38 @@ public extension HealthClient {
                         continuation.resume(returning: stepsByDate)
                     } else {
                         continuation.resume(returning: [:])
+                    }
+                }
+                healthStore.execute(query)
+            }
+        } getTotalStepsByPeriod: { start, end in
+            let predicate = HKQuery.predicateForSamples(
+                withStart: start,
+                end: end,
+                options: .strictStartDate
+            )
+            let query = HKStatisticsCollectionQuery(
+                quantityType: stepCountType,
+                quantitySamplePredicate: predicate,
+                options: [.cumulativeSum],
+                anchorDate: start,
+                intervalComponents: DateComponents(day: 1)
+            )
+            return try await withCheckedThrowingContinuation { continuation in
+                var sum = 0
+                query.initialResultsHandler = { query, results, error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                    } else if let results = results {
+                        results.enumerateStatistics(from: start, to: end) { statistics, stop in
+                            if let sumQuantity = statistics.sumQuantity() {
+                                let steps = Int(sumQuantity.doubleValue(for: HKUnit.count()))
+                                sum += steps
+                            }
+                        }
+                        continuation.resume(returning: sum)
+                    } else {
+                        continuation.resume(returning: 0)
                     }
                 }
                 healthStore.execute(query)

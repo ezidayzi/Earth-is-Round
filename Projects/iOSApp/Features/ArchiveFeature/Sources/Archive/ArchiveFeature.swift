@@ -1,10 +1,13 @@
+import APIClient_ios
 import ComposableArchitecture
 import Dependencies
-
-import Foundation
 import Domain_ios
+import Foundation
+import Shared_ios
+
 
 public struct ArchiveFeature: ReducerProtocol {
+
     public init() {}
     
     public struct State: Equatable {
@@ -30,6 +33,10 @@ public struct ArchiveFeature: ReducerProtocol {
         }
     }
 
+
+    @Dependency(\.recordAPI)
+    var recordAPI
+
     public var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
@@ -52,82 +59,46 @@ public struct ArchiveFeature: ReducerProtocol {
 
     private func fetchArchiveList() -> EffectTask<Action> {
         .run { send in
-            // 서버 통신
-            let list: [MonthlyArchive] = [
-//                MonthlyArchive(
-//                    uuid: UUID(),
-//                    month: 12,
-//                    weeklyArchive: [
-//                        WeeklyArchive(
-//                            uuid: UUID(),
-//                            week: 1,
-//                            snowmanType: .largeHeadSmallBody,
-//                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
-//                        ),
-//                        WeeklyArchive(
-//                            uuid: UUID(),
-//                            week: 2,
-//                            snowmanType: .largeHeadSmallBody,
-//                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
-//                        ),
-//                        WeeklyArchive(
-//                            uuid: UUID(),
-//                            week: 3,
-//                            snowmanType: .largeHeadSmallBody,
-//                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
-//                        )
-//                    ]
-//                ),
-//                MonthlyArchive(
-//                    uuid: UUID(),
-//                    month: 1,
-//                    weeklyArchive: [
-//                        WeeklyArchive(
-//                            uuid: UUID(),
-//                            week: 1,
-//                            snowmanType: .largeHeadSmallBody,
-//                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
-//                        ),
-//                        WeeklyArchive(
-//                            uuid: UUID(),
-//                            week: 2,
-//                            snowmanType: .largeHeadSmallBody,
-//                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
-//                        ),
-//                        WeeklyArchive(
-//                            uuid: UUID(),
-//                            week: 3,
-//                            snowmanType: .largeHeadSmallBody,
-//                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
-//                        )
-//                    ]
-//                ),
-//                MonthlyArchive(
-//                    uuid: UUID(),
-//                    month: 2,
-//                    weeklyArchive: [
-//                        WeeklyArchive(
-//                            uuid: UUID(),
-//                            week: 1,
-//                            snowmanType: .largeHeadSmallBody,
-//                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
-//                        ),
-//                        WeeklyArchive(
-//                            uuid: UUID(),
-//                            week: 2,
-//                            snowmanType: .largeHeadSmallBody,
-//                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
-//                        ),
-//                        WeeklyArchive(
-//                            uuid: UUID(),
-//                            week: 3,
-//                            snowmanType: .largeHeadSmallBody,
-//                            snowmanItemTypes: [.airPodMax2, .boots, .carrot, .sunglass]
-//                        )
-//                    ]
-//                )
-            ]
-            await send(._fetchArchiveList(list))
+            let result = await recordAPI.getList(Date().toString(withFormat: .yearMonthDay))
+            switch result {
+            case let .success(response):
+                let records = response.snowmen
+                var monthlyArchives: [MonthlyArchive] = []
+
+                let snowmenByMonth = Dictionary(grouping: records) { snowman in
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "yyyy-MM"
+                    return dateFormatter.string(from: snowman.startDate.toDate(dateFormat: .yearMonthDay) ?? Date())
+                }
+
+                for (month, snowmenInMonth) in snowmenByMonth {
+                    let weeklyArchives = snowmenInMonth.map { snowman in
+                        WeeklyArchive(
+                            uuid: UUID(),
+                            week: snowman.startDate.toDate(
+                                dateFormat: .yearMonthDay
+                            )?.weekNumberStartingOnMonday ?? 0,
+                            snowmanType: SnowmanType(headSize: snowman.headSize, bodySize: snowman.bodySize),
+                            snowmanItemTypes: snowman.usedItems
+                        )
+                    }
+
+                    monthlyArchives.append(MonthlyArchive(
+                        uuid: UUID(),
+                        month: month.toDate(dateFormat: .yearMonth)?.month ?? 0,
+                        weeklyArchive: weeklyArchives
+                    ))
+                }
+                monthlyArchives.sort()
+                
+                for index in monthlyArchives.indices {
+                    monthlyArchives[index].weeklyArchive.sort()
+                }
+                await send(._fetchArchiveList(monthlyArchives))
+                
+            case .failure:
+                await send(._fetchArchiveList([]))
+            }
         }
     }
 }
