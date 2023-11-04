@@ -40,8 +40,6 @@ public struct SignInFeature: ReducerProtocol {
         
         public enum CoordinatorAction {
             case pop
-            // Note(230602)
-            // SingIn 및 SingUp 로직 Delegate로 분리하기
             case toMain
         }
     }

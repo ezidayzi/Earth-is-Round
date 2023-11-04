@@ -99,11 +99,11 @@ extension RootCoordinator {
                     )),
                     embedInNavigationView: true
                 )]
-                
+
             default:
                 break
             }
-            
+
         default:
             break
         }
