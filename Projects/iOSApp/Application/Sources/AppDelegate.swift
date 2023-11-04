@@ -25,8 +25,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
+
         session = WCSession.default
-        
         if WCSession.isSupported() {
             session.delegate = self
             session.activate()

@@ -17,7 +17,9 @@ let project = Project.framework(
         .Core.LocationClient.iOS,
         .Core.LocationClient.watchOS,
         .Core.LocalStorageClient.iOS,
-        .Core.LocalStorageClient.watchOS
+        .Core.LocalStorageClient.watchOS,
+        .Core.PushNotificationClient.iOS,
+        .Core.PushNotificationClient.watchOS
     ],
     externalDependencies: [
         

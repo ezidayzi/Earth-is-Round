@@ -22,6 +22,7 @@ public extension TargetDependency {
         public struct LocationClient {}
         public struct APIClient {}
         public struct LocalStorageClient {}
+        public struct PushNotificationClient {}
     }
     public struct Shared {}
     public struct ThirdPartyLibs {}
@@ -138,6 +139,11 @@ public extension Dep.Core.LocationClient {
 public extension Dep.Core.LocalStorageClient {
     static let iOS = Dep.project(target: "LocalStorageClient_ios", path: .relativeToCore("LocalStorageClient"))
     static let watchOS = Dep.project(target: "LocalStorageClient_watchos", path: .relativeToCore("LocalStorageClient"))
+}
+
+public extension Dep.Core.PushNotificationClient {
+    static let iOS = Dep.project(target: "PushNotificationClient_ios", path: .relativeToCore("PushNotificationClient"))
+    static let watchOS = Dep.project(target: "PushNotificationClient_watchos", path: .relativeToCore("PushNotificationClient"))
 }
 
 // MARK: - DesignSystemp
