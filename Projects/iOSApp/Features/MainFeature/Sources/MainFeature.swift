@@ -295,7 +295,16 @@ extension MainFeature {
                     return
                 }
 
-                let pastSteps = try await healthClient.getStepsByPeriod(start, end)
+                let calendar = Calendar.current
+                guard
+                    let startWithMidnight = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: start),
+                    let endWithMidnight = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: end)
+                else {
+                    return
+                }
+
+                let pastSteps = try await healthClient.getStepsByPeriod(startWithMidnight, endWithMidnight)
+
                 let steps = pastSteps.map { date, count in
                     return Step(
                         date: date.toString(withFormat: .yearMonthDay),
@@ -329,6 +338,7 @@ extension MainFeature {
             else { return }
 
             let result = await localStorageClient.getSnowmanItem(date)
+
             switch result {
             case .success(let itemInfo):
                 await send(._fetchSnowmanItems(itemInfo.itemPoint))
@@ -338,7 +348,10 @@ extension MainFeature {
         }
     }
 
-    private func saveSnowmanItemPosition(weekDay: Int, itemPoint: ItemPoint) -> EffectTask<Action> {
+    private func saveSnowmanItemPosition(
+        weekDay: Int,
+        itemPoint: ItemPoint
+    ) -> EffectTask<Action> {
         return .run { send in
             let currentDate = Date()
             guard

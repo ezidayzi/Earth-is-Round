@@ -17,6 +17,7 @@ public extension LocalStorageClient {
         return Self(
             appendSnowmanItemInfo: { items in
                 do {
+                    
                     var existingItems: [SnowmanItemInfo] = []
 
                     if let data = defaults.data(forKey: UserDefaultsKey.snowmanItems) {
@@ -65,7 +66,6 @@ public extension LocalStorageClient {
 
                     let encodedData = try encoder.encode(snowmanItemInfos)
                     defaults.set(encodedData, forKey: UserDefaultsKey.snowmanItems)
-
                     return .success(())
 
                 } catch let decodingError as DecodingError {
@@ -82,12 +82,11 @@ public extension LocalStorageClient {
                 else {
                     return .failure(LocalStorageError.fileNotFound)
                 }
-                print(date)
+
                 do {
                     let items = try decoder.decode([SnowmanItemInfo].self, from: encodedData)
-                    print(items)
                     let filteredItems = items.filter { $0.date == date }
-                    dump(filteredItems)
+
                     if let item = filteredItems.first {
                         return .success(item)
                     }
