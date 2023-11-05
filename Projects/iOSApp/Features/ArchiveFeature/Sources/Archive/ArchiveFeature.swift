@@ -16,7 +16,7 @@ public struct ArchiveFeature: ReducerProtocol {
         public init() {}
     }
 
-    public enum Action: Equatable {
+    public enum Action {
         // View Actions
         case naviBackButtonTapped
         case onAppear

@@ -8,7 +8,7 @@ public struct ItemAlertFeature: ReducerProtocol {
         public init() {}
     }
 
-    public enum Action: Equatable {
+    public enum Action {
         
     }
 

@@ -16,7 +16,7 @@ public struct AuthFeature: ReducerProtocol {
         public init() {}
     }
 
-    public enum Action: Equatable {
+    public enum Action {
 
         // Coordinator
         case coordinator(CoordinatorAction)
