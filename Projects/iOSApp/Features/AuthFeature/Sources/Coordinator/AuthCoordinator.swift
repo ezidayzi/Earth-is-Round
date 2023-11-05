@@ -16,7 +16,7 @@ public struct AuthCoordinator: ReducerProtocol {
 
     public struct State: Equatable, IndexedRouterState {
         public init() {
-            self.routes = [.root(.auth(.init()), embedInNavigationView: true)]
+            self.routes = [.root(.auth(.init()))]
         }
 
         public var routes: [Route<AuthScreen.State>]

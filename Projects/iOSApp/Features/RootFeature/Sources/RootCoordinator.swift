@@ -72,7 +72,7 @@ extension RootCoordinator {
                 embedInNavigationView: true
             )]
         case .coordinator(.toAuth):
-            state.routes = [.root(.auth(.init()))]
+            state.routes = [.root(.auth(.init()), embedInNavigationView: true)]
         default:
             break
         }
