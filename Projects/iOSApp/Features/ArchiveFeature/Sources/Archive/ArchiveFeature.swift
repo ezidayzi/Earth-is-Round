@@ -29,7 +29,7 @@ public struct ArchiveFeature: ReducerProtocol {
 
         public enum CoordinatorAction {
             case pop
-            case detail
+            case toDetail
         }
     }
 
@@ -49,6 +49,7 @@ public struct ArchiveFeature: ReducerProtocol {
 
             case let ._fetchArchiveList(list):
                 state.archiveList = list
+                state.isLoading = false
                 return .none
 
             case .coordinator:
@@ -79,7 +80,8 @@ public struct ArchiveFeature: ReducerProtocol {
                                 dateFormat: .yearMonthDay
                             )?.weekNumberStartingOnMonday ?? 0,
                             snowmanType: SnowmanType(headSize: snowman.headSize, bodySize: snowman.bodySize),
-                            snowmanItemTypes: snowman.usedItems
+                            snowmanItemTypes: snowman.usedItems,
+                            startDate: snowman.startDate
                         )
                     }
 

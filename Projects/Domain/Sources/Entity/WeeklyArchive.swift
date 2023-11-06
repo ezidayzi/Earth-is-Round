@@ -15,17 +15,20 @@ public struct WeeklyArchive {
     public let week: Int
     public let snowmanType: SnowmanType
     public let snowmanItemTypes: [SnowmanItemType]
+    public let startDate: String
 
     public init(
         uuid: UUID,
         week: Int,
         snowmanType: SnowmanType,
-        snowmanItemTypes: [SnowmanItemType]
+        snowmanItemTypes: [SnowmanItemType],
+        startDate: String
     ) {
         self.uuid = uuid
         self.week = week
         self.snowmanType = snowmanType
         self.snowmanItemTypes = snowmanItemTypes
+        self.startDate = startDate
     }
 }
 
@@ -44,3 +47,4 @@ extension WeeklyArchive: Comparable {
         return lhs.week < rhs.week
     }
 }
+

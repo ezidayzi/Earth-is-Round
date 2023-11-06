@@ -24,7 +24,12 @@ public struct ArchiveView: View {
                 viewStore.send(.naviBackButtonTapped)
             }
 
-            if let archiveList = viewStore.archiveList, !archiveList.isEmpty {
+            if viewStore.isLoading {
+                Spacer()
+                ProgressView()
+                Spacer()
+            }
+            else if let archiveList = viewStore.archiveList, !archiveList.isEmpty {
                 ScrollView {
                     LazyVGrid(columns: (1...2).map { _ in return GridItem(.flexible()) }, spacing: 6) {
                         ForEach(viewStore.archiveList ?? [], id: \.self) { mothlyArchive in
