@@ -20,6 +20,7 @@ public struct ArchiveFeature: ReducerProtocol {
         // View Actions
         case naviBackButtonTapped
         case onAppear
+        case snowmanCardDidTapped(startDate: String)
 
         // Internal Actions
         case _fetchArchiveList([MonthlyArchive])
@@ -29,7 +30,7 @@ public struct ArchiveFeature: ReducerProtocol {
 
         public enum CoordinatorAction {
             case pop
-            case toDetail
+            case toDetail(_ startDate: String)
         }
     }
 
@@ -52,8 +53,12 @@ public struct ArchiveFeature: ReducerProtocol {
                 state.isLoading = false
                 return .none
 
+            case .snowmanCardDidTapped(let startDate):
+                return .send(.coordinator(.toDetail(startDate)))
+
             case .coordinator:
                 return .none
+
             }
         }
     }

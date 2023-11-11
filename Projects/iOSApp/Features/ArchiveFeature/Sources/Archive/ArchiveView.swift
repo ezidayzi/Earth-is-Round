@@ -40,6 +40,9 @@ public struct ArchiveView: View {
                                         snowmanType: weeklyArchive.snowmanType,
                                         snowmanItemTypes: weeklyArchive.snowmanItemTypes
                                     )
+                                    .onTapGesture {
+                                        viewStore.send(.snowmanCardDidTapped(startDate: weeklyArchive.startDate))
+                                    }
                                 }
                             }, header: {
                                 HStack {
@@ -88,8 +91,6 @@ fileprivate struct ArchiveGridItem: View {
                         itemRawValues: snowmanItemTypes.map { $0.priority },
                         snowmanType: snowmanType
                     )
-                    .frame(width: geometry.size.width - 32)
-                    .frame(height: (geometry.size.width - 32) * 4/3)
                 }
 
             Text(week)
