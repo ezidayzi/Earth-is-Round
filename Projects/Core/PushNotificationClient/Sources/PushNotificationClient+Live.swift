@@ -27,6 +27,7 @@ public extension PushNotificationClient {
                     [.year, .month, .day, .hour, .minute, .second],
                     from: threeDaysFromNow
                 )
+                dateComponents.calendar = Calendar.current
                 let result1 = await scheduleNotification(
                     type: PushNotificationType.threeDays,
                     dateComponents: dateComponents
@@ -39,6 +40,7 @@ public extension PushNotificationClient {
                     value: 6,
                     to: Date()
                 )!
+                dateComponents.calendar = Calendar.current
                 dateComponents = Calendar.current.dateComponents(
                     [.year, .month, .day, .hour, .minute, .second],
                     from: sixDaysFromNow
@@ -48,19 +50,18 @@ public extension PushNotificationClient {
                     dateComponents: dateComponents
                 )
 
-
-
                 dateComponents = DateComponents()
+                dateComponents.calendar = Calendar.current
                 dateComponents.weekday = 2
                 dateComponents.hour = 0
+                dateComponents.minute = 11
                 let result3 = await scheduleNotification(
                     type: PushNotificationType.sundayNight,
                     dateComponents: dateComponents
                 )
 
-
-
                 dateComponents = DateComponents(hour: 9)
+                dateComponents.calendar = Calendar.current
                 let result4 = await scheduleNotification(
                     type: PushNotificationType.nextMorning,
                     dateComponents: dateComponents
@@ -73,6 +74,7 @@ public extension PushNotificationClient {
                     value: 14,
                     to: Date()
                 )!
+                dateComponents.calendar = Calendar.current
                 dateComponents = Calendar.current.dateComponents(
                     [.year, .month, .day, .hour, .minute, .second],
                     from: twoWeeksFromNow
@@ -93,6 +95,7 @@ public extension PushNotificationClient {
                     [.year, .month, .day, .hour, .minute, .second],
                     from: threeWeeksFromNow
                 )
+                dateComponents.calendar = Calendar.current
                 let result6 = await scheduleNotification(
                     type: PushNotificationType.threeWeeks,
                     dateComponents: dateComponents
