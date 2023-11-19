@@ -61,14 +61,15 @@ public struct MainFeature: ReducerProtocol {
         case _updateSnowmanItemSataus
         case _showFetchingStepError
         case _fetchSnowmanItems([ItemPoint])
+        case _showSnowmanPopUp(startDate: String)
 
         // Coordinator
         case coordinator(CoordinatorAction)
 
         public enum CoordinatorAction {
             case toArchive
-            case checkTodayPopup
-            case pushSettingView
+            case toSnowmanAlert(startDate: String)
+            case toSetting
         }
     }
 
@@ -131,7 +132,7 @@ public struct MainFeature: ReducerProtocol {
                 )
 
             case .settingButtonTapped:
-                return .send(.coordinator(.pushSettingView))
+                return .send(.coordinator(.toSetting))
 
             case .mySnowmanButtonTapped:
                 return .send(.coordinator(.toArchive))
@@ -214,6 +215,9 @@ public struct MainFeature: ReducerProtocol {
             case ._fetchSnowmanItems(let items):
                 state.snowmanItemPoints = items
                 return .none
+
+            case ._showSnowmanPopUp(let startDate):
+                return .send(.coordinator(.toSnowmanAlert(startDate: startDate)))
 
             case .coordinator:
                 return .none
@@ -368,7 +372,8 @@ extension MainFeature {
     private func calculateSnowmen() -> EffectTask<Action> {
         return .run { send in
             do {
-                guard let lastSunday = Date().lastSunday else { return }
+                guard let lastSunday = Date().today?.lastSunday else { return }
+
                 guard
                     let lastCalculationDate = userDefaultsClient
                         .stringForKey(UserDefaultsKey.lastCalculationDate)
@@ -380,6 +385,9 @@ extension MainFeature {
                     )
                     return
                 }
+
+                print(lastSunday)
+                print(lastCalculationDate)
 
                 if lastCalculationDate == lastSunday {
                     return
@@ -414,13 +422,26 @@ extension MainFeature {
                     )
                 }
 
+                guard !calculatingList.isEmpty else { return }
+
                 let result = await snowmenAPI.calculate(calculatingList)
                 switch result {
                 case .success:
+                    let sunday = lastSunday.toString(withFormat: .yearMonthDay)
                     userDefaultsClient.setString(
-                        lastSunday.toString(withFormat: .yearMonthDay),
+                        sunday,
                         UserDefaultsKey.lastCalculationDate
                     )
+                    guard
+                        let monday = calendar.date(
+                            byAdding: .day,
+                            value: -6,
+                            to: lastSunday
+                        )?.toString(withFormat: .yearMonthDay)
+                    else { return }
+
+                    await send(._showSnowmanPopUp(startDate: monday))
+
                 case let .failure(error):
                     throw error
                 }

@@ -122,10 +122,10 @@ extension RootCoordinator {
         state: inout State
     ) {
         switch action {
-        case .coordinator(.checkTodayPopup):
-            state.routes.presentSheet(.snowmanAlert(.init(startDate: "", viewType: .popUp)))
+        case .coordinator(.toSnowmanAlert(let startDate)):
+            state.routes.presentSheet(.snowmanAlert(.init(startDate: startDate, viewType: .popUp)))
             
-        case .coordinator(.pushSettingView):
+        case .coordinator(.toSetting):
             state.routes.push(.setting(.init()))
 
         case .coordinator(.toArchive):

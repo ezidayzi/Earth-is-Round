@@ -12,6 +12,7 @@ public struct KeychainClient {
     enum ServiceKey: String {
         case token = "token"
         case nickname = "nickname"
+        case password = "password"
     }
 
     @KeychainValue(key: ServiceKey.token.rawValue)
@@ -20,8 +21,12 @@ public struct KeychainClient {
     @KeychainValue(key: ServiceKey.nickname.rawValue)
     public static var nickname: String?
 
+    @KeychainValue(key: ServiceKey.password.rawValue)
+    public static var password: String?
+
     public static func deleteAll() {
         KeychainClient.token = nil
         KeychainClient.nickname = nil
+        KeychainClient.password = nil
     }
 }

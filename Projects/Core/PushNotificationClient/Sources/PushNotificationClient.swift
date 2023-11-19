@@ -3,7 +3,9 @@ import ComposableArchitecture
 // MARK: - PedometerClient
 
 public struct PushNotificationClient {
+    public let requestAuthorization: () async throws -> Bool
     public let requestNotificationsScheduling: () async -> Result<Void, Error>
+    public let cancelNotificationsScheduling: (_ types: [PushNotificationType]) -> Void
 }
 
 // MARK: DependencyKey
