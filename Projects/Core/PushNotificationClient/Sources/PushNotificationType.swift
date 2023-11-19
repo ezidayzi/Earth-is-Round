@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum PushNotificationType {
+public enum PushNotificationType: CaseIterable {
     case threeDays
     case sixDays
     case sundayNight

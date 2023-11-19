@@ -96,6 +96,7 @@ public struct SignInFeature: ReducerProtocol {
                 print("Login Response: \(loginResponse)")
                 KeychainClient.token = loginResponse.token
                 KeychainClient.nickname = loginResponse.nickname
+                KeychainClient.password = password
                 await send(._successSignIn)
             case .failure(let failure as ErrorCode):
                 print("Login Failure: \(failure.description)")

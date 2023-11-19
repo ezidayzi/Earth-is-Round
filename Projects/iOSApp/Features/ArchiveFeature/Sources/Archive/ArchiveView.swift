@@ -24,7 +24,12 @@ public struct ArchiveView: View {
                 viewStore.send(.naviBackButtonTapped)
             }
 
-            if let archiveList = viewStore.archiveList, !archiveList.isEmpty {
+            if viewStore.isLoading {
+                Spacer()
+                ProgressView()
+                Spacer()
+            }
+            else if let archiveList = viewStore.archiveList, !archiveList.isEmpty {
                 ScrollView {
                     LazyVGrid(columns: (1...2).map { _ in return GridItem(.flexible()) }, spacing: 6) {
                         ForEach(viewStore.archiveList ?? [], id: \.self) { mothlyArchive in
@@ -35,6 +40,9 @@ public struct ArchiveView: View {
                                         snowmanType: weeklyArchive.snowmanType,
                                         snowmanItemTypes: weeklyArchive.snowmanItemTypes
                                     )
+                                    .onTapGesture {
+                                        viewStore.send(.snowmanCardDidTapped(startDate: weeklyArchive.startDate))
+                                    }
                                 }
                             }, header: {
                                 HStack {
@@ -83,8 +91,6 @@ fileprivate struct ArchiveGridItem: View {
                         itemRawValues: snowmanItemTypes.map { $0.priority },
                         snowmanType: snowmanType
                     )
-                    .frame(width: geometry.size.width - 32)
-                    .frame(height: (geometry.size.width - 32) * 4/3)
                 }
 
             Text(week)

@@ -3,8 +3,8 @@ import SwiftUI
 import ComposableArchitecture
 
 import DesignSystem_ios
+import Shared_ios
 
-// TODO: - Store 구현
 public struct SnowmanAlertView: View {
     
     let store: StoreOf<SnowmanAlertFeature>
@@ -16,49 +16,76 @@ public struct SnowmanAlertView: View {
     }
     
     public var body: some View {
-        ScrollView {
-            VStack {
-                Spacer()
-                    .frame(height: 96.adjustedH)
-                
-                titleText
-                    .padding(.bottom, 80.adjustedH)
-                
-                ERSpeechBalloon(text: {
-                    Text("머리 조금만 더 크게 만들어주지..")
-                        .font(DesignSystemIosFontFamily.AritaDotumOTF.semiBold.font(size: 16).toSwiftUI)
-                }, color: ERColor.White)
-                .padding(.horizontal, 56.adjusted)
-                .frame(height: 108.adjustedH)
-                
-                SnowmanView(
-                    itemRawValues: [0, 3, 5, 13, 16],
-                    snowmanType: .largeHeadLargeBody
-                )
-                .frame(width: 250)
-                .frame(height: 250 * 4/3)
-                
-                Spacer()
-                    .frame(height: 50)
-                
-                bottomContent
-                    .background(
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(ERColor.White)
-                    )
-                    .padding(.horizontal, 16.adjusted)
-                
-                Spacer()
-                    .frame(height: 40.adjustedH)
-                
-                Button("확인") {
-                    
+        VStack {
+            if viewStore.viewType == .push {
+                ERNavigationBar(
+                    title: I18N.Archive.mySnowman,
+                    backgroundColor: ERColor.BackgroundBlue
+                ) {
+                    viewStore.send(.naviBackButtonTapped)
                 }
-                .erButton(
-                    labelColor: ERColor.White,
-                    backgroundColor: ERColor.Black10
-                )
-                .padding(.horizontal, 24.adjusted)
+            }
+            ScrollView {
+                VStack {
+                    if viewStore.isLoading {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    } else {
+                        Spacer()
+                            .frame(height: 96.adjustedH)
+
+                        if viewStore.viewType == .popUp {
+                            titleText
+                                .padding(.bottom, 80.adjustedH)
+                        }
+
+                        if let speechText = viewStore.speechBubbleText {
+                            ERSpeechBalloon(text: {
+                                Text(speechText)
+                                    .font(DesignSystemIosFontFamily.AritaDotumOTF.semiBold.font(size: 16).toSwiftUI)
+                            }, color: ERColor.White)
+                            .padding(.horizontal, 56.adjusted)
+                            .frame(height: 108.adjustedH)
+                        }
+
+
+                        if let snowmanItem = viewStore.items, let snowmanType = viewStore.snowmanType {
+                            SnowmanView(
+                                snowmanItemTypes: snowmanItem,
+                                snowmanType: snowmanType
+                            )
+                            .frame(width: 250)
+                            .frame(height: 250 * 4/3)
+                        }
+
+
+                        Spacer()
+                            .frame(height: 50)
+
+                        bottomContent
+                            .background(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(ERColor.White)
+                            )
+                            .padding(.horizontal, 16.adjusted)
+
+                        
+                        Spacer()
+                            .frame(height: 40.adjustedH)
+
+                        if viewStore.viewType == .popUp {
+                            Button("확인") {
+                                viewStore.send(.naviBackButtonTapped)
+                            }
+                            .erButton(
+                                labelColor: ERColor.White,
+                                backgroundColor: ERColor.Black10
+                            )
+                            .padding(.horizontal, 24.adjusted)
+                        }
+                    }
+                }
             }
         }
         .frame(
@@ -68,14 +95,20 @@ public struct SnowmanAlertView: View {
         .background(
             DesignSystemIosAsset.Assets.backgroundBlue.swiftUIColor
         )
+        .toolbar(.hidden, for: .navigationBar)
+        .onAppear {
+            viewStore.send(.onAppear)
+        }
     }
-    
+
     private var titleText: some View {
         VStack {
-            Text("12월 1주차")
-                .font(DesignSystemIosFontFamily.AritaDotumOTF.bold.font(size: 22).toSwiftUI)
-                .foregroundColor(DesignSystemIosAsset.Assets.black10.swiftUIColor)
-                .padding(.bottom, 4.adjustedH)
+            if let title = viewStore.title {
+                Text(title)
+                    .font(DesignSystemIosFontFamily.AritaDotumOTF.bold.font(size: 22).toSwiftUI)
+                    .foregroundColor(DesignSystemIosAsset.Assets.black10.swiftUIColor)
+                    .padding(.bottom, 4.adjustedH)
+            }
             
             Text("눈사람이 정산되었어요.")
                 .font(DesignSystemIosFontFamily.AritaDotumOTF.medium.font(size: 22).toSwiftUI)
@@ -93,9 +126,13 @@ public struct SnowmanAlertView: View {
             
             Spacer()
                 .frame(height: 38.adjustedH + 24.adjustedH)
-            
-            WeeklyWalkView(steps: [100, 50, 30, 20, 40, 70, 30], standard: 60)
-                .frame(height: 60)
+
+            if let steps = viewStore.steps,
+                steps.count > 0,
+                let standard = steps.reduce(0, +)/steps.count {
+                WeeklyWalkView(steps: steps, standard: standard)
+                    .frame(height: 60)
+            }
             
             Divider()
                 .foregroundColor(ERColor.Black10)
@@ -113,16 +150,20 @@ public struct SnowmanAlertView: View {
                     .font(DesignSystemIosFontFamily.AritaDotumOTF.medium.font(size: 15).toSwiftUI)
                 
                 Spacer()
-                
-                Text("12.01-12.07")
-                    .foregroundColor(ERColor.Black70)
-                    .font(DesignSystemIosFontFamily.AritaDotumOTF.medium.font(size: 14).toSwiftUI)
-                    .padding(5)
-                    .dynamicCornerRadius(ERColor.Black70)
+
+                if let date = viewStore.date {
+                    Text("\(date)")
+                        .foregroundColor(ERColor.Black70)
+                        .font(DesignSystemIosFontFamily.AritaDotumOTF.medium.font(size: 14).toSwiftUI)
+                        .padding(5)
+                        .dynamicCornerRadius(ERColor.Black70)
+                }
             }
-            
-            Text(1234567.decimal)
-                .font(DesignSystemIosFontFamily.AritaDotumOTF.bold.font(size: 28).toSwiftUI)
+
+            if let totalStep = viewStore.steps?.reduce(0, +) {
+                Text(totalStep.decimal)
+                    .font(DesignSystemIosFontFamily.AritaDotumOTF.bold.font(size: 28).toSwiftUI)
+            }
         }
     }
     
@@ -141,9 +182,10 @@ public struct SnowmanAlertView: View {
     
     private var pickUpItems: some View {
         LazyVGrid(columns: (1...4).map { _ in return GridItem(.flexible()) }, spacing: 9.adjusted) {
-            ForEach((1...10).map { "Item \($0)" }, id: \.self) { item in
-                DesignSystemIosAsset.Assets.icnSnowman.swiftUIImage
-                    .scaledToFill()
+            ForEach(viewStore.items ?? [], id: \.self) { item in
+                item.image
+                    .resizable()
+                    .scaledToFit()
                     .frame(width: 71.adjusted, height: 88.adjusted)
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)

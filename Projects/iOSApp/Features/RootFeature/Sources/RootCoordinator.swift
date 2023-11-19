@@ -1,4 +1,5 @@
 import SwiftUI
+import SnowmanAlertFeature
 import ArchiveFeature
 
 import ComposableArchitecture
@@ -42,6 +43,9 @@ public struct RootCoordinator: ReducerProtocol {
                 
             case let .routeAction(_, .setting(settingCoordinator)):
                 handleSettingAction(settingCoordinator, state: &state)
+
+            case let .routeAction(_, action: .snowmanAlert(snowmanAlertFeature)):
+                handleSnowmanAlertAction(snowmanAlertFeature, state: &state)
                 
             default:
                 break
@@ -118,10 +122,10 @@ extension RootCoordinator {
         state: inout State
     ) {
         switch action {
-        case .coordinator(.checkTodayPopup):
-            state.routes.presentSheet(.snowmanAlert(.init()))
+        case .coordinator(.toSnowmanAlert(let startDate)):
+            state.routes.presentSheet(.snowmanAlert(.init(startDate: startDate, viewType: .popUp)))
             
-        case .coordinator(.pushSettingView):
+        case .coordinator(.toSetting):
             state.routes.push(.setting(.init()))
 
         case .coordinator(.toArchive):
@@ -142,6 +146,26 @@ extension RootCoordinator {
         switch action {
         case .coordinator(.pop):
             state.routes.pop()
+
+        case .coordinator(.toDetail(let startDate)):
+            state.routes.push(.snowmanAlert(.init(startDate: startDate, viewType: .push)))
+
+        default:
+            break
+        }
+    }
+}
+
+// MARK: - Archive
+extension RootCoordinator {
+    private func handleSnowmanAlertAction(
+        _ action: SnowmanAlertFeature.Action,
+        state: inout State
+    ) {
+        switch action {
+        case .coordinator(.pop):
+            state.routes.pop()
+
         default:
             break
         }

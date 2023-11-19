@@ -31,7 +31,6 @@ extension SnowmanItemType {
         case .can: return DesignSystemAsset.Assets.stickerCan.swiftUIImage
         case .santaHat: return DesignSystemAsset.Assets.stickerSantaHat.swiftUIImage
         case .sunglass: return DesignSystemAsset.Assets.stickerSunglass.swiftUIImage
-
         }
     }
 }

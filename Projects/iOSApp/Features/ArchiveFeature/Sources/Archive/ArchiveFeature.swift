@@ -20,6 +20,7 @@ public struct ArchiveFeature: ReducerProtocol {
         // View Actions
         case naviBackButtonTapped
         case onAppear
+        case snowmanCardDidTapped(startDate: String)
 
         // Internal Actions
         case _fetchArchiveList([MonthlyArchive])
@@ -29,7 +30,7 @@ public struct ArchiveFeature: ReducerProtocol {
 
         public enum CoordinatorAction {
             case pop
-            case detail
+            case toDetail(_ startDate: String)
         }
     }
 
@@ -49,10 +50,15 @@ public struct ArchiveFeature: ReducerProtocol {
 
             case let ._fetchArchiveList(list):
                 state.archiveList = list
+                state.isLoading = false
                 return .none
+
+            case .snowmanCardDidTapped(let startDate):
+                return .send(.coordinator(.toDetail(startDate)))
 
             case .coordinator:
                 return .none
+
             }
         }
     }
@@ -79,7 +85,8 @@ public struct ArchiveFeature: ReducerProtocol {
                                 dateFormat: .yearMonthDay
                             )?.weekNumberStartingOnMonday ?? 0,
                             snowmanType: SnowmanType(headSize: snowman.headSize, bodySize: snowman.bodySize),
-                            snowmanItemTypes: snowman.usedItems
+                            snowmanItemTypes: snowman.usedItems,
+                            startDate: snowman.startDate
                         )
                     }
 

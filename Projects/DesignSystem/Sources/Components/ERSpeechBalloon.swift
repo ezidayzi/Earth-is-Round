@@ -29,7 +29,7 @@ public struct ERSpeechBalloon: View {
                 Capsule()
                     .fill(color)
                     .frame(
-                        width: .infinity,
+                        width: geometry.size.width,
                         height: geometry.size.height * 51 / 108
                     )
                     .overlay(text())

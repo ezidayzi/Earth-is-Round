@@ -5,7 +5,7 @@ import ComposableArchitecture
 
 public struct LocalStorageClient {
     public let appendSnowmanItemInfo: (_ items: [SnowmanItemInfo]) async -> Result<Void, LocalStorageError>
-    public let updateSnowmanItemPoint: (_ date: String,_ items: ItemPoint) async -> Result<Void, LocalStorageError>
+    public let updateSnowmanItemPoint: (_ date: String, _ items: ItemPoint) async -> Result<Void, LocalStorageError>
     public let getSnowmanItem: (_ date: String) async -> Result<SnowmanItemInfo, LocalStorageError>
     public let deleteAll: () -> Void
 }

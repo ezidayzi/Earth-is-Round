@@ -1,6 +1,7 @@
 import ComposableArchitecture
 import Dependencies
 import Shared_ios
+import PushNotificationClient_ios
 
 public struct SettingFeature: ReducerProtocol {
     public init() {}
@@ -29,6 +30,9 @@ public struct SettingFeature: ReducerProtocol {
         }
     }
 
+    @Dependency(\.pushNotificationClient)
+    var pushNotificationClient
+
     public var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
@@ -43,6 +47,7 @@ public struct SettingFeature: ReducerProtocol {
 
             case .logoutTapped:
                 KeychainClient.deleteAll()
+                pushNotificationClient.cancelNotificationsScheduling(PushNotificationType.allCases)
                 return .send(.coordinator(.toSplash))
                 
             case .coordinator:

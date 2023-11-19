@@ -51,10 +51,11 @@ public extension Date {
 
     var lastSunday: Self? {
         let calendar = Calendar.current
-        let today = calendar.startOfDay(for: self)
-        let daysUntilLastSunday = (calendar.component(.weekday, from: today) + 7 - 1) % 7
-        let lastSunday = calendar.date(byAdding: .day, value: -daysUntilLastSunday, to: today)
-        return lastSunday
+        let weekday = calendar.component(.weekday, from: self)
+
+        let daysToLastSunday = (weekday == 1) ? 7 : weekday - 1
+
+        return calendar.date(byAdding: .day, value: -daysToLastSunday, to: self)
     }
 
     var month: Int {
@@ -87,7 +88,7 @@ public extension Date {
             let firstDayOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: self)),
             let firstWeekdayOfMonth = calendar.dateComponents([.weekday], from: firstDayOfMonth).weekday
         else {
-             return 0
+            return 0
         }
         let offset = (weekday - firstWeekdayOfMonth + 7) % 7
         let weekNumber = (day + offset - 1) / 7 + 1

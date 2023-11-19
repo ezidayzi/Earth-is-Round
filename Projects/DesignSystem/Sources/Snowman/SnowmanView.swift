@@ -27,6 +27,12 @@ public struct SnowmanView: View {
             .map { SnowmanItem(type: $0) }
         self.snowmanType = snowmanType
     }
+
+    public init(snowmanItemTypes: [SnowmanItemType], snowmanType: SnowmanType) {
+        self.items = snowmanItemTypes
+            .map { SnowmanItem(type: $0) }
+        self.snowmanType = snowmanType
+    }
     
     public var body: some View {
         GeometryReader { geometry in
