@@ -62,6 +62,7 @@ public struct MainFeature: ReducerProtocol {
         case _showFetchingStepError
         case _fetchSnowmanItems([ItemPoint])
         case _showSnowmanPopUp(startDate: String)
+        case _showItemPopUp(items: [SnowmanItemInfo])
 
         // Coordinator
         case coordinator(CoordinatorAction)
@@ -69,6 +70,7 @@ public struct MainFeature: ReducerProtocol {
         public enum CoordinatorAction {
             case toArchive
             case toSnowmanAlert(startDate: String)
+            case toItemAlert(snowmanItems: [SnowmanItemInfo])
             case toSetting
         }
     }
@@ -149,7 +151,11 @@ public struct MainFeature: ReducerProtocol {
                 var updatedItem = state.snowmanItemPoints[index]
                 updatedItem.x = x
                 updatedItem.y = y
-                return saveSnowmanItemPosition(weekDay: state.currentWeekDay, itemPoint: updatedItem)
+
+                return saveSnowmanItemPosition(
+                    weekDay: state.currentWeekDay,
+                    itemPoint: updatedItem
+                )
 
             case ._uploadStepsByPeriod:
 
@@ -218,6 +224,9 @@ public struct MainFeature: ReducerProtocol {
 
             case ._showSnowmanPopUp(let startDate):
                 return .send(.coordinator(.toSnowmanAlert(startDate: startDate)))
+
+            case ._showItemPopUp(let items):
+                return .send(.coordinator(.toItemAlert(snowmanItems: items)))
 
             case .coordinator:
                 return .none
@@ -320,7 +329,10 @@ extension MainFeature {
                 switch result {
                 case let .success(response):
                     updateLastLoginDate()
-                    _ = await appendSnowmanItemList(response: response)
+                    let snowmanItems = await generateSnowmanItemGroups(response: response)
+                    _ = await localStorageClient.appendSnowmanItemInfo(snowmanItems)
+                    await send(._showItemPopUp(items: snowmanItems))
+
                 case let .failure(error):
                     throw error
                 }
@@ -386,9 +398,6 @@ extension MainFeature {
                     return
                 }
 
-                print(lastSunday)
-                print(lastCalculationDate)
-
                 if lastCalculationDate == lastSunday {
                     return
                 }
@@ -452,7 +461,9 @@ extension MainFeature {
         }
     }
 
-    private func appendSnowmanItemList(response: SnowmanItemListResponse) async  {
+    private func generateSnowmanItemGroups(
+        response: SnowmanItemListResponse
+    ) async -> [SnowmanItemInfo]  {
         let groupedItem = Dictionary(grouping: response.items, by: { $0.getDate })
         let dailyItems = groupedItem.map { (key, value) in
 
@@ -467,7 +478,7 @@ extension MainFeature {
                 }
             )
         }
-        _ = await localStorageClient.appendSnowmanItemInfo(dailyItems)
+        return dailyItems
     }
 
     private func updateLastLoginDate() {

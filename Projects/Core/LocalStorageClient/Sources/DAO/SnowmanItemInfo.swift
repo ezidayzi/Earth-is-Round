@@ -18,6 +18,17 @@ public struct SnowmanItemInfo: Codable {
     }
 }
 
+extension SnowmanItemInfo: Equatable, Hashable {
+    public static func == (lhs: SnowmanItemInfo, rhs: SnowmanItemInfo) -> Bool {
+        return lhs.date == rhs.date && lhs.itemPoint == rhs.itemPoint
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(date)
+        hasher.combine(itemPoint)
+    }
+}
+
 public struct ItemPoint: Codable, Identifiable {
     public let id: String
     public let itemType: SnowmanItemType
@@ -34,12 +45,14 @@ public struct ItemPoint: Codable, Identifiable {
 
 extension ItemPoint: Equatable, Hashable {
     public static func == (lhs: ItemPoint, rhs: ItemPoint) -> Bool {
-        return lhs.itemType == rhs.itemType &&
+        return lhs.id == rhs.id &&
+        lhs.itemType == rhs.itemType &&
         lhs.x == rhs.x &&
         lhs.y == rhs.y
     }
 
     public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
         hasher.combine(itemType)
         hasher.combine(x)
         hasher.combine(y)

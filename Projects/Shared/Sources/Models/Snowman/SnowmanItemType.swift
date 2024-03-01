@@ -91,4 +91,29 @@ public enum SnowmanItemType: String, Codable {
         case .sunglass: return 18
         }
     }
+
+    public var toKorean: String {
+        switch self {
+        case .button: return "오래된 단추"
+        case .stones: return "작은 돌맹이"
+        case .saw: return "톱"
+        case .carrot: return "안 팔린 당근"
+        case .radish: return "하얀 무우"
+        case .gloves: return "어린이 장갑"
+        case .cardigan: return "할머니 가디건"
+        case .branch: return "나뭇가지"
+        case .earMuff: return "빵집 귀마개"
+        case .airPodMax1: return "에어팟 맥스"
+        case .airPodMax2: return "에어팟 맥스"
+        case .airPodMax3: return "에어팟 맥스"
+        case .muffler1: return "빈티지 목도리"
+        case .muffler2: return "빈티지 목도리"
+        case .boots: return "부츠"
+        case .bikini: return "비키니"
+        case .can: return "다 먹은 깡통"
+        case .santaHat: return "산타 모자"
+        case .sunglass: return "선글라스"
+        }
+    }
+
 }
